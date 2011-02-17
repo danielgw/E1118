@@ -18,5 +18,4 @@ src-$(CONFIG_GFX_WTK)           += util/gfx/wtk_radio_button.c
 src-$(CONFIG_GFX_WTK)           += util/gfx/wtk_slider.c
 src-$(CONFIG_GFX_WTK)           += util/gfx/wtk_plot.c
 
-
 mkfiles                         += $(src)/util/gfx/subdir.mk
