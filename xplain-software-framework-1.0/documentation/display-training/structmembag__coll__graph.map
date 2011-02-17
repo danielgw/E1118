@@ -1,0 +1,4 @@
+<map id="G" name="G">
+<area shape="rect" href="$structmem__pool.html" title="Memory pool." alt="" coords="5,5,85,35"/>
+<area shape="rect" href="$structphysmem__pool.html" title="A region of available physical memory." alt="" coords="109,5,219,35"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" href="$structblock__device.html" title="A block device." alt="" coords="8,312,104,341"/>
+<area shape="rect" href="$structslist.html" title="A singly linked list." alt="" coords="33,120,79,149"/>
+<area shape="rect" href="$structslist__node.html" title="A node in a singly linked list." alt="" coords="16,5,96,35"/>
+</map>

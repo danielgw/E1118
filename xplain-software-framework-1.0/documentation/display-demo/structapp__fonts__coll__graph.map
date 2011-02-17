@@ -1,0 +1,13 @@
+<map id="G" name="G">
+<area shape="rect" href="$structwtk__progress__bar.html" title="Progress bar control struct." alt="" coords="60,453,183,483"/>
+<area shape="rect" href="$structwin__window.html" title="Window control data." alt="" coords="156,335,244,364"/>
+<area shape="rect" href="$structwtk__basic__frame.html" title="Basic frame control struct." alt="" coords="207,453,327,483"/>
+<area shape="rect" href="$structwtk__button.html" title="wtk_button" alt="" coords="351,453,433,483"/>
+<area shape="rect" href="$structwin__attributes.html" title="Window attribute data." alt="" coords="125,216,227,245"/>
+<area shape="rect" href="$structgfx__bitmap.html" title="Storage structure for bitmap pixel data and metadata." alt="" coords="5,120,91,149"/>
+<area shape="rect" href="$structwin__area.html" title="Geometric type describing an area on screen." alt="" coords="140,120,212,149"/>
+<area shape="rect" href="$structwin__point.html" title="Geometric type describing a point or vector on screen, relative or absolute." alt="" coords="139,5,213,35"/>
+<area shape="rect" href="$structfont.html" title="Storage structure for font metadata." alt="" coords="457,453,500,483"/>
+<area shape="rect" href="$structworkqueue__task.html" title="Task to be run from a work queue." alt="" coords="544,453,659,483"/>
+<area shape="rect" href="$structslist__node.html" title="A node in a singly linked list." alt="" coords="561,335,641,364"/>
+</map>

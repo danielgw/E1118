@@ -1,0 +1,13 @@
+<map id="structs" name="structs">
+<area shape="rect" href="$group__appsutil__group.html" title="Application utilities are helper utilities which are useful for the applications..." alt="" coords="196,5,327,35"/>
+<area shape="rect" href="$group__app__widget__group.html" title="This application demonstrates most of the available widgets in the Widget toolkit..." alt="" coords="180,59,343,88"/>
+<area shape="rect" href="$group__apps__memgame__group.html" title="The memory game application is a simple game where the user has to find pairs of..." alt="" coords="176,112,347,141"/>
+<area shape="rect" href="$group__app__calc__group.html" title="The calculator application demonstrates some of the available widgets in the Widget..." alt="" coords="189,165,333,195"/>
+<area shape="rect" href="$group__app__clock__group.html" title="This application will display an analog and digital clock on the screen." alt="" coords="149,219,373,248"/>
+<area shape="rect" href="$group__app__desktop__group.html" title="The desktop application handles launching of additional applications." alt="" coords="193,272,329,301"/>
+<area shape="rect" href="$group__app__calibrate__group.html" title="This application performs touch screen calibration by utilizing the Touch driver..." alt="" coords="148,325,375,355"/>
+<area shape="rect" href="$group__app__files__group.html" title="The file system contents application demonstrates parts of the Tiny Simple File System..." alt="" coords="157,379,365,408"/>
+<area shape="rect" href="$group__apps__slide__group.html" title="The slideshow application is a timed, automatic image loader. It demonstrates use..." alt="" coords="188,432,335,461"/>
+<area shape="rect" href="$group__apps__tank__group.html" title="The water tank application is a process control&#45;inspired demonstration of the slider..." alt="" coords="187,485,336,515"/>
+<area shape="rect" href="$group__app__fonts__group.html" title="The font application demonstrates use of fonts with the Graphics display system." alt="" coords="159,539,364,568"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="G" name="G">
+<area shape="rect" href="$structat90usb__udc__ep.html" title="at90usb_udc_ep" alt="" coords="115,331,229,360"/>
+<area shape="rect" href="$structat90usb__controller.html" title="at90usb_controller" alt="" coords="203,120,331,149"/>
+<area shape="rect" href="$structslist.html" title="A singly linked list." alt="" coords="5,173,51,203"/>
+<area shape="rect" href="$structslist__node.html" title="A node in a singly linked list." alt="" coords="23,5,103,35"/>
+<area shape="rect" href="$structworkqueue__task.html" title="Task to be run from a work queue." alt="" coords="64,120,179,149"/>
+<area shape="rect" href="$structusb__setup__req.html" title="A USB Device SETUP request." alt="" coords="355,120,461,149"/>
+<area shape="rect" href="$structudc.html" title="A USB Device Controller." alt="" coords="485,120,528,149"/>
+</map>

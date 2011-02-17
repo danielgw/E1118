@@ -1,0 +1,6 @@
+<map id="structs" name="structs">
+<area shape="rect" href="$group__gfx__font.html" title="Font support" alt="" coords="233,5,327,35"/>
+<area shape="rect" href="$group__gfx__gfx.html" title="Graphics driver" alt="" coords="225,59,335,88"/>
+<area shape="rect" href="$group__gfx__win.html" title="Window system for organizing window elements in a graphical user interface (GUI)..." alt="" coords="223,112,337,141"/>
+<area shape="rect" href="$group__gfx__wtk.html" title="Widget toolkit" alt="" coords="231,165,329,195"/>
+</map>

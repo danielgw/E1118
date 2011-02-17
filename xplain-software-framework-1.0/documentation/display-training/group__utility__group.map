@@ -1,0 +1,13 @@
+<map id="structs" name="structs">
+<area shape="rect" href="$group__compiler__group.html" title="Compiler Support" alt="" coords="203,5,323,35"/>
+<area shape="rect" href="$group__byte__order__group.html" title="Byte Order Conversion" alt="" coords="187,59,339,88"/>
+<area shape="rect" href="$group__progmem__group.html" title="Data in Program Space" alt="" coords="185,112,340,141"/>
+<area shape="rect" href="$group__atomic__group.html" title="Atomic Operations" alt="" coords="199,165,327,195"/>
+<area shape="rect" href="$group__assert__group.html" title="Assertions" alt="" coords="221,219,304,248"/>
+<area shape="rect" href="$group__unaligned__group.html" title="Unaligned Access Helpers" alt="" coords="176,272,349,301"/>
+<area shape="rect" href="$group__hugemem__group.html" title="Data in Huge Data Memory Space" alt="" coords="153,325,372,355"/>
+<area shape="rect" href="$group__stdint__group.html" title="Standard integer types" alt="" coords="187,379,339,408"/>
+<area shape="rect" href="$group__assembler__group.html" title="Assembler Support" alt="" coords="197,432,328,461"/>
+<area shape="rect" href="$group__string__group.html" title="String Operations" alt="" coords="201,485,324,515"/>
+<area shape="rect" href="$group__bitops__group.html" title="Bit Operations" alt="" coords="211,539,315,568"/>
+</map>

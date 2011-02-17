@@ -1,0 +1,11 @@
+<map id="structs" name="structs">
+<area shape="rect" href="$group__gfx__wtk__label.html" title="Label widget" alt="" coords="392,5,485,35"/>
+<area shape="rect" href="$group__gfx__wtk__progress__bar.html" title="Progress bar widget" alt="" coords="371,59,507,88"/>
+<area shape="rect" href="$group__gfx__wtk__button.html" title="Button widget" alt="" coords="389,112,488,141"/>
+<area shape="rect" href="$group__gfx__wtk__frame.html" title="Frame widget" alt="" coords="389,165,488,195"/>
+<area shape="rect" href="$group__gfx__wtk__check__box.html" title="Check box widget" alt="" coords="377,219,500,248"/>
+<area shape="rect" href="$group__gfx__wtk__radio__button.html" title="Radio button widget" alt="" coords="371,272,507,301"/>
+<area shape="rect" href="$group__gfx__wtk__slider.html" title="Slider widget" alt="" coords="391,325,487,355"/>
+<area shape="rect" href="$group__gfx__wtk__basic__frame.html" title="Basic frame widget" alt="" coords="373,379,504,408"/>
+<area shape="rect" href="$group__gfx.html" title="Graphical display system" alt="" coords="5,192,173,221"/>
+</map>

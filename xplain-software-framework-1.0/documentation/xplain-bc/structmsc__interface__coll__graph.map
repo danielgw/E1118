@@ -1,0 +1,11 @@
+<map id="G" name="G">
+<area shape="rect" href="$uniondma__addr__t.html" title="A physical/virtual address pair used for DMA." alt="" coords="5,312,93,341"/>
+<area shape="rect" href="$structblock__request.html" title="A block device request." alt="" coords="168,216,269,245"/>
+<area shape="rect" href="$structblock__device.html" title="A block device." alt="" coords="221,312,317,341"/>
+<area shape="rect" href="$structslist.html" title="A singly linked list." alt="" coords="271,120,316,149"/>
+<area shape="rect" href="$structusb__request.html" title="A USB request." alt="" coords="319,216,409,245"/>
+<area shape="rect" href="$structslist__node.html" title="A node in a singly linked list." alt="" coords="296,5,376,35"/>
+<area shape="rect" href="$structudm__interface.html" title="A USB device interface." alt="" coords="468,312,572,341"/>
+<area shape="rect" href="$structudc.html" title="A USB Device Controller." alt="" coords="596,312,639,341"/>
+<area shape="rect" href="$structatomic__object.html" title="Implementation&#45;specific structure holding an atomic object." alt="" coords="663,312,764,341"/>
+</map>

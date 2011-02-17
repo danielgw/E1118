@@ -1,0 +1,7 @@
+<map id="G" name="G">
+<area shape="rect" href="$structtouch__event.html" title="Contains touch event type and touch point data." alt="" coords="88,101,179,131"/>
+<area shape="rect" href="$structtouch__point.html" title="Panel coordinate and measurement data of a single touch." alt="" coords="5,5,93,35"/>
+<area shape="rect" href="$structtouch__calibration__matrix.html" title="Calibration matrix coefficients." alt="" coords="203,101,365,131"/>
+<area shape="rect" href="$structworkqueue__task.html" title="Task to be run from a work queue." alt="" coords="389,101,504,131"/>
+<area shape="rect" href="$structslist__node.html" title="A node in a singly linked list." alt="" coords="407,5,487,35"/>
+</map>

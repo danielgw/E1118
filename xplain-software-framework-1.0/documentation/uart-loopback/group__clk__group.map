@@ -1,0 +1,5 @@
+<map id="structs" name="structs">
+<area shape="rect" href="$group__pll__group.html" title="PLL Management" alt="" coords="217,5,340,35"/>
+<area shape="rect" href="$group__sysclk__group.html" title="System Clock Management" alt="" coords="188,59,369,88"/>
+<area shape="rect" href="$group__osc__group.html" title="Oscillator Management" alt="" coords="201,112,356,141"/>
+</map>

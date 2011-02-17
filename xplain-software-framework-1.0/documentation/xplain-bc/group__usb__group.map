@@ -1,0 +1,5 @@
+<map id="structs" name="structs">
+<area shape="rect" href="$group__usb__device__group.html" title="USB Device Framework" alt="" coords="152,5,312,35"/>
+<area shape="rect" href="$group__usb__request__group.html" title="USB Request Management" alt="" coords="143,59,321,88"/>
+<area shape="rect" href="$group__usb__protocol__group.html" title="USB Protocol Definitions" alt="" coords="149,112,315,141"/>
+</map>

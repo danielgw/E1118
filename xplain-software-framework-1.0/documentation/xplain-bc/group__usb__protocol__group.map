@@ -1,0 +1,5 @@
+<map id="structs" name="structs">
+<area shape="rect" href="$group__msc__protocol__group.html" title="Mass Storage Class Definitions" alt="" coords="388,5,591,35"/>
+<area shape="rect" href="$group__usb__ids__group.html" title="USB Vendor, Product and Class Identifiers" alt="" coords="356,59,623,88"/>
+<area shape="rect" href="$group__usb__group.html" title="USB Stack" alt="" coords="7,32,92,61"/>
+</map>

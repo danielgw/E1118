@@ -1,0 +1,4 @@
+<map id="G" name="G">
+<area shape="rect" href="$structworkqueue__task.html" title="Task to be run from a work queue." alt="" coords="5,101,120,131"/>
+<area shape="rect" href="$structslist__node.html" title="A node in a singly linked list." alt="" coords="23,5,103,35"/>
+</map>

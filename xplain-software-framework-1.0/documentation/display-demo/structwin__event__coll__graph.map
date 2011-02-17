@@ -1,0 +1,10 @@
+<map id="G" name="G">
+<area shape="rect" href="$structwin__command__event.html" title="Event data for command events, e.g. a button widget action command." alt="" coords="24,483,168,512"/>
+<area shape="rect" href="$structwin__window.html" title="Window control data." alt="" coords="12,345,100,375"/>
+<area shape="rect" href="$structwin__attributes.html" title="Window attribute data." alt="" coords="5,227,107,256"/>
+<area shape="rect" href="$structgfx__bitmap.html" title="Storage structure for bitmap pixel data and metadata." alt="" coords="7,120,92,149"/>
+<area shape="rect" href="$structwin__area.html" title="Geometric type describing an area on screen." alt="" coords="124,120,196,149"/>
+<area shape="rect" href="$structwin__point.html" title="Geometric type describing a point or vector on screen, relative or absolute." alt="" coords="167,5,241,35"/>
+<area shape="rect" href="$structwin__pointer__event.html" title="Event data for all pointer events, e.g. touch screen or mouse." alt="" coords="179,173,304,203"/>
+<area shape="rect" href="$structwin__keyboard__event.html" title="Event data for all keyboard events, e.g. full keyboards or smaller matrices." alt="" coords="279,483,417,512"/>
+</map>

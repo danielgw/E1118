@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" href="$structudc.html" title="A USB Device Controller." alt="" coords="16,101,59,131"/>
+<area shape="rect" href="$structworkqueue__task.html" title="Task to be run from a work queue." alt="" coords="83,101,197,131"/>
+<area shape="rect" href="$structslist__node.html" title="A node in a singly linked list." alt="" coords="100,5,180,35"/>
+</map>

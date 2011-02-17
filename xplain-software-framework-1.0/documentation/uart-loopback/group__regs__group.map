@@ -1,0 +1,11 @@
+<map id="structs" name="structs">
+<area shape="rect" href="$group__portcfg__regs__group.html" title="Port Configuration" alt="" coords="607,5,729,35"/>
+<area shape="rect" href="$group__port__regs__group.html" title="I/O Ports Register Definitions" alt="" coords="573,59,763,88"/>
+<area shape="rect" href="$group__xmega__usart__regs__group.html" title="XMEGA USART Register Definitions" alt="" coords="552,112,784,141"/>
+<area shape="rect" href="$group__xmega__clk__regs__group.html" title="Xmega Clock Register Definitions" alt="" coords="560,165,776,195"/>
+<area shape="rect" href="$group__ebi__regs__group.html" title="EBI Register Definitions" alt="" coords="588,219,748,248"/>
+<area shape="rect" href="$group__xmega__pr__regs__group.html" title="XMEGA Power Reduction Register Definitions" alt="" coords="525,272,811,301"/>
+<area shape="rect" href="$group__xmega__osc__regs__group.html" title="Xmega Oscillator Register Definitions" alt="" coords="549,325,787,355"/>
+<area shape="rect" href="$group__ebics__regs__group.html" title="EBI Chip Select Register Definitions" alt="" coords="552,379,784,408"/>
+<area shape="rect" href="$group__mmio__group.html" title="Memory&#45;Mapped Input/Output (MMIO)" alt="" coords="5,192,248,221"/>
+</map>

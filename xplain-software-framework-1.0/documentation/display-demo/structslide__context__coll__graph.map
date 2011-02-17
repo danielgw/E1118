@@ -1,0 +1,10 @@
+<map id="G" name="G">
+<area shape="rect" href="$structwin__window.html" title="Window control data." alt="" coords="52,335,140,364"/>
+<area shape="rect" href="$structwin__attributes.html" title="Window attribute data." alt="" coords="45,216,147,245"/>
+<area shape="rect" href="$structgfx__bitmap.html" title="Storage structure for bitmap pixel data and metadata." alt="" coords="5,120,91,149"/>
+<area shape="rect" href="$structwin__area.html" title="Geometric type describing an area on screen." alt="" coords="115,120,187,149"/>
+<area shape="rect" href="$structwin__point.html" title="Geometric type describing a point or vector on screen, relative or absolute." alt="" coords="113,5,188,35"/>
+<area shape="rect" href="$structtimer.html" title="Timer data." alt="" coords="257,335,308,364"/>
+<area shape="rect" href="$structworkqueue__task.html" title="Task to be run from a work queue." alt="" coords="332,335,447,364"/>
+<area shape="rect" href="$structslist__node.html" title="A node in a singly linked list." alt="" coords="349,216,429,245"/>
+</map>

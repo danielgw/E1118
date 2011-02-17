@@ -1,0 +1,14 @@
+<map id="G" name="G">
+<area shape="rect" href="$structwtk__progress__bar.html" title="Progress bar control struct." alt="" coords="109,453,232,483"/>
+<area shape="rect" href="$structwin__window.html" title="Window control data." alt="" coords="129,335,217,364"/>
+<area shape="rect" href="$structwtk__slider.html" title="Slider control struct." alt="" coords="5,453,85,483"/>
+<area shape="rect" href="$structwtk__basic__frame.html" title="Basic frame control struct." alt="" coords="256,453,376,483"/>
+<area shape="rect" href="$structwin__attributes.html" title="Window attribute data." alt="" coords="123,216,224,245"/>
+<area shape="rect" href="$structgfx__bitmap.html" title="Storage structure for bitmap pixel data and metadata." alt="" coords="285,120,371,149"/>
+<area shape="rect" href="$structwin__area.html" title="Geometric type describing an area on screen." alt="" coords="104,120,176,149"/>
+<area shape="rect" href="$structwin__point.html" title="Geometric type describing a point or vector on screen, relative or absolute." alt="" coords="43,5,117,35"/>
+<area shape="rect" href="$structtimer.html" title="Timer data." alt="" coords="451,453,501,483"/>
+<area shape="rect" href="$structfont.html" title="Storage structure for font metadata." alt="" coords="525,453,568,483"/>
+<area shape="rect" href="$structworkqueue__task.html" title="Task to be run from a work queue." alt="" coords="592,453,707,483"/>
+<area shape="rect" href="$structslist__node.html" title="A node in a singly linked list." alt="" coords="609,335,689,364"/>
+</map>

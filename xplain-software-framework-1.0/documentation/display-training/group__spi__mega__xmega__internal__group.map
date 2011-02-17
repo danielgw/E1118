@@ -1,0 +1,4 @@
+<map id="structs" name="structs">
+<area shape="rect" href="$group__spi__polled__internal__group.html" title="Generic SPI polled internals" alt="" coords="5,5,189,35"/>
+<area shape="rect" href="$group__spi__xmega__internal__group.html" title="ATxmega SPI internals" alt="" coords="575,5,729,35"/>
+</map>
