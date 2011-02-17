@@ -261,21 +261,21 @@ static void sub_frame_draw_handler_1(struct win_window *win,
 
 	if (slide_value == 0){
 	 	
-		gfx_draw_string("MIN", clip->origin.x + 12, clip->origin.y + 12,
+		gfx_draw_string("MIN", clip->origin.x + 24, clip->origin.y + 12,
 			&sysfont, GFX_COLOR(255, 255, 255),
 			GFX_COLOR_TRANSPARENT);
 		}
 
 	else if (slide_value == 10){
 
-		gfx_draw_string("MAX", clip->origin.x + 12, clip->origin.y + 12,
+		gfx_draw_string("MAX", clip->origin.x + 24, clip->origin.y + 12,
 			&sysfont, GFX_COLOR(255, 255, 255),
 			GFX_COLOR_TRANSPARENT);
 		}
 	
 	else {
 		
-		gfx_draw_string(buffer_0, clip->origin.x + 12, clip->origin.y + 12,
+		gfx_draw_string(buffer_0, clip->origin.x + 15, clip->origin.y + 12,
 			&sysfont, GFX_COLOR(255, 255, 255),
 			GFX_COLOR_TRANSPARENT);
 		}
