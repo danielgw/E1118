@@ -67,7 +67,7 @@
 //! Threshold for unintended touches on display
 #define CAL_TRESHOLD    500
 //! Background color for the application
-#define CAL_BG_COLOR    GFX_COLOR(0, 0, 255)
+#define CAL_BG_COLOR    GFX_COLOR(255, 0, 0)
 //! Foreground color for the application
 #define CAL_FG_COLOR    GFX_COLOR(255, 255, 255)
 
@@ -106,7 +106,7 @@ static struct font sysfont2x;
  * \note Stored in PROGMEM to reduce memory usage.
  */
 static DEFINE_PROGMEM(char, calibrate_help_text[]) =
-		"Touch screen calibration.\n\nTouch inside the circles.";
+		"Poke those circles.";
 
 /**
  * \brief Touch event handler

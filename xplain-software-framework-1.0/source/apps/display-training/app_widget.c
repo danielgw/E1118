@@ -70,7 +70,8 @@ enum app_widget_ids {
 	//! Event command ID for the slider.
 	SLIDER_ID = 1,
 	//! Event command ID for the button.
-	BUTTON_ID,
+	BUTTON_ID_0,
+	BUTTON_ID_1,
 };
 
 /**
@@ -80,7 +81,7 @@ enum app_widget_ids {
  */
 
 //! Background color for application
-#define APP_BACKGROUND_COLOR        GFX_COLOR(50, 50, 50)
+#define APP_BACKGROUND_COLOR        GFX_COLOR(0, 0, 255)
 
 //! @}
 
@@ -91,25 +92,45 @@ enum app_widget_ids {
  */
 
 //! Label position on top of display
-#define LABEL_POS_X                 10
+#define LABEL_POS_X                 40
 //! Label position on top of display
 #define LABEL_POS_Y                 10
 
 //! Slider position
-#define SLIDER_POS_X                10
+#define SLIDER_POS_X                35
 //! Slider position
-#define SLIDER_POS_Y                60
+#define SLIDER_POS_Y                30
 //! Slider size on display
-#define SLIDER_SIZE_X               80
+#define SLIDER_SIZE_X               250 //max value 255+handle width
 //! Slider size on display
 #define SLIDER_SIZE_Y               40
 
-//! Spacing from slider to progress bar
-#define SLIDER_PB_SPACING_X         10
-//! Slider progress bar on display
-#define PB_SIZE_X                   SLIDER_SIZE_X
-//! Slider progress bar on display
-#define PB_SIZE_Y                   SLIDER_SIZE_Y
+//! Progress bar position
+#define PB_POS_X                	35
+//! Progress bar position
+#define PB_POS_Y                	180
+//! Progress bar size on display
+#define PB_SIZE_X               	250
+//! Progress bar size on display
+#define PB_SIZE_Y               	40
+
+//! Button position
+#define BUTTON_POS_X                35
+//! Button position
+#define BUTTON_POS_Y                130
+//! Button size on display
+#define BUTTON_SIZE_X               80
+//! Button size on display
+#define BUTTON_SIZE_Y               40
+
+//! Frame position
+#define FRAME_POS_X					35
+//! Frame position
+#define FRAME_POS_Y					80
+//! Frame position		
+#define FRAME_SIZE_X				250
+//! Frame position	
+#define FRAME_SIZE_Y				40
 
 //! @}
 
@@ -131,7 +152,7 @@ enum app_widget_ids {
  */
 
 //! Description for label
-const static char                   *demo_string = "Demonstrating widgets";
+const static char                   *demo_string = "Dimmer app";
 
 //! @}
 
@@ -151,8 +172,12 @@ static struct wtk_progress_bar      *progress_bar;
 static struct gfx_bitmap            frame_background;
 //! Counter for button
 static uint8_t                      counter;
+//! Counter for slider
+static uint8_t						slide_value;
 //! Pointer to the sub-frame
-static struct wtk_basic_frame       *sub_frame;
+static struct wtk_basic_frame       *sub_frame_0;
+//! Pointer to the sub-frame
+static struct wtk_basic_frame       *sub_frame_1;
 //! Sub-frame background bitmap
 static struct gfx_bitmap            sub_frame_background;
 
@@ -172,12 +197,35 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 
 	switch (command) {
 	case SLIDER_ID:
-		wtk_progress_bar_set_value(progress_bar,
-				wtk_slider_get_value(slider));
+		//wtk_progress_bar_set_value(progress_bar,
+		counter = (wtk_slider_get_value(slider));
+		win_redraw(wtk_basic_frame_as_child(sub_frame_0));
 		break;
 
-	case BUTTON_ID:
-		//! \todo Add code here to handle button press.
+	case BUTTON_ID_0:
+		
+		if(slide_value == 0) {
+			slide_value = slide_value;
+			}
+		else {
+		slide_value--;
+		}
+
+		wtk_progress_bar_set_value(progress_bar, (10*slide_value));
+		win_redraw(wtk_basic_frame_as_child(sub_frame_1));
+		break;
+
+	case BUTTON_ID_1:
+		
+		if(slide_value == 10) {
+			slide_value = slide_value;
+			}
+		else {
+		slide_value++;
+		}
+
+		wtk_progress_bar_set_value(progress_bar, (10*slide_value));
+		win_redraw(wtk_basic_frame_as_child(sub_frame_1));
 		break;
 	}
 
@@ -191,16 +239,48 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
  *
  * \sa wtk_basic_frame_draw_handler_t
  */
-static void sub_frame_draw_handler(struct win_window *win,
+static void sub_frame_draw_handler_0(struct win_window *win,
 		struct win_clip_region const *clip)
 {
-	char buffer[4];
+	char buffer_0[4];
 
-	snprintf(buffer, sizeof(buffer), "%3d", counter);
-	/**
-	 * \todo Add code here to draw text on screen using the
-	 * gfx_draw_string() function.
-	 */
+	snprintf(buffer_0, sizeof(buffer_0), "%3d", (counter/10));
+	if (counter > 16){
+	 	counter = 0;
+		}
+	 	 
+	 	gfx_draw_string(buffer_0, clip->origin.x + 100, clip->origin.y + 12,
+			&sysfont, GFX_COLOR(255, 255, 255),
+			GFX_COLOR_TRANSPARENT);
+}
+
+static void sub_frame_draw_handler_1(struct win_window *win,
+		struct win_clip_region const *clip)
+{
+	char buffer_0[4];
+
+	snprintf(buffer_0, sizeof(buffer_0), "%3d", (slide_value));
+
+	if (slide_value == 0){
+	 	
+		gfx_draw_string("MIN", clip->origin.x + 24, clip->origin.y + 12,
+			&sysfont, GFX_COLOR(255, 255, 255),
+			GFX_COLOR_TRANSPARENT);
+		}
+
+	else if (slide_value == 10){
+
+		gfx_draw_string("MAX", clip->origin.x + 24, clip->origin.y + 12,
+			&sysfont, GFX_COLOR(255, 255, 255),
+			GFX_COLOR_TRANSPARENT);
+		}
+	
+	else {
+		
+		gfx_draw_string(buffer_0, clip->origin.x + 15, clip->origin.y + 12,
+			&sysfont, GFX_COLOR(255, 255, 255),
+			GFX_COLOR_TRANSPARENT);
+		}
 }
 
 /**
@@ -216,7 +296,8 @@ void app_widget_launch(struct workqueue_task *task) {
 	struct win_window       *parent;
 	struct win_area         area;
 	struct wtk_label        *lbl;
-	struct wtk_button       *btn;
+	struct wtk_button       *btn_0;
+	struct wtk_button       *btn_1;
 
 	// Use larger sysfont for this app
 	sysfont.scale = 2;
@@ -257,7 +338,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	 */
 	win_show(parent);
 
-	// Application label
+	// Application label_0
 	area.pos.x = LABEL_POS_X;
 	area.pos.y = LABEL_POS_Y;
 	// Find an optimal size for the widget.
@@ -296,7 +377,8 @@ void app_widget_launch(struct workqueue_task *task) {
 	win_show(wtk_slider_as_child(slider));
 
 	// Application progress bar, placed right of the slider.
-	area.pos.x += area.size.x + SLIDER_PB_SPACING_X;
+	area.pos.x = PB_POS_X;
+	area.pos.y = PB_POS_Y;
 	area.size.x = PB_SIZE_X;
 	area.size.y = PB_SIZE_Y;
 
@@ -314,9 +396,65 @@ void app_widget_launch(struct workqueue_task *task) {
 	// Draw the progress bar by showing the progress bar widget's window.
 	win_show(wtk_progress_bar_as_child(progress_bar));
 
-	//! \todo Add code to set up button here.
+	//! First button
+	area.pos.x = BUTTON_POS_X;
+	area.pos.y = BUTTON_POS_Y;
+	area.size.x = BUTTON_SIZE_X;
+	area.size.y = BUTTON_SIZE_Y;
 
-	//! \todo Add code to set up basic frame here.
+	btn_0 = wtk_button_create(parent, &area, "Down",
+			(win_command_t)BUTTON_ID_0);
+	if (!btn_0) {
+		goto error_widget;
+	}
+	win_show(wtk_button_as_child(btn_0));
+
+	//! \todo Add code to set up button here.
+	area.pos.x = BUTTON_POS_X+170;
+	area.pos.y = BUTTON_POS_Y;
+	area.size.x = BUTTON_SIZE_X;
+	area.size.y = BUTTON_SIZE_Y;
+
+	btn_1 = wtk_button_create(parent, &area, "Up",
+			(win_command_t)BUTTON_ID_1);
+	if (!btn_1) {
+		goto error_widget;
+	}
+	win_show(wtk_button_as_child(btn_1));
+
+	//! sub_frame_0
+	area.pos.x = FRAME_POS_X;
+	area.pos.y = FRAME_POS_Y;
+	area.size.x = FRAME_SIZE_X;
+	area.size.y = FRAME_SIZE_Y;
+
+	sub_frame_background.type = BITMAP_SOLID;
+	sub_frame_background.data.color = GFX_COLOR(127, 0, 0);
+
+	sub_frame_0 = wtk_basic_frame_create(parent, &area,
+			&sub_frame_background, sub_frame_draw_handler_0,
+			NULL, NULL);
+	if (!sub_frame_0) {
+		goto error_widget;
+	}
+	win_show(wtk_basic_frame_as_child(sub_frame_0));
+
+	//! sub_frame_1
+	area.pos.x = 115;
+	area.pos.y = 130;
+	area.size.x = 90;
+	area.size.y = FRAME_SIZE_Y;
+
+	sub_frame_background.type = BITMAP_SOLID;
+	sub_frame_background.data.color = GFX_COLOR(127, 0, 0);
+
+	sub_frame_1 = wtk_basic_frame_create(parent, &area,
+			&sub_frame_background, sub_frame_draw_handler_1,
+			NULL, NULL);
+	if (!sub_frame_1) {
+		goto error_widget;
+	}
+	win_show(wtk_basic_frame_as_child(sub_frame_1));
 
 	return;
 
