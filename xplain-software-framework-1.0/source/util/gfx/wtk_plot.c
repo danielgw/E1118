@@ -61,15 +61,17 @@
 struct wtk_plot {
 	//! Container window of plot. 
 	
-													//TODO: Endre Innholdet i denne
+													//TODO: Er dette nok? trenger vi mer, mindre/noe annet?
 	
 	struct win_window       *container;
 	//! Maximum value of plot.
 	uint8_t                 maximum;
-	//! Value of plot.
-	uint8_t                 value;
-	//! End position of plot.
-	uint8_t                 position;
+	//! Number of datapoints in plot.
+	uint8_t                 datapoints;	
+	//! Pointer to values to plot.
+	uint8_t                 *value;
+			//! End position of plot.
+			//uint8_t                 position;
 	//! Configuration of orientation and behavior.
 	uint8_t                 option;
 	//! Color for plot.
