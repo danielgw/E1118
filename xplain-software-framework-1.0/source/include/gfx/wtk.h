@@ -349,39 +349,6 @@ void wtk_progress_bar_set_colors(struct wtk_progress_bar *bar,
 	 * \defgroup gfx_wtk_plot Plot widget
 	 * @{
 	 */
-
-								/**
-								 * \defgroup gfx_wtk_progress_bar_options Progress bar widget options
-								 * These options can be ORed together to specify the behaviour of a
-								 * progress bar widget when creating it with \ref wtk_progress_bar_create
-								 * @{
-								 */
-
-								/**
-								 * \name Progress bar orientation configuration options.
-								 * For use with the option parameter of \ref wtk_progress_bar_create
-								 * @{
-								 */
-
-								//! Progress bar is horizontally oriented.
-								//#define WTK_PROGRESS_BAR_HORIZONTAL    (0 << 0)
-								//! Progress bar is vertically oriented.
-								//#define WTK_PROGRESS_BAR_VERTICAL      (1 << 0)
-
-								//! @}
-
-								/**
-								 * \name Progress bar widget invert configuration options.
-								 * For use with the option parameter of \ref wtk_progress_bar_create
-								 * @{
-								 */
-								//! Progress bar is inverted.
-								//#define WTK_PROGRESS_BAR_INVERT        (1 << 1)
-
-								//! @}
-
-								//! @}
-
 	struct wtk_plot;
 
 	struct wtk_plot *wtk_plot_create(struct win_window *parent,
@@ -397,6 +364,8 @@ void wtk_progress_bar_set_colors(struct wtk_progress_bar *bar,
 
 	//! @}
 
+	
+	
 
 uint8_t wtk_rescale_value(uint8_t value, uint8_t from_scale, uint8_t to_scale);
 void wtk_copy_string(char *dest, char const *source);
