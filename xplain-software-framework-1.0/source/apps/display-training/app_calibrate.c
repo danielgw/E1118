@@ -67,7 +67,7 @@
 //! Threshold for unintended touches on display
 #define CAL_TRESHOLD    500
 //! Background color for the application
-#define CAL_BG_COLOR    GFX_COLOR(255, 0, 0)
+#define CAL_BG_COLOR    GFX_COLOR(255, 0, 255)
 //! Foreground color for the application
 #define CAL_FG_COLOR    GFX_COLOR(255, 255, 255)
 
@@ -106,7 +106,7 @@ static struct font sysfont2x;
  * \note Stored in PROGMEM to reduce memory usage.
  */
 static DEFINE_PROGMEM(char, calibrate_help_text[]) =
-		"Poke those circles.";
+		"Initialize \n coordinate-stabilizers.";
 
 /**
  * \brief Touch event handler
@@ -253,7 +253,7 @@ void app_touch_calibrate_setup(struct workqueue_task *completed_task)
 			CAL_BG_COLOR);
 
 	gfx_draw_progmem_string((const char __progmem_arg *)
-			&calibrate_help_text, 10, 80, &sysfont2x, CAL_FG_COLOR,
+			&calibrate_help_text, 10, 10, &sysfont2x, CAL_FG_COLOR,
 			GFX_COLOR_TRANSPARENT);
 
 	// Set panel coordinates for all calibration points.
