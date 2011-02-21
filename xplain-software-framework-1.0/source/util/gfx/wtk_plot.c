@@ -70,8 +70,6 @@ struct wtk_plot {
 	uint8_t                 datapoints;	
 	//! Pointer to values to plot.
 	uint8_t                 *value;
-			//! End position of plot.
-			//uint8_t                 position;
 	//! Configuration of orientation and behavior.
 	uint8_t                 option;
 	//! Color for plot.
@@ -99,7 +97,7 @@ struct win_window *wtk_plot_as_child(struct wtk_plot *plot)
 
 
 
-			// TODO:							denne må endres totalt
+			// TODO:							denne må endres totalt  // eller slettes?
 /**
  * \brief Set new progress bar value.
  *
@@ -112,8 +110,8 @@ struct win_window *wtk_plot_as_child(struct wtk_plot *plot)
  *
  * \return True if progress bar's value was changed.
  */
-bool wtk_progress_bar_set_value(struct wtk_plot *plot, uint8_t value) 
-{
+//bool wtk_progress_bar_set_value(struct wtk_plot *plot, uint8_t value) 
+//{
 	/*
 	uint8_t length;
 	uint8_t option;
@@ -151,7 +149,7 @@ bool wtk_progress_bar_set_value(struct wtk_plot *plot, uint8_t value)
 		return false;
 	}
 	*/
-}
+//}
 
 
 
@@ -208,7 +206,7 @@ static bool wtk_plot_handler(struct win_window *win,
 	struct win_clip_region const    *clip;
 	struct win_area const           *area;
 	struct wtk_plot					*plot;
-	uint8_t                         position;
+							//uint8_t                         position;
 	uint8_t                         option;
 
 	plot = (struct wtk_plot *)win_get_custom_data(win);
@@ -225,12 +223,13 @@ static bool wtk_plot_handler(struct win_window *win,
 		clip = (struct win_clip_region const *)data;
 		area = win_get_area(win);
 
-		position = plot->position;
+		//position = plot->position;
 		option = plot->option;
 
 		// Draw a window border.
 		gfx_draw_rect(clip->origin.x, clip->origin.y, area->size.x,
-				area->size.y, WTK_PROGRESS_BAR_BORDER_COLOR);			//TODO: gjennomgang av headerfil og nye defines for plot
+				area->size.y, WTK_PROGRESS_BAR_BORDER_COLOR);			
+				//TODO: gjennomgang av headerfil og nye ls defines for plot
 				
 
 		/* Draw plot interior.
@@ -319,7 +318,7 @@ static bool wtk_plot_handler(struct win_window *win,
  * \return Pointer to new plot, if memory allocation was successful.
  */
 struct wtk_plot *wtk_plot_create(struct win_window *parent,
-		struct win_area const *area, /*uint8_t maximum, uint8_t value,*/		//!!!!!
+		struct win_area const *area, uint8_t maximum, uint8_t *value,
 		gfx_color_t draw_color, gfx_color_t background_color,
 		uint8_t option)
 {
@@ -337,32 +336,32 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 									struct win_attributes attr;
 
 									// Allocate memory for the control data.
-									struct wtk_progress_bar *bar =
-											membag_alloc(sizeof(struct wtk_progress_bar));
-									if (!bar) {
-										goto outofmem_bar;
+									struct wtk_plot *plot =
+											membag_alloc(sizeof(struct wtk_plot));
+									if (!plot) {
+										goto outofmem_plot;
 									}
 
 									// Initialize the progress bar data.
-									bar->maximum = maximum;
-									bar->value = value;
-									bar->option = option;
+									plot->maximum = maximum;
+									plot->value = value;
+									plot->option = option;
 
 									/* Set the progress bar's colors and prepare the value for computation
 									 * of the bar's end position according to the invert option.
 									 */
-									if (option & WTK_PROGRESS_BAR_INVERT) {
-										bar->fill_color = background_color;
-										bar->background_color = fill_color;
-										value = maximum - value;
-									} else {
-										bar->fill_color = fill_color;
-										bar->background_color = background_color;
-									}
+								//	if (option & WTK_PROGRESS_BAR_INVERT) {
+								//		bar->fill_color = background_color;
+								//		bar->background_color = fill_color;
+								//		value = maximum - value;
+								//	} else {
+								//		bar->fill_color = fill_color;
+								//		bar->background_color = background_color;
+								//	}
 
 									// Set up handling information.
-									attr.event_handler = wtk_progress_bar_handler;
-									attr.custom = bar;
+									attr.event_handler = wtk_plot_handler;
+									attr.custom = plot;
 
 									/* Do sanity check of specified window area parameters
 									 * according to the orientation of the progress bar.
@@ -382,7 +381,7 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 									length -= 2;
 
 									// Set the progress bar's end position.
-									bar->position = wtk_rescale_value(value, maximum, length);
+									//bar->position = wtk_rescale_value(value, maximum, length);
 
 									/* All drawing is done in wtk_progress_bar_handler() so no background is
 									 * needed.
@@ -395,17 +394,17 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 									attr.behavior = 0;
 
 									// Create a new window for the progress bar.
-									bar->container = win_create(parent, &attr);
-									if (!bar->container) {
+									plot->container = win_create(parent, &attr);
+									if (!plot->container) {
 										goto outofmem_container;
 									}
 
-									return bar;
+									return plot;
 
 								outofmem_container:
-									membag_free(bar);
+									membag_free(plot);
 
-								outofmem_bar:
+								outofmem_plot:
 									return NULL;
 }
 
