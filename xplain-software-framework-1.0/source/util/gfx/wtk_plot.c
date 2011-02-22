@@ -322,7 +322,7 @@ static bool wtk_plot_handler(struct win_window *win,
  * \return Pointer to new plot, if memory allocation was successful.
  */
 struct wtk_plot *wtk_plot_create(struct win_window *parent,
-		struct win_area const *area, uint8_t maximum, 
+		struct win_area const *area, uint8_t maximum, uint8_t datapoints, 
 		gfx_color_t draw_color, gfx_color_t background_color,
 		uint8_t option)
 {
@@ -345,23 +345,20 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 									if (!plot) {
 										goto outofmem_plot;
 									}
+									
+									// Allocate memory for the control data.
+									plot->plot_buffer =
+											membag_alloc(datapoints);
+									if (!plot) {
+										goto outofmem_plot;
+									}
+									
+									
 
 									// Initialize the progress bar data.
 									plot->maximum = maximum;
 									//plot->value = value;
 									plot->option = option;
-
-									/* Set the progress bar's colors and prepare the value for computation
-									 * of the bar's end position according to the invert option.
-									 */
-								//	if (option & WTK_PROGRESS_BAR_INVERT) {
-								//		bar->fill_color = background_color;
-								//		bar->background_color = fill_color;
-								//		value = maximum - value;
-								//	} else {
-								//		bar->fill_color = fill_color;
-								//		bar->background_color = background_color;
-								//	}
 
 									// Set up handling information.
 									attr.event_handler = wtk_plot_handler;
@@ -374,15 +371,15 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 									assert(attr.area.size.x > 3);
 									assert(attr.area.size.y > 3);
 
-									//if (option & WTK_PROGRESS_BAR_VERTICAL) {
-									//	assert(attr.area.size.y < (uint8_t) ~ 0);
-									//	length = attr.area.size.y;
-									//} else {
-									//	assert(attr.area.size.x < (uint8_t) ~ 0);
-									//	length = attr.area.size.x;
-									//}
-
-									//length -= 2;
+									
+									length = attr.area.size.x;
+									length -= 2;
+									
+									//TO DO! optimeres 
+									
+									spacing = length / datapoints;
+									spacing_error = (uint8_t)((((uint16_t)(length-spacing*datapoints))*100)/((uint16_t)datapoints));
+									
 
 									// Set the progress bar's end position.
 									//bar->position = wtk_rescale_value(value, maximum, length);

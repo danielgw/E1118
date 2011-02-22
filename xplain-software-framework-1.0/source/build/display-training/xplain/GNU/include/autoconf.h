@@ -1,5 +1,6 @@
 /* Automatically generated; edit at your own risk */
 
+<<<<<<< HEAD
 #define CONFIG_APP_DATAFLASH_SPI_ID 0
 #define CONFIG_ARCH_AVR 1
 #define CONFIG_AT45 1
@@ -203,3 +204,5 @@
 #define CONFIG_TOUCH_XR_PIN 5
 #define CONFIG_TOUCH_YD_PIN 6
 #define CONFIG_TOUCH_YU_PIN 7
+=======
+>>>>>>> 868338a14883295c4c97938eb052ae73b65d3c6c

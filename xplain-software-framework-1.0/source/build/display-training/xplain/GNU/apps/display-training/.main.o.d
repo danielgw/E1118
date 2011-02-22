@@ -5,8 +5,13 @@ apps/display-training/main.o: ../../../../apps/display-training/main.c \
   ../../../../arch/avr8/include/arch/stdint.h \
   ../../../../include/compiler/gcc.h \
   ../../../../arch/avr8/include/arch/compiler-gcc.h \
+<<<<<<< HEAD
   c:\winavr\bin\../lib/gcc/avr/4.3.3/include/stdbool.h \
   c:\winavr\bin\../lib/gcc/avr/4.3.3/include/stddef.h \
+=======
+  c:\winavr-20100110\bin\../lib/gcc/avr/4.3.3/include/stdbool.h \
+  c:\winavr-20100110\bin\../lib/gcc/avr/4.3.3/include/stddef.h \
+>>>>>>> 868338a14883295c4c97938eb052ae73b65d3c6c
   ../../../../include/util.h ../../../../cpu/xmega/include/cpu/dma.h \
   ../../../../include/generic/dma_nommu.h ../../../../include/physmem.h \
   ../../../../cpu/xmega/include/cpu/physmem.h \
@@ -21,6 +26,7 @@ apps/display-training/main.o: ../../../../apps/display-training/main.c \
   ../../../../board/xplain/include/board.h ../../../../include/mainloop.h \
   ../../../../include/slist.h ../../../../include/assert.h \
   ../../../../include/debug.h \
+<<<<<<< HEAD
   c:\winavr\bin\../lib/gcc/avr/4.3.3/include/stdarg.h \
   ../../../../include/sleep.h ../../../../cpu/xmega/include/cpu/sleep.h \
   ../../../../include/workqueue.h ../../../../include/interrupt.h \
@@ -31,6 +37,13 @@ apps/display-training/main.o: ../../../../apps/display-training/main.c \
   ../../../../apps/display-training/include/app/softirq.h \
   ../../../../arch/avr8/include/arch/softirq.h \
   ../../../../include/clk/sys.h \
+=======
+  c:\winavr-20100110\bin\../lib/gcc/avr/4.3.3/include/stdarg.h \
+  ../../../../include/sleep.h ../../../../cpu/xmega/include/cpu/sleep.h \
+  ../../../../include/workqueue.h ../../../../include/interrupt.h \
+  ../../../../arch/avr8/include/arch/interrupt.h \
+  ../../../../cpu/xmega/include/cpu/regs.h ../../../../include/clk/sys.h \
+>>>>>>> 868338a14883295c4c97938eb052ae73b65d3c6c
   ../../../../chip/atxmega128a1/include/chip/sysclk.h \
   ../../../../include/clk/pll.h \
   ../../../../chip/atxmega128a1/include/chip/pll.h \
@@ -42,10 +55,18 @@ apps/display-training/main.o: ../../../../apps/display-training/main.c \
   ../../../../include/regs/xmega_clk.h ../../../../include/gfx/gfx.h \
   ../../../../include/hugemem.h \
   ../../../../arch/avr8/include/arch/hugemem.h \
+<<<<<<< HEAD
   ../../../../include/progmem.h \
   ../../../../arch/avr8/include/arch/progmem.h \
   ../../../../include/gfx/gfx_hx8347a.h \
   ../../../../include/gfx/gfx_generic.h ../../../../include/gfx/win.h \
+=======
+  ../../../../include/generic/hugemem.h ../../../../include/string.h \
+  ../../../../arch/avr8/include/arch/string.h \
+  ../../../../include/generic/string.h ../../../../include/progmem.h \
+  ../../../../arch/avr8/include/arch/progmem.h \
+  ../../../../include/gfx/win.h \
+>>>>>>> 868338a14883295c4c97938eb052ae73b65d3c6c
   ../../../../apps/display-training/include/app/win.h \
   ../../../../include/gfx/default/win.h ../../../../include/membag.h \
   ../../../../include/touch/touch.h \
@@ -68,9 +89,15 @@ include/autoconf.h:
 
 ../../../../arch/avr8/include/arch/compiler-gcc.h:
 
+<<<<<<< HEAD
 c:\winavr\bin\../lib/gcc/avr/4.3.3/include/stdbool.h:
 
 c:\winavr\bin\../lib/gcc/avr/4.3.3/include/stddef.h:
+=======
+c:\winavr-20100110\bin\../lib/gcc/avr/4.3.3/include/stdbool.h:
+
+c:\winavr-20100110\bin\../lib/gcc/avr/4.3.3/include/stddef.h:
+>>>>>>> 868338a14883295c4c97938eb052ae73b65d3c6c
 
 ../../../../include/util.h:
 
@@ -114,7 +141,11 @@ c:\winavr\bin\../lib/gcc/avr/4.3.3/include/stddef.h:
 
 ../../../../include/debug.h:
 
+<<<<<<< HEAD
 c:\winavr\bin\../lib/gcc/avr/4.3.3/include/stdarg.h:
+=======
+c:\winavr-20100110\bin\../lib/gcc/avr/4.3.3/include/stdarg.h:
+>>>>>>> 868338a14883295c4c97938eb052ae73b65d3c6c
 
 ../../../../include/sleep.h:
 
@@ -128,6 +159,7 @@ c:\winavr\bin\../lib/gcc/avr/4.3.3/include/stdarg.h:
 
 ../../../../cpu/xmega/include/cpu/regs.h:
 
+<<<<<<< HEAD
 ../../../../include/softirq.h:
 
 ../../../../include/bitops.h:
@@ -138,6 +170,8 @@ c:\winavr\bin\../lib/gcc/avr/4.3.3/include/stdarg.h:
 
 ../../../../arch/avr8/include/arch/softirq.h:
 
+=======
+>>>>>>> 868338a14883295c4c97938eb052ae73b65d3c6c
 ../../../../include/clk/sys.h:
 
 ../../../../chip/atxmega128a1/include/chip/sysclk.h:
@@ -166,6 +200,7 @@ c:\winavr\bin\../lib/gcc/avr/4.3.3/include/stdarg.h:
 
 ../../../../arch/avr8/include/arch/hugemem.h:
 
+<<<<<<< HEAD
 ../../../../include/progmem.h:
 
 ../../../../arch/avr8/include/arch/progmem.h:
@@ -173,6 +208,19 @@ c:\winavr\bin\../lib/gcc/avr/4.3.3/include/stdarg.h:
 ../../../../include/gfx/gfx_hx8347a.h:
 
 ../../../../include/gfx/gfx_generic.h:
+=======
+../../../../include/generic/hugemem.h:
+
+../../../../include/string.h:
+
+../../../../arch/avr8/include/arch/string.h:
+
+../../../../include/generic/string.h:
+
+../../../../include/progmem.h:
+
+../../../../arch/avr8/include/arch/progmem.h:
+>>>>>>> 868338a14883295c4c97938eb052ae73b65d3c6c
 
 ../../../../include/gfx/win.h:
 
