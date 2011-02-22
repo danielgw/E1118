@@ -377,8 +377,8 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 									
 									//TO DO! optimeres 
 									
-									spacing = length / datapoints;
-									spacing_error = (uint8_t)((((uint16_t)(length-spacing*datapoints))*100)/((uint16_t)datapoints));
+									plot->spacing = length / datapoints;
+									plot->spacing_error = (uint8_t)((((uint16_t)(length-plot->spacing*datapoints))*100)/((uint16_t)datapoints));
 									
 
 									// Set the progress bar's end position.
