@@ -65,6 +65,10 @@ struct wtk_plot {
 	uint8_t                 maximum;
 	//! Number of datapoints in plot.
 	uint8_t                 datapoints;	
+	//! Space between datapoints.
+	uint8_t                 spacing;	
+	//! Error in spacing between datapoints.
+	uint8_t                 spacing_error;	
 	//! Pointer to ring buffer containing values to plot.
 	uint8_t                 *plot_buffer;
 	//! Ring buffer start-point displacement
@@ -96,7 +100,8 @@ struct win_window *wtk_plot_as_child(struct wtk_plot *plot)
 
 
 
-			// TODO:							denne må endres totalt  // eller slettes?
+			// TODO:							denne må endres totalt
+			//					legg til ny verdi i buffer og flytt pekeren.
 /**
  * \brief Set new progress bar value.
  *
@@ -369,15 +374,15 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 									assert(attr.area.size.x > 3);
 									assert(attr.area.size.y > 3);
 
-									if (option & WTK_PROGRESS_BAR_VERTICAL) {
-										assert(attr.area.size.y < (uint8_t) ~ 0);
-										length = attr.area.size.y;
-									} else {
-										assert(attr.area.size.x < (uint8_t) ~ 0);
-										length = attr.area.size.x;
-									}
+									//if (option & WTK_PROGRESS_BAR_VERTICAL) {
+									//	assert(attr.area.size.y < (uint8_t) ~ 0);
+									//	length = attr.area.size.y;
+									//} else {
+									//	assert(attr.area.size.x < (uint8_t) ~ 0);
+									//	length = attr.area.size.x;
+									//}
 
-									length -= 2;
+									//length -= 2;
 
 									// Set the progress bar's end position.
 									//bar->position = wtk_rescale_value(value, maximum, length);
