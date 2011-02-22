@@ -60,16 +60,15 @@
  */
 struct wtk_plot {
 	//! Container window of plot. 
-	
-													//TODO: Er dette nok? trenger vi mer, mindre/noe annet?
-	
 	struct win_window       *container;
 	//! Maximum value of plot.
 	uint8_t                 maximum;
 	//! Number of datapoints in plot.
 	uint8_t                 datapoints;	
-	//! Pointer to values to plot.
-	uint8_t                 *value;
+	//! Pointer to ring buffer containing values to plot.
+	uint8_t                 *plot_buffer;
+	//! Ring buffer start-point displacement
+	uint8_t					buffer_start;
 	//! Configuration of orientation and behavior.
 	uint8_t                 option;
 	//! Color for plot.
@@ -318,7 +317,7 @@ static bool wtk_plot_handler(struct win_window *win,
  * \return Pointer to new plot, if memory allocation was successful.
  */
 struct wtk_plot *wtk_plot_create(struct win_window *parent,
-		struct win_area const *area, uint8_t maximum, uint8_t *value,
+		struct win_area const *area, uint8_t maximum, 
 		gfx_color_t draw_color, gfx_color_t background_color,
 		uint8_t option)
 {
@@ -328,7 +327,7 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 
 									// Do sanity check on parameters.
 									assert(maximum > 0);
-									assert(value <= maximum);
+									//assert(value <= maximum);
 									assert(area);
 									assert(parent);
 
@@ -344,7 +343,7 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 
 									// Initialize the progress bar data.
 									plot->maximum = maximum;
-									plot->value = value;
+									//plot->value = value;
 									plot->option = option;
 
 									/* Set the progress bar's colors and prepare the value for computation
