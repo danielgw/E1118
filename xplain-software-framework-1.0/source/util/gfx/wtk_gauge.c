@@ -275,12 +275,16 @@ static bool wtk_gauge_handler(struct win_window *win,
 					area->size.x - 2 - position,
 					area->size.y - 2,
 					gauge->background_color);*/
-					
-			gfx_generic_draw_line(area->pos.x + position,area->pos.y,area->pos.x + 20,area->pos.y + 20,gauge->fill_color);
+
+			gfx_draw_filled_rect(clip->origin.x, clip->origin.y, area->size.x,
+				area->size.y, gauge->background_color);
+            
+            gfx_generic_draw_line(clip->origin.x + 1, clip->origin.y + 1, area->size.x - 2 - position, area->size.y - 2,gauge->fill_color);
 			{
                     //! Old test variables!
                     //
                     //
+                    //area->pos.x + position,area->pos.y,clip->origin.x ,area->pos.y + 20,gauge->fill_color
                     //area->pos.x,area->pos.y,area->pos.x + 20,area->pos.y + 20,gauge->fill_color
                     //GFX_COLOR(255,0,0)
                     //pgm_read_byte(&(trigtable[position]));

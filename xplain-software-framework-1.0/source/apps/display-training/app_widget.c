@@ -102,18 +102,23 @@ enum app_widget_ids {
 //! Slider position
 #define SLIDER_POS_X                10
 //! Slider position
-#define SLIDER_POS_Y                60
+#define SLIDER_POS_Y                40
 //! Slider size on display
-#define SLIDER_SIZE_X               80
+#define SLIDER_SIZE_X               30
 //! Slider size on display
-#define SLIDER_SIZE_Y               40
+#define SLIDER_SIZE_Y               128
 
 //! Spacing from slider to progress bar
-#define SLIDER_PB_SPACING_X         10
-//! Slider progress bar on display
-#define PB_SIZE_X                   SLIDER_SIZE_X
-//! Slider progress bar on display
-#define PB_SIZE_Y                   SLIDER_SIZE_Y
+#define SLIDER_PB_SPACING_X         20	//Not used
+
+//! Gauge position
+#define PB_POS_X					50
+//! Gauge position
+#define PB_POS_Y					40
+//! Gauge size on display
+#define PB_SIZE_X                   128
+//! Gauge size on display
+#define PB_SIZE_Y                   128
 
 //! @}
 
@@ -125,6 +130,7 @@ enum app_widget_ids {
 
 //! Max value for slider
 #define SLIDER_MAX_VALUE            127
+
 
 //! @}
 
@@ -297,22 +303,27 @@ void app_widget_launch(struct workqueue_task *task) {
 	area.size.x = SLIDER_SIZE_X;
 	area.size.y = SLIDER_SIZE_Y;
 
+	
+
 	/*
 	 * Create the slider and check the return value if an error occured
 	 * while creating the slider.
 	 */
 	slider = wtk_slider_create(parent, &area, SLIDER_MAX_VALUE,
-			SLIDER_MAX_VALUE / 2, WTK_SLIDER_HORIZONTAL|WTK_SLIDER_CMD_RELEASE,
+			SLIDER_MAX_VALUE / 2, WTK_SLIDER_VERTICAL|WTK_SLIDER_CMD_RELEASE,
 			(win_command_t)SLIDER_ID);
 	if (!slider) {
 		goto error_widget;
 	}
 
+
+
 	// Draw the slider by showing the slider widget's window.
 	win_show(wtk_slider_as_child(slider));
 
 	// Application progress bar, placed right of the slider.
-	area.pos.x += area.size.x + SLIDER_PB_SPACING_X;
+	area.pos.x = PB_POS_X;
+	area.pos.y = PB_POS_Y;
 	area.size.x = PB_SIZE_X;
 	area.size.y = PB_SIZE_Y;
 
@@ -332,11 +343,11 @@ void app_widget_launch(struct workqueue_task *task) {
 	win_show(wtk_gauge_as_child(gauge));
 
 
-	//! \todo Add code to set up button here.
+	//! Code for the button
 	area.pos.x = 10;
-	area.pos.y = 150;
-	area.size.x = 90;
-	area.size.y = 40;
+	area.pos.y = 200;
+	area.size.x = 80;
+	area.size.y = 30;
 
 	btn = wtk_button_create(parent, &area, "Click",
 			(win_command_t)BUTTON_ID);
@@ -345,8 +356,8 @@ void app_widget_launch(struct workqueue_task *task) {
 	}
 	win_show(wtk_button_as_child(btn));
 
-	//! \todo Add code to set up basic frame here.
-	area.pos.x += area.size.x + 40;
+	//! Basic frame code
+	area.pos.x += area.size.x + 20;
 
 	sub_frame_background.type = BITMAP_SOLID;
 	sub_frame_background.data.color = GFX_COLOR(127, 0, 0);
