@@ -95,9 +95,9 @@ enum app_widget_ids {
  */
 
 //! Label position on top of display
-#define LABEL_POS_X                 10
+#define LABEL_POS_X                 2
 //! Label position on top of display
-#define LABEL_POS_Y                 10
+#define LABEL_POS_Y                 2
 
 //! Slider position
 #define SLIDER_POS_X                10
@@ -106,7 +106,7 @@ enum app_widget_ids {
 //! Slider size on display
 #define SLIDER_SIZE_X               30
 //! Slider size on display
-#define SLIDER_SIZE_Y               128
+#define SLIDER_SIZE_Y               192
 
 //! Spacing from slider to progress bar
 #define SLIDER_PB_SPACING_X         20	//Not used
@@ -116,9 +116,9 @@ enum app_widget_ids {
 //! Gauge position
 #define PB_POS_Y					40
 //! Gauge size on display
-#define PB_SIZE_X                   128
+#define PB_SIZE_X                   210
 //! Gauge size on display
-#define PB_SIZE_Y                   128
+#define PB_SIZE_Y                   192
 
 //! @}
 
@@ -141,7 +141,7 @@ enum app_widget_ids {
  */
 
 //! Description for label
-const static char                   *demo_string = "Gauge Demo Widget";
+const static char                   *demo_string = "Gauge Demo";
 
 //! @}
 
@@ -344,8 +344,8 @@ void app_widget_launch(struct workqueue_task *task) {
 
 
 	//! Code for the button
-	area.pos.x = 10;
-	area.pos.y = 200;
+	area.pos.x = 130;
+	area.pos.y = 2;
 	area.size.x = 80;
 	area.size.y = 30;
 
@@ -357,7 +357,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	win_show(wtk_button_as_child(btn));
 
 	//! Basic frame code
-	area.pos.x += area.size.x + 20;
+	area.pos.x += area.size.x + 10;
 
 	sub_frame_background.type = BITMAP_SOLID;
 	sub_frame_background.data.color = GFX_COLOR(127, 0, 0);

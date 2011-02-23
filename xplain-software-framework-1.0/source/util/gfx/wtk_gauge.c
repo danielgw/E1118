@@ -223,6 +223,11 @@ static bool wtk_gauge_handler(struct win_window *win,
 	struct wtk_gauge                *gauge;
 	uint8_t                         position;
 	uint8_t                         option;
+	uint8_t                         rescale;
+	uint8_t                         xangle;
+	uint8_t                         yangle;
+	uint8_t                         xrescale;
+	uint8_t                         yrescale;
 
 	gauge = (struct wtk_gauge *)win_get_custom_data(win);
 
@@ -245,51 +250,47 @@ static bool wtk_gauge_handler(struct win_window *win,
 		gfx_draw_rect(clip->origin.x, clip->origin.y, area->size.x,
 				area->size.y, WTK_PROGRESS_BAR_BORDER_COLOR);
 
-		/* Draw progress gauge interior according to orientation.
-		 * An inverted progress gauge is drawn in the same way as a
+		/* Draw gauge interior according to orientation.
+		 * An inverted gauge is drawn in the same way as a
 		 * non-inverted, as this option is handled in the functions
 		 * for setting the gauge's colors and value.
 		 */
 		if (option & WTK_PROGRESS_BAR_VERTICAL) {
-			// Draw the top section of the gauge.
-			gfx_draw_filled_rect(clip->origin.x + 1,
-					clip->origin.y + 1,
-					area->size.x - 2,
-					position, gauge->fill_color);
-			// Draw the bottom section of the gauge.
-			gfx_draw_filled_rect(clip->origin.x + 1,
-					clip->origin.y + 1 + position,
-					area->size.x - 2,
-					area->size.y - 2 - position,
-					gauge->background_color);
+			
+			/* TODO: OTHER ANGLES FOR GAUGE */
+			
 		} else {
-			/*
-            // Draw the left section of the gauge.
-			gfx_draw_filled_rect(clip->origin.x + 1,
-					clip->origin.y + 1,
-					gauge->position,
-					area->size.y - 2, gauge->fill_color);
-			// Draw the right section of the gauge.
-			gfx_draw_filled_rect(clip->origin.x + 1 + position,
-					clip->origin.y + 1,
-					area->size.x - 2 - position,
-					area->size.y - 2,
-					gauge->background_color);*/
-
-			gfx_draw_filled_rect(clip->origin.x, clip->origin.y, area->size.x,
+			
+			/*!! NEW GAUGE STUFF !!*/
+			
+			rescale = wtk_rescale_value(position, area->size.x, 128);
+			
+			xangle = pgm_read_byte(&(trigtable[128 - rescale]));
+			
+			yangle = pgm_read_byte(&(trigtable[rescale]));
+			
+			xrescale = wtk_rescale_value(xangle, 255, area->size.x);
+			
+			yrescale = wtk_rescale_value(yangle, 255, area->size.y);
+			
+            //! Redraws the gauge background
+            gfx_draw_filled_rect(clip->origin.x, clip->origin.y, area->size.x,
 				area->size.y, gauge->background_color);
             
-            gfx_generic_draw_line(clip->origin.x + 1, clip->origin.y + 1, area->size.x - 2 - position, area->size.y - 2,gauge->fill_color);
+            //! Draws the gauge  
+            gfx_generic_draw_line(clip->origin.x + area->size.x - xrescale, clip->origin.y + area->size.y - yrescale, clip->origin.x + area->size.x - 2, clip->origin.y + area->size.y - 2, gauge->fill_color);
 			{
-                    //! Old test variables!
-                    //
-                    //
+                    //! Old test variables
+                    //clip->origin.x + area->size.x - xrescale, clip->origin.y + area->size.y - yrescale, clip->origin.x + area->size.x - 2, clip->origin.y + area->size.y - 2, gauge->fill_color
+                    //clip->origin.x + area->size.x, clip->origin.y + area->size.y, area->size.x - 2 - position, area->size.y - 2,gauge->fill_color
                     //area->pos.x + position,area->pos.y,clip->origin.x ,area->pos.y + 20,gauge->fill_color
                     //area->pos.x,area->pos.y,area->pos.x + 20,area->pos.y + 20,gauge->fill_color
                     //GFX_COLOR(255,0,0)
-                    //pgm_read_byte(&(trigtable[position]));
-                                                  
+                    //pgm_read_byte(&(trigtable[position]));                  
             }
+            
+            //! Visibility circle - temporary
+            gfx_draw_circle(clip->origin.x + area->size.x - xrescale, clip->origin.y + area->size.y - yrescale, 3, GFX_COLOR(255,0,0), GFX_WHOLE);{}
 		}
 
 		/* Always accept DRAW events, as the return value is ignored
@@ -315,7 +316,7 @@ static bool wtk_gauge_handler(struct win_window *win,
  * Allocates the necessary memory and intializes the window and data for
  * progress gauge widgets. If there is not enough memory, the function returns
  * NULL.\n To destroy a gauge widget and all its contents, and free its
- * memory, call \ref win_destroy() on the progress gauge's child reference, given
+ * memory, call \ref win_destroy() on the gauge's child reference, given
  * by \ref wtk_gauge_as_child(), like this:
  * "win_destroy(wtk_gauge_as_child(my_gauge_ptr));".\par
  *
@@ -331,7 +332,7 @@ static bool wtk_gauge_handler(struct win_window *win,
  *
  * Refer to <gfx/wtk.h> for available configuration options.
  *
- * \todo Revisit, support larger progress gauges and values given a config symbol.
+ * \todo Revisit, support larger gauges and values given a config symbol.
  *
  * \param parent Pointer to parent win_window struct.
  * \param area Pointer to win_area struct with position and size of the
