@@ -63,13 +63,13 @@
 //! Offset from the display edges to calibration circles
 #define CAL_OFFSET      50
 //! Radius of calibration circles
-#define CAL_RADIUS      5
+#define CAL_RADIUS      8
 //! Threshold for unintended touches on display
 #define CAL_TRESHOLD    500
 //! Background color for the application
-#define CAL_BG_COLOR    GFX_COLOR(255, 0, 0)
+#define CAL_BG_COLOR    GFX_COLOR(0, 0, 255)
 //! Foreground color for the application
-#define CAL_FG_COLOR    GFX_COLOR(255, 255, 255)
+#define CAL_FG_COLOR    GFX_COLOR(0, 255, 0)
 
 //! @}
 
@@ -106,7 +106,7 @@ static struct font sysfont2x;
  * \note Stored in PROGMEM to reduce memory usage.
  */
 static DEFINE_PROGMEM(char, calibrate_help_text[]) =
-		"Poke those circles.";
+		"Engage calibration!\n\nTouch the nipples now!";
 
 /**
  * \brief Touch event handler

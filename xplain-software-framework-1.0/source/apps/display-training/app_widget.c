@@ -41,6 +41,7 @@
 #include <board.h>
 #include <string.h>
 
+
 #include <gfx/gfx.h>
 #include <gfx/win.h>
 #include <gfx/wtk.h>
@@ -51,7 +52,11 @@
 #include <string.h>
 #include <stream.h>
 
+
+
 #include "app_widget.h"
+
+
 
 /**
  * \weakgroup app_widget_group
@@ -119,7 +124,7 @@ enum app_widget_ids {
  */
 
 //! Max value for slider
-#define SLIDER_MAX_VALUE            100
+#define SLIDER_MAX_VALUE            127
 
 //! @}
 
@@ -130,7 +135,7 @@ enum app_widget_ids {
  */
 
 //! Description for label
-const static char                   *demo_string = "Demonstrating widgets";
+const static char                   *demo_string = "Gauge Demo Widget";
 
 //! @}
 
@@ -144,8 +149,7 @@ const static char                   *demo_string = "Demonstrating widgets";
 static struct wtk_basic_frame       *frame;
 //! Pointer to slider
 static struct wtk_slider            *slider;
-//! Pointer to progress bar
-static struct wtk_progress_bar      *progress_bar;
+
 //! Frame background bitmap
 static struct gfx_bitmap            frame_background;
 //! Counter for button
@@ -154,6 +158,10 @@ static uint8_t                      counter;
 static struct wtk_basic_frame       *sub_frame;
 //! Sub-frame background bitmap
 static struct gfx_bitmap            sub_frame_background;
+
+//! Pointer to gauge
+static struct wtk_gauge      		*gauge;
+
 
 //! @}
 
@@ -171,12 +179,13 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 
 	switch (command) {
 	case SLIDER_ID:
-		wtk_progress_bar_set_value(progress_bar,
-				wtk_slider_get_value(slider));
+		wtk_gauge_set_value(gauge,
+		wtk_slider_get_value(slider));
 		break;
 
 	case BUTTON_ID:
-		//! \todo Add code here to handle button press.
+		counter++;
+		win_redraw(wtk_basic_frame_as_child(sub_frame));
 		break;
 	}
 
@@ -195,11 +204,14 @@ static void sub_frame_draw_handler(struct win_window *win,
 {
 	char buffer[4];
 
-	snprintf(buffer, sizeof(buffer), "%3d", counter);
+	snprintf(buffer, sizeof(buffer), "%3d", wtk_gauge_trigtable(wtk_gauge_get_value(gauge)));
 	/**
 	 * \todo Add code here to draw text on screen using the
 	 * gfx_draw_string() function.
 	 */
+	gfx_draw_string(buffer, clip->origin.x + 30, clip->origin.y + 12,
+			&sysfont, GFX_COLOR(255, 255, 255),
+			GFX_COLOR_TRANSPARENT);
 }
 
 /**
@@ -216,6 +228,11 @@ void app_widget_launch(struct workqueue_task *task) {
 	struct win_area         area;
 	struct wtk_label        *lbl;
 	struct wtk_button       *btn;
+
+
+	//int byte = pgm_read_byte(&(trigtable[15])); //! Get byte function for PROGMEM
+	//pgm_read_byte(&(trigtable[wtk_slider_get_value(slider)]))
+
 
 	// Use larger sysfont for this app
 	sysfont.scale = 2;
@@ -299,23 +316,48 @@ void app_widget_launch(struct workqueue_task *task) {
 	area.size.x = PB_SIZE_X;
 	area.size.y = PB_SIZE_Y;
 
+
 	/*
-	 * Create the progress bar and check the return value if an error
-	 * occured while creating the progress bar.
+	 * Create the gauge and check the return value if an error
+	 * occured while creating the gauge.
 	 */
-	progress_bar = wtk_progress_bar_create(parent, &area, SLIDER_MAX_VALUE,
+	gauge = wtk_gauge_create(parent, &area, SLIDER_MAX_VALUE,
 			SLIDER_MAX_VALUE / 2, GFX_COLOR(255, 255, 0),
-			GFX_COLOR(90, 90, 90), WTK_PROGRESS_BAR_HORIZONTAL);
-	if (!progress_bar) {
+			GFX_COLOR(90, 90, 90), WTK_GAUGE_HORIZONTAL);
+	if (!gauge) {
 		goto error_widget;
 	}
 
 	// Draw the progress bar by showing the progress bar widget's window.
-	win_show(wtk_progress_bar_as_child(progress_bar));
+	win_show(wtk_gauge_as_child(gauge));
+
 
 	//! \todo Add code to set up button here.
+	area.pos.x = 10;
+	area.pos.y = 150;
+	area.size.x = 90;
+	area.size.y = 40;
+
+	btn = wtk_button_create(parent, &area, "Click",
+			(win_command_t)BUTTON_ID);
+	if (!btn) {
+		goto error_widget;
+	}
+	win_show(wtk_button_as_child(btn));
 
 	//! \todo Add code to set up basic frame here.
+	area.pos.x += area.size.x + 40;
+
+	sub_frame_background.type = BITMAP_SOLID;
+	sub_frame_background.data.color = GFX_COLOR(127, 0, 0);
+
+	sub_frame = wtk_basic_frame_create(parent, &area,
+			&sub_frame_background, sub_frame_draw_handler,
+			NULL, NULL);
+	if (!sub_frame) {
+		goto error_widget;
+	}
+	win_show(wtk_basic_frame_as_child(sub_frame));
 
 	return;
 
