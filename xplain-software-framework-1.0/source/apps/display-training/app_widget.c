@@ -116,9 +116,9 @@ enum app_widget_ids {
 //! Gauge position
 #define PB_POS_Y					40
 //! Gauge size on display
-#define PB_SIZE_X                   210
+#define PB_SIZE_X                   128
 //! Gauge size on display
-#define PB_SIZE_Y                   192
+#define PB_SIZE_Y                   128
 
 //! @}
 
@@ -129,7 +129,7 @@ enum app_widget_ids {
  */
 
 //! Max value for slider
-#define SLIDER_MAX_VALUE            127
+#define SLIDER_MAX_VALUE            255
 
 
 //! @}
@@ -161,7 +161,7 @@ static struct gfx_bitmap            frame_background;
 //! Counter for button
 static uint8_t                      counter;
 //! Pointer to the sub-frame
-static struct wtk_basic_frame       *sub_frame;
+static struct wtk_basic_frame       *sub_frame, *sub_frame_test;
 //! Sub-frame background bitmap
 static struct gfx_bitmap            sub_frame_background;
 
@@ -187,6 +187,7 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 	case SLIDER_ID:
 		wtk_gauge_set_value(gauge,
 		wtk_slider_get_value(slider));
+		win_redraw(wtk_basic_frame_as_child(sub_frame_test));
 		break;
 
 	case BUTTON_ID:
@@ -210,7 +211,22 @@ static void sub_frame_draw_handler(struct win_window *win,
 {
 	char buffer[4];
 
-	snprintf(buffer, sizeof(buffer), "%3d", wtk_gauge_trigtable(wtk_gauge_get_value(gauge)));
+	snprintf(buffer, sizeof(buffer), "%3d", counter);
+	/**
+	 * \todo Add code here to draw text on screen using the
+	 * gfx_draw_string() function.
+	 */
+	gfx_draw_string(buffer, clip->origin.x + 30, clip->origin.y + 12,
+			&sysfont, GFX_COLOR(255, 255, 255),
+			GFX_COLOR_TRANSPARENT);
+}
+
+static void sub_frame_draw_handler_test(struct win_window *win,
+		struct win_clip_region const *clip)
+{
+	char buffer[4];
+
+	snprintf(buffer, sizeof(buffer), "%3d", wtk_gauge_trigtable(wtk_rescale_value(wtk_gauge_get_value(gauge), SLIDER_MAX_VALUE, 128)));
 	/**
 	 * \todo Add code here to draw text on screen using the
 	 * gfx_draw_string() function.
@@ -297,13 +313,16 @@ void app_widget_launch(struct workqueue_task *task) {
 	// Draw the label by showing the label widget's window.
 	win_show(wtk_label_as_child(lbl));
 
+	/*
+	 * Testing label for extra values
+	 */
+
+
 	// Application slider
 	area.pos.x = SLIDER_POS_X;
 	area.pos.y = SLIDER_POS_Y;
 	area.size.x = SLIDER_SIZE_X;
 	area.size.y = SLIDER_SIZE_Y;
-
-	
 
 	/*
 	 * Create the slider and check the return value if an error occured
@@ -333,7 +352,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	 * occured while creating the gauge.
 	 */
 	gauge = wtk_gauge_create(parent, &area, SLIDER_MAX_VALUE,
-			SLIDER_MAX_VALUE / 2, GFX_COLOR(255, 255, 0),
+			SLIDER_MAX_VALUE / 2, GFX_COLOR(0, 255, 0),
 			GFX_COLOR(90, 90, 90), WTK_GAUGE_HORIZONTAL);
 	if (!gauge) {
 		goto error_widget;
@@ -349,7 +368,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	area.size.x = 80;
 	area.size.y = 30;
 
-	btn = wtk_button_create(parent, &area, "Click",
+	btn = wtk_button_create(parent, &area, "Hit me",
 			(win_command_t)BUTTON_ID);
 	if (!btn) {
 		goto error_widget;
@@ -369,6 +388,23 @@ void app_widget_launch(struct workqueue_task *task) {
 		goto error_widget;
 	}
 	win_show(wtk_basic_frame_as_child(sub_frame));
+
+	//! Test frame code
+	area.pos.x = 220;
+	area.pos.y = 40;
+	area.size.x = 80;
+	area.size.y = 30;
+
+	sub_frame_background.type = BITMAP_SOLID;
+	sub_frame_background.data.color = GFX_COLOR(127, 0, 0);
+
+	sub_frame_test = wtk_basic_frame_create(parent, &area,
+			&sub_frame_background, sub_frame_draw_handler_test,
+			NULL, NULL);
+	if (!sub_frame) {
+		goto error_widget;
+	}
+	win_show(wtk_basic_frame_as_child(sub_frame_test));
 
 	return;
 

@@ -263,7 +263,7 @@ static bool wtk_gauge_handler(struct win_window *win,
 			
 			/*!! NEW GAUGE STUFF !!*/
 			
-			rescale = wtk_rescale_value(position, area->size.x, 128);
+			rescale = wtk_rescale_value(area->size.x - position, area->size.x, 128);
 			
 			xangle = pgm_read_byte(&(trigtable[128 - rescale]));
 			
@@ -274,8 +274,11 @@ static bool wtk_gauge_handler(struct win_window *win,
 			yrescale = wtk_rescale_value(yangle, 255, area->size.y);
 			
             //! Redraws the gauge background
-            gfx_draw_filled_rect(clip->origin.x, clip->origin.y, area->size.x,
-				area->size.y, gauge->background_color);
+            gfx_draw_filled_rect(clip->origin.x + 1, clip->origin.y + 1, area->size.x - 1,
+				area->size.y - 1, GFX_COLOR(50, 50, 50));
+				
+			//! Draws gauge pointer circle
+			gfx_draw_filled_circle(clip->origin.x + area->size.x - 3, clip->origin.y + area->size.y - 3, area->size.x - 4, gauge->background_color, GFX_QUADRANT1);{}
             
             //! Draws the gauge  
             gfx_generic_draw_line(clip->origin.x + area->size.x - xrescale, clip->origin.y + area->size.y - yrescale, clip->origin.x + area->size.x - 2, clip->origin.y + area->size.y - 2, gauge->fill_color);
@@ -286,6 +289,7 @@ static bool wtk_gauge_handler(struct win_window *win,
                     //area->pos.x + position,area->pos.y,clip->origin.x ,area->pos.y + 20,gauge->fill_color
                     //area->pos.x,area->pos.y,area->pos.x + 20,area->pos.y + 20,gauge->fill_color
                     //GFX_COLOR(255,0,0)
+                    //gauge->background_color
                     //pgm_read_byte(&(trigtable[position]));                  
             }
             
