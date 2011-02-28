@@ -263,25 +263,25 @@ static bool wtk_gauge_handler(struct win_window *win,
 			
 			/*!! NEW GAUGE STUFF !!*/
 			
-			rescale = wtk_rescale_value(area->size.x - position, area->size.x, 128);
+			rescale = wtk_rescale_value(area->size.x - position, area->size.x + 2, 127);
 			
-			xangle = pgm_read_byte(&(trigtable[128 - rescale]));
+			xangle = pgm_read_byte(&(trigtable[127 - rescale]));
 			
-			yangle = pgm_read_byte(&(trigtable[rescale]));
+			yangle = pgm_read_byte(&(trigtable[rescale - 1]));
 			
-			xrescale = wtk_rescale_value(xangle, 255, area->size.x);
+			xrescale = wtk_rescale_value(xangle, 255, area->size.x - 2);
 			
-			yrescale = wtk_rescale_value(yangle, 255, area->size.y);
+			yrescale = wtk_rescale_value(yangle, 255, area->size.y - 2);
 			
             //! Redraws the gauge background
-            gfx_draw_filled_rect(clip->origin.x + 1, clip->origin.y + 1, area->size.x - 1,
-				area->size.y - 1, GFX_COLOR(50, 50, 50));
+            gfx_draw_filled_rect(clip->origin.x + 1, clip->origin.y + 1, area->size.x - 2,
+				area->size.y - 2, GFX_COLOR(50, 50, 50));
 				
 			//! Draws gauge pointer circle
-			gfx_draw_filled_circle(clip->origin.x + area->size.x - 3, clip->origin.y + area->size.y - 3, area->size.x - 4, gauge->background_color, GFX_QUADRANT1);{}
+			gfx_draw_filled_circle(clip->origin.x + area->size.x - 2, clip->origin.y + area->size.y - 2, area->size.x - 3, gauge->background_color, GFX_QUADRANT1);{}
             
-            //! Draws the gauge  
-            gfx_generic_draw_line(clip->origin.x + area->size.x - xrescale, clip->origin.y + area->size.y - yrescale, clip->origin.x + area->size.x - 2, clip->origin.y + area->size.y - 2, gauge->fill_color);
+            //! Draws the gauge line  
+            gfx_generic_draw_line(clip->origin.x + area->size.x - xrescale, clip->origin.y + area->size.y - yrescale - 2, clip->origin.x + area->size.x - 2, clip->origin.y + area->size.y - 2, gauge->fill_color);
 			{
                     //! Old test variables
                     //clip->origin.x + area->size.x - xrescale, clip->origin.y + area->size.y - yrescale, clip->origin.x + area->size.x - 2, clip->origin.y + area->size.y - 2, gauge->fill_color
@@ -294,7 +294,7 @@ static bool wtk_gauge_handler(struct win_window *win,
             }
             
             //! Visibility circle - temporary
-            gfx_draw_circle(clip->origin.x + area->size.x - xrescale, clip->origin.y + area->size.y - yrescale, 3, GFX_COLOR(255,0,0), GFX_WHOLE);{}
+            gfx_draw_circle(clip->origin.x + area->size.x - xrescale, clip->origin.y + area->size.y - yrescale - 2, 5, GFX_COLOR(255,0,0), GFX_WHOLE);{}
 		}
 
 		/* Always accept DRAW events, as the return value is ignored

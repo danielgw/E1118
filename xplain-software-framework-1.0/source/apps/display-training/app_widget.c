@@ -106,7 +106,7 @@ enum app_widget_ids {
 //! Slider size on display
 #define SLIDER_SIZE_X               30
 //! Slider size on display
-#define SLIDER_SIZE_Y               192
+#define SLIDER_SIZE_Y               170
 
 //! Spacing from slider to progress bar
 #define SLIDER_PB_SPACING_X         20	//Not used
@@ -129,7 +129,7 @@ enum app_widget_ids {
  */
 
 //! Max value for slider
-#define SLIDER_MAX_VALUE            255
+#define SLIDER_MAX_VALUE            128
 
 
 //! @}
@@ -226,7 +226,7 @@ static void sub_frame_draw_handler_test(struct win_window *win,
 {
 	char buffer[4];
 
-	snprintf(buffer, sizeof(buffer), "%3d", wtk_gauge_trigtable(wtk_rescale_value(wtk_gauge_get_value(gauge), SLIDER_MAX_VALUE, 128)));
+	snprintf(buffer, sizeof(buffer), "%3d", wtk_gauge_trigtable(wtk_rescale_value(wtk_gauge_get_value(gauge), SLIDER_MAX_VALUE, 127)));
 	/**
 	 * \todo Add code here to draw text on screen using the
 	 * gfx_draw_string() function.
@@ -358,7 +358,7 @@ void app_widget_launch(struct workqueue_task *task) {
 		goto error_widget;
 	}
 
-	// Draw the progress bar by showing the progress bar widget's window.
+	// Draw the gauge by showing the gauge widget's window.
 	win_show(wtk_gauge_as_child(gauge));
 
 
