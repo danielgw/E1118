@@ -108,17 +108,13 @@ enum app_widget_ids {
 //! Slider size on display
 #define SLIDER_SIZE_Y               170
 
-//! Spacing from slider to progress bar
-#define SLIDER_PB_SPACING_X         20	//Not used
+//! Gauge position
+#define G_POS_X						 50
+//! Gauge position
+#define G_POS_Y						 40
+//! Gauge size on display
+#define G_SIZE						128
 
-//! Gauge position
-#define PB_POS_X					50
-//! Gauge position
-#define PB_POS_Y					40
-//! Gauge size on display
-#define PB_SIZE_X                   128
-//! Gauge size on display
-#define PB_SIZE_Y                   128
 
 //! @}
 
@@ -340,11 +336,11 @@ void app_widget_launch(struct workqueue_task *task) {
 	// Draw the slider by showing the slider widget's window.
 	win_show(wtk_slider_as_child(slider));
 
-	// Application progress bar, placed right of the slider.
-	area.pos.x = PB_POS_X;
-	area.pos.y = PB_POS_Y;
-	area.size.x = PB_SIZE_X;
-	area.size.y = PB_SIZE_Y;
+	// Application gauge.
+	area.pos.x = G_POS_X;
+	area.pos.y = G_POS_Y;
+	area.size.x = G_SIZE;
+	area.size.y = G_SIZE;
 
 
 	/*

@@ -71,6 +71,11 @@ uint8_t trigtable[128] PROGMEM = {
 		236,237,238,239,240,241,242,243,244,245,246,247,247,248,249,249,
 		250,251,251,252,252,253,253,253,254,254,254,255,255,255,255,255
 	};
+	
+bool                            start = true;
+
+uint8_t                         xrescale = 0;
+uint8_t                         yrescale = 0;
  
 struct wtk_gauge {
 	//! Container window of gauge.
@@ -226,8 +231,7 @@ static bool wtk_gauge_handler(struct win_window *win,
 	uint8_t                         rescale;
 	uint8_t                         xangle;
 	uint8_t                         yangle;
-	uint8_t                         xrescale;
-	uint8_t                         yrescale;
+
 
 	gauge = (struct wtk_gauge *)win_get_custom_data(win);
 
@@ -246,56 +250,71 @@ static bool wtk_gauge_handler(struct win_window *win,
 		position = gauge->position;
 		option = gauge->option;
 
-		// Draw a window border.
-		gfx_draw_rect(clip->origin.x, clip->origin.y, area->size.x,
-				area->size.y, WTK_PROGRESS_BAR_BORDER_COLOR);
 
-		/* Draw gauge interior according to orientation.
-		 * An inverted gauge is drawn in the same way as a
-		 * non-inverted, as this option is handled in the functions
-		 * for setting the gauge's colors and value.
-		 */
-		if (option & WTK_PROGRESS_BAR_VERTICAL) {
-			
-			/* TODO: OTHER ANGLES FOR GAUGE */
-			
-		} else {
-			
-			/*!! NEW GAUGE STUFF !!*/
-			
-			rescale = wtk_rescale_value(area->size.x - position, area->size.x + 2, 127);
-			
-			xangle = pgm_read_byte(&(trigtable[127 - rescale]));
-			
-			yangle = pgm_read_byte(&(trigtable[rescale - 1]));
-			
-			xrescale = wtk_rescale_value(xangle, 255, area->size.x - 2);
-			
-			yrescale = wtk_rescale_value(yangle, 255, area->size.y - 2);
-			
-            //! Redraws the gauge background
+		/*
+         * !! NEW GAUGE STUFF !! 
+         *
+         * Draw gauge interior according to orientation.
+		 * TODO: OTHER ANGLES FOR GAUGE
+         */
+        
+        
+        //! Draw the gauge background elements once
+        if (start) {
+            // Draw a window border.
+    		gfx_draw_rect(clip->origin.x, clip->origin.y, area->size.x,
+    				area->size.y, WTK_PROGRESS_BAR_BORDER_COLOR);
+            
+            /* Old redraw background
             gfx_draw_filled_rect(clip->origin.x + 1, clip->origin.y + 1, area->size.x - 2,
-				area->size.y - 2, GFX_COLOR(50, 50, 50));
-				
-			//! Draws gauge pointer circle
-			gfx_draw_filled_circle(clip->origin.x + area->size.x - 2, clip->origin.y + area->size.y - 2, area->size.x - 3, gauge->background_color, GFX_QUADRANT1);{}
+    			area->size.y - 2, GFX_COLOR(50, 50, 50));
+   			*/
+    			
+    		//! Draws gauge tracking circle
+    		gfx_draw_filled_circle(clip->origin.x + area->size.x - 2, clip->origin.y + area->size.y - 2, area->size.x - 3, gauge->background_color, GFX_QUADRANT1);{}
             
-            //! Draws the gauge line  
-            gfx_generic_draw_line(clip->origin.x + area->size.x - xrescale, clip->origin.y + area->size.y - yrescale - 2, clip->origin.x + area->size.x - 2, clip->origin.y + area->size.y - 2, gauge->fill_color);
-			{
-                    //! Old test variables
-                    //clip->origin.x + area->size.x - xrescale, clip->origin.y + area->size.y - yrescale, clip->origin.x + area->size.x - 2, clip->origin.y + area->size.y - 2, gauge->fill_color
-                    //clip->origin.x + area->size.x, clip->origin.y + area->size.y, area->size.x - 2 - position, area->size.y - 2,gauge->fill_color
-                    //area->pos.x + position,area->pos.y,clip->origin.x ,area->pos.y + 20,gauge->fill_color
-                    //area->pos.x,area->pos.y,area->pos.x + 20,area->pos.y + 20,gauge->fill_color
-                    //GFX_COLOR(255,0,0)
-                    //gauge->background_color
-                    //pgm_read_byte(&(trigtable[position]));                  
-            }
-            
-            //! Visibility circle - temporary
-            gfx_draw_circle(clip->origin.x + area->size.x - xrescale, clip->origin.y + area->size.y - yrescale - 2, 5, GFX_COLOR(255,0,0), GFX_WHOLE);{}
-		}
+            start = false;
+        }
+		
+		//! Erases the previous gauge line using old values
+		gfx_generic_draw_line(clip->origin.x + area->size.x - xrescale, clip->origin.y + area->size.y - yrescale - 2, clip->origin.x + area->size.x - 2, clip->origin.y + area->size.y - 2, gauge->background_color);
+		
+		
+		//! Rescales the position value for usage in the trigtable array
+		rescale = wtk_rescale_value(area->size.x - position, area->size.x + 2, 127);
+		
+		//! Reads x trigonometric value from PROGMEM array
+		xangle = pgm_read_byte(&(trigtable[127 - rescale]));
+        //! Reads x trigonometric value from PROGMEM array
+		yangle = pgm_read_byte(&(trigtable[rescale - 1]));
+		
+		//! Rescales the x trigonometric value for usage in the draw function
+		xrescale = wtk_rescale_value(xangle, 255, area->size.x - 2);
+		//! Rescales the y trigonometric value for usage in the draw function
+		yrescale = wtk_rescale_value(yangle, 255, area->size.y - 2);
+		
+
+        
+        //! Draws the gauge line  
+        gfx_generic_draw_line(clip->origin.x + area->size.x - xrescale, clip->origin.y + area->size.y - yrescale - 2, clip->origin.x + area->size.x - 2, clip->origin.y + area->size.y - 2, gauge->fill_color);
+		
+		// clip->origin.(x/y)                -- the frames start position top left cord(0.0)
+		// area->size.(x.y)                  -- the area size aquired from area defined in widget
+		
+                //! Old test variables
+                //clip->origin.x + area->size.x - xrescale, clip->origin.y + area->size.y - yrescale, clip->origin.x + area->size.x - 2, clip->origin.y + area->size.y - 2, gauge->fill_color
+                //clip->origin.x + area->size.x, clip->origin.y + area->size.y, area->size.x - 2 - position, area->size.y - 2,gauge->fill_color
+                //area->pos.x + position,area->pos.y,clip->origin.x ,area->pos.y + 20,gauge->fill_color
+                //area->pos.x,area->pos.y,area->pos.x + 20,area->pos.y + 20,gauge->fill_color
+                //GFX_COLOR(255,0,0)
+                //gauge->background_color
+                //pgm_read_byte(&(trigtable[position]));                  
+        
+        
+        /*
+        //! Visibility circle - temporary out :P
+        gfx_draw_circle(clip->origin.x + area->size.x - xrescale, clip->origin.y + area->size.y - yrescale - 2, 5, GFX_COLOR(255,0,0), GFX_WHOLE);{}
+        */
 
 		/* Always accept DRAW events, as the return value is ignored
 		 * anyway for that event type.
