@@ -73,6 +73,8 @@
 enum app_widget_ids {
 	//! Event command ID for the slider.
 	SLIDER_ID = 1,
+	//! Event command ID for the second slider.
+	SLIDERTWO_ID = 2,
 	//! Event command ID for the button.
 	BUTTON_ID,
 };
@@ -116,6 +118,27 @@ enum app_widget_ids {
 #define G_SIZE						128
 
 
+//! Slidertwo position
+#define SLIDERTWO_POS_X                180
+//! Slidertwo position
+#define SLIDERTWO_POS_Y                190
+//! Slidertwo size on display
+#define SLIDERTWO_SIZE_X               128
+//! Slidertwo size on display
+#define SLIDERTWO_SIZE_Y                30
+
+//! Gaugetwo position
+#define GTWO_POS_X			       	   200
+//! Gaugetwo position
+#define GTWO_POS_Y					   100
+//! Gaugetwo size on display
+#define GTWO_SIZE						64
+
+
+//! Gauge line height start position
+#define TRAVEL						  	 0
+
+
 //! @}
 
 /**
@@ -126,6 +149,8 @@ enum app_widget_ids {
 
 //! Max value for slider
 #define SLIDER_MAX_VALUE            128
+//! Max value for slidertwo
+#define SLIDERTWO_MAX_VALUE         128
 
 
 //! @}
@@ -137,7 +162,7 @@ enum app_widget_ids {
  */
 
 //! Description for label
-const static char                   *demo_string = "Gauge Demo";
+const static char                   *demo_string = "Gauge Demo:";
 
 //! @}
 
@@ -151,6 +176,8 @@ const static char                   *demo_string = "Gauge Demo";
 static struct wtk_basic_frame       *frame;
 //! Pointer to slider
 static struct wtk_slider            *slider;
+//! Pointer to slidertwo
+static struct wtk_slider            *slidertwo;
 
 //! Frame background bitmap
 static struct gfx_bitmap            frame_background;
@@ -163,6 +190,8 @@ static struct gfx_bitmap            sub_frame_background;
 
 //! Pointer to gauge
 static struct wtk_gauge      		*gauge;
+//! Pointer to gaugetwo
+static struct wtk_gauge      		*gaugetwo;
 
 
 //! @}
@@ -184,6 +213,11 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 		wtk_gauge_set_value(gauge,
 		wtk_slider_get_value(slider));
 		win_redraw(wtk_basic_frame_as_child(sub_frame_test));
+		break;
+
+	case SLIDERTWO_ID:
+		wtk_gauge_set_value(gaugetwo,
+		wtk_slider_get_value(slidertwo));
 		break;
 
 	case BUTTON_ID:
@@ -332,9 +366,30 @@ void app_widget_launch(struct workqueue_task *task) {
 	}
 
 
-
 	// Draw the slider by showing the slider widget's window.
 	win_show(wtk_slider_as_child(slider));
+
+	// Application slidertwo
+	area.pos.x = SLIDERTWO_POS_X;
+	area.pos.y = SLIDERTWO_POS_Y;
+	area.size.x = SLIDERTWO_SIZE_X;
+	area.size.y = SLIDERTWO_SIZE_Y;
+
+	/*
+	 * Create the slidertwo and check the return value if an error occured
+	 * while creating the slidertwo.
+	 */
+	slidertwo = wtk_slider_create(parent, &area, SLIDERTWO_MAX_VALUE,
+			SLIDERTWO_MAX_VALUE / 2, WTK_SLIDER_CMD_RELEASE,
+			(win_command_t)SLIDERTWO_ID);
+	if (!slidertwo) {
+		goto error_widget;
+	}
+
+
+
+	// Draw the slider by showing the slider widget's window.
+	win_show(wtk_slider_as_child(slidertwo));
 
 	// Application gauge.
 	area.pos.x = G_POS_X;
@@ -347,8 +402,8 @@ void app_widget_launch(struct workqueue_task *task) {
 	 * Create the gauge and check the return value if an error
 	 * occured while creating the gauge.
 	 */
-	gauge = wtk_gauge_create(parent, &area, SLIDER_MAX_VALUE,
-			SLIDER_MAX_VALUE / 2, GFX_COLOR(0, 255, 0),
+	gauge = wtk_gauge_create(parent, &area, SLIDER_MAX_VALUE + TRAVEL,
+			SLIDER_MAX_VALUE + TRAVEL / 2, GFX_COLOR(0, 255, 0),
 			GFX_COLOR(90, 90, 90), WTK_GAUGE_HORIZONTAL);
 	if (!gauge) {
 		goto error_widget;
@@ -356,6 +411,28 @@ void app_widget_launch(struct workqueue_task *task) {
 
 	// Draw the gauge by showing the gauge widget's window.
 	win_show(wtk_gauge_as_child(gauge));
+
+
+	// Application gaugetwo.
+	area.pos.x = GTWO_POS_X;
+	area.pos.y = GTWO_POS_Y;
+	area.size.x = GTWO_SIZE;
+	area.size.y = GTWO_SIZE;
+
+
+	/*
+	 * Create the gaugetwo and check the return value if an error
+	 * occured while creating the gauge.
+	 */
+	gaugetwo = wtk_gauge_create(parent, &area, SLIDERTWO_MAX_VALUE + TRAVEL,
+			SLIDERTWO_MAX_VALUE + TRAVEL / 2, GFX_COLOR(0, 255, 0),
+			GFX_COLOR(90, 90, 90), WTK_GAUGE_INVERT|WTK_GAUGE_HORIZONTAL);
+	if (!gaugetwo) {
+		goto error_widget;
+	}
+
+	// Draw the gaugetwo by showing the gauge widget's window.
+	win_show(wtk_gauge_as_child(gaugetwo));
 
 
 	//! Code for the button
