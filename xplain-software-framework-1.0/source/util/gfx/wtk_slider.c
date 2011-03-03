@@ -522,7 +522,7 @@ struct wtk_slider *wtk_slider_create(struct win_window *parent,
 {
 	struct win_attributes   attr;
 	struct wtk_slider       *slider;
-	uint8_t                 length;
+	uint16_t                 length;
 
 	// Do sanity check on parameters.
 	assert(maximum > 0);

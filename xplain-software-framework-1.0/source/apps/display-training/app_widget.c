@@ -97,46 +97,46 @@ enum app_widget_ids {
  */
 
 //! Label position on top of display
-#define LABEL_POS_X                 2
+#define LABEL_POS_X                 3
 //! Label position on top of display
-#define LABEL_POS_Y                 2
+#define LABEL_POS_Y                 3
 
 //! Slider position
-#define SLIDER_POS_X                10
+#define SLIDER_POS_X               10
 //! Slider position
-#define SLIDER_POS_Y                40
+#define SLIDER_POS_Y               40
 //! Slider size on display
-#define SLIDER_SIZE_X               30
+#define SLIDER_SIZE_X              20
 //! Slider size on display
-#define SLIDER_SIZE_Y               170
+#define SLIDER_SIZE_Y             170
 
 //! Gauge position
-#define G_POS_X						 50
+#define G_POS_X					   50
 //! Gauge position
-#define G_POS_Y						 40
+#define G_POS_Y					   40
 //! Gauge size on display
-#define G_SIZE						128
+#define G_SIZE				      128
 
 
 //! Slidertwo position
-#define SLIDERTWO_POS_X                180
+#define SLIDERTWO_POS_X                 50
 //! Slidertwo position
 #define SLIDERTWO_POS_Y                190
 //! Slidertwo size on display
-#define SLIDERTWO_SIZE_X               128
+#define SLIDERTWO_SIZE_X               255
 //! Slidertwo size on display
-#define SLIDERTWO_SIZE_Y                30
+#define SLIDERTWO_SIZE_Y                40
 
 //! Gaugetwo position
 #define GTWO_POS_X			       	   200
 //! Gaugetwo position
-#define GTWO_POS_Y					   100
+#define GTWO_POS_Y					    80
 //! Gaugetwo size on display
-#define GTWO_SIZE						64
+#define GTWO_SIZE					   100
 
 
 //! Gauge line height start position
-#define TRAVEL						  	 0
+#define TRAVEL						  	40
 
 
 //! @}
@@ -436,7 +436,7 @@ void app_widget_launch(struct workqueue_task *task) {
 
 
 	//! Code for the button
-	area.pos.x = 130;
+	area.pos.x = 140;
 	area.pos.y = 2;
 	area.size.x = 80;
 	area.size.y = 30;
@@ -463,7 +463,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	win_show(wtk_basic_frame_as_child(sub_frame));
 
 	//! Test frame code
-	area.pos.x = 220;
+	area.pos.x = 230;
 	area.pos.y = 40;
 	area.size.x = 80;
 	area.size.y = 30;

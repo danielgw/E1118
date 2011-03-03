@@ -262,6 +262,10 @@ static bool wtk_gauge_handler(struct win_window *win,
 		 * TODO: OTHER ANGLES FOR GAUGE
          */
         
+ 		if (!gauge->start) {
+		//! Erases the previous gauge line using old values
+		gfx_generic_draw_line(clip->origin.x + area->size.x - gauge->xrescale, clip->origin.y + area->size.y - gauge->yrescale - 2, clip->origin.x + area->size.x - 2, clip->origin.y + area->size.y - 2, gauge->background_color);
+        }
         
         //! Draw the gauge background elements once
         if (gauge->start) {
@@ -280,9 +284,7 @@ static bool wtk_gauge_handler(struct win_window *win,
             gauge->start = false;
         }
 		
-		//! Erases the previous gauge line using old values
-		gfx_generic_draw_line(clip->origin.x + area->size.x - gauge->xrescale, clip->origin.y + area->size.y - gauge->yrescale - 2, clip->origin.x + area->size.x - 2, clip->origin.y + area->size.y - 2, gauge->background_color);
-		
+
 		
 		//! Rescales the position value for usage in the trigtable array
 		rescale = wtk_rescale_value(area->size.x - position, area->size.x + 2, 127);
