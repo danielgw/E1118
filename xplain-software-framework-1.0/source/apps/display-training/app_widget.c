@@ -86,7 +86,7 @@ enum app_widget_ids {
  */
 
 //! Background color for application
-#define APP_BACKGROUND_COLOR        GFX_COLOR(50, 50, 50)
+#define APP_BACKGROUND_COLOR        GFX_COLOR(77, 77, 77)
 
 //! @}
 
@@ -97,9 +97,9 @@ enum app_widget_ids {
  */
 
 //! Label position on top of display
-#define LABEL_POS_X                 3
+#define LABEL_POS_X                 6
 //! Label position on top of display
-#define LABEL_POS_Y                 3
+#define LABEL_POS_Y                 6
 
 //! Slider position
 #define SLIDER_POS_X               10
@@ -115,28 +115,28 @@ enum app_widget_ids {
 //! Gauge position
 #define G_POS_Y					   40
 //! Gauge size on display
-#define G_SIZE				      128
+#define G_SIZE				      150
 
 
 //! Slidertwo position
-#define SLIDERTWO_POS_X                 50
+#define SLIDERTWO_POS_X            50
 //! Slidertwo position
-#define SLIDERTWO_POS_Y                190
+#define SLIDERTWO_POS_Y           210
 //! Slidertwo size on display
-#define SLIDERTWO_SIZE_X               255
+#define SLIDERTWO_SIZE_X          255
 //! Slidertwo size on display
-#define SLIDERTWO_SIZE_Y                40
+#define SLIDERTWO_SIZE_Y           20
 
 //! Gaugetwo position
-#define GTWO_POS_X			       	   200
+#define GTWO_POS_X			      210
 //! Gaugetwo position
-#define GTWO_POS_Y					    80
+#define GTWO_POS_Y				   80
 //! Gaugetwo size on display
-#define GTWO_SIZE					   100
+#define GTWO_SIZE				   90
 
 
 //! Gauge line height start position
-#define TRAVEL						  	40
+#define TRAVEL						0
 
 
 //! @}
@@ -148,9 +148,9 @@ enum app_widget_ids {
  */
 
 //! Max value for slider
-#define SLIDER_MAX_VALUE            128
+#define SLIDER_MAX_VALUE            240
 //! Max value for slidertwo
-#define SLIDERTWO_MAX_VALUE         128
+#define SLIDERTWO_MAX_VALUE         240
 
 
 //! @}
@@ -184,7 +184,7 @@ static struct gfx_bitmap            frame_background;
 //! Counter for button
 static uint8_t                      counter;
 //! Pointer to the sub-frame
-static struct wtk_basic_frame       *sub_frame, *sub_frame_test;
+static struct wtk_basic_frame       *sub_frame, *sub_frame_test, *sub_frame_test2;
 //! Sub-frame background bitmap
 static struct gfx_bitmap            sub_frame_background;
 
@@ -193,6 +193,8 @@ static struct wtk_gauge      		*gauge;
 //! Pointer to gaugetwo
 static struct wtk_gauge      		*gaugetwo;
 
+//! Application font in use
+static struct font sysfont1x;
 
 //! @}
 
@@ -213,6 +215,7 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 		wtk_gauge_set_value(gauge,
 		wtk_slider_get_value(slider));
 		win_redraw(wtk_basic_frame_as_child(sub_frame_test));
+		win_redraw(wtk_basic_frame_as_child(sub_frame_test2));
 		break;
 
 	case SLIDERTWO_ID:
@@ -242,12 +245,9 @@ static void sub_frame_draw_handler(struct win_window *win,
 	char buffer[4];
 
 	snprintf(buffer, sizeof(buffer), "%3d", counter);
-	/**
-	 * \todo Add code here to draw text on screen using the
-	 * gfx_draw_string() function.
-	 */
+
 	gfx_draw_string(buffer, clip->origin.x + 30, clip->origin.y + 12,
-			&sysfont, GFX_COLOR(255, 255, 255),
+			&sysfont, GFX_COLOR(0, 0, 0),
 			GFX_COLOR_TRANSPARENT);
 }
 
@@ -257,12 +257,23 @@ static void sub_frame_draw_handler_test(struct win_window *win,
 	char buffer[4];
 
 	snprintf(buffer, sizeof(buffer), "%3d", wtk_gauge_trigtable(wtk_rescale_value(wtk_gauge_get_value(gauge), SLIDER_MAX_VALUE, 127)));
-	/**
-	 * \todo Add code here to draw text on screen using the
-	 * gfx_draw_string() function.
-	 */
+	
 	gfx_draw_string(buffer, clip->origin.x + 30, clip->origin.y + 12,
-			&sysfont, GFX_COLOR(255, 255, 255),
+			&sysfont, GFX_COLOR(0, 0, 0),
+			GFX_COLOR_TRANSPARENT);
+}
+
+static void sub_frame_draw_handler_test2(struct win_window *win,
+		struct win_clip_region const *clip)
+{
+	char buffer[4];
+
+	
+	snprintf(buffer, sizeof(buffer), "%3d", wtk_gauge_get_test(gauge));
+
+	
+	gfx_draw_string(buffer, clip->origin.x + 30, clip->origin.y + 12,
+			&sysfont, GFX_COLOR(0, 0, 0),
 			GFX_COLOR_TRANSPARENT);
 }
 
@@ -286,8 +297,8 @@ void app_widget_launch(struct workqueue_task *task) {
 	//pgm_read_byte(&(trigtable[wtk_slider_get_value(slider)]))
 
 
-	// Use larger sysfont for this app
-	sysfont.scale = 2;
+	// Use normal sysfont for this app
+	sysfont1x.scale = 1;
 
 	// Get pointer to root window
 	win_root = win_get_root();
@@ -403,7 +414,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	 * occured while creating the gauge.
 	 */
 	gauge = wtk_gauge_create(parent, &area, SLIDER_MAX_VALUE + TRAVEL,
-			SLIDER_MAX_VALUE + TRAVEL / 2, GFX_COLOR(0, 255, 0),
+			(SLIDER_MAX_VALUE + TRAVEL) / 2, GFX_COLOR(0, 255, 0),
 			GFX_COLOR(90, 90, 90), WTK_GAUGE_HORIZONTAL);
 	if (!gauge) {
 		goto error_widget;
@@ -425,7 +436,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	 * occured while creating the gauge.
 	 */
 	gaugetwo = wtk_gauge_create(parent, &area, SLIDERTWO_MAX_VALUE + TRAVEL,
-			SLIDERTWO_MAX_VALUE + TRAVEL / 2, GFX_COLOR(0, 255, 0),
+			(SLIDERTWO_MAX_VALUE + TRAVEL) / 2, GFX_COLOR(0, 255, 0),
 			GFX_COLOR(90, 90, 90), WTK_GAUGE_INVERT|WTK_GAUGE_HORIZONTAL);
 	if (!gaugetwo) {
 		goto error_widget;
@@ -436,10 +447,10 @@ void app_widget_launch(struct workqueue_task *task) {
 
 
 	//! Code for the button
-	area.pos.x = 140;
-	area.pos.y = 2;
-	area.size.x = 80;
-	area.size.y = 30;
+	area.pos.x = 120;
+	area.pos.y =   4;
+	area.size.x = 60;
+	area.size.y = 20;
 
 	btn = wtk_button_create(parent, &area, "Hit me",
 			(win_command_t)BUTTON_ID);
@@ -450,9 +461,11 @@ void app_widget_launch(struct workqueue_task *task) {
 
 	//! Basic frame code
 	area.pos.x += area.size.x + 10;
+	area.size.x = 50;
+	area.size.y = 20;
 
 	sub_frame_background.type = BITMAP_SOLID;
-	sub_frame_background.data.color = GFX_COLOR(127, 0, 0);
+	sub_frame_background.data.color = GFX_COLOR(255, 255, 255);
 
 	sub_frame = wtk_basic_frame_create(parent, &area,
 			&sub_frame_background, sub_frame_draw_handler,
@@ -463,13 +476,13 @@ void app_widget_launch(struct workqueue_task *task) {
 	win_show(wtk_basic_frame_as_child(sub_frame));
 
 	//! Test frame code
-	area.pos.x = 230;
-	area.pos.y = 40;
-	area.size.x = 80;
-	area.size.y = 30;
+	area.pos.x = 260;
+	area.pos.y =   4;
+	area.size.x = 50;
+	area.size.y = 20;
 
 	sub_frame_background.type = BITMAP_SOLID;
-	sub_frame_background.data.color = GFX_COLOR(127, 0, 0);
+	sub_frame_background.data.color = GFX_COLOR(255, 255, 255);
 
 	sub_frame_test = wtk_basic_frame_create(parent, &area,
 			&sub_frame_background, sub_frame_draw_handler_test,
@@ -478,6 +491,23 @@ void app_widget_launch(struct workqueue_task *task) {
 		goto error_widget;
 	}
 	win_show(wtk_basic_frame_as_child(sub_frame_test));
+
+	//! Test2 frame code
+	area.pos.x = 260;
+	area.pos.y =  30;
+	area.size.x = 50;
+	area.size.y = 20;
+
+	sub_frame_background.type = BITMAP_SOLID;
+	sub_frame_background.data.color = GFX_COLOR(255, 255, 255);
+
+	sub_frame_test2 = wtk_basic_frame_create(parent, &area,
+			&sub_frame_background, sub_frame_draw_handler_test2,
+			NULL, NULL);
+	if (!sub_frame) {
+		goto error_widget;
+	}
+	win_show(wtk_basic_frame_as_child(sub_frame_test2));
 
 	return;
 
