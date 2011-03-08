@@ -145,6 +145,8 @@ static struct wtk_basic_frame       *frame;
 static struct wtk_slider            *slider;
 //! Pointer to progress bar
 static struct wtk_progress_bar      *progress_bar;
+//! Pointer to progress bar
+static struct wtk_plot		        *plot;
 //! Frame background bitmap
 static struct gfx_bitmap            frame_background;
 //! Counter for button
@@ -194,11 +196,9 @@ static void sub_frame_draw_handler(struct win_window *win,
 {
 	char buffer[4];
 
-	snprintf(buffer, sizeof(buffer), "%3d", counter);
-	/**
-	 * \todo Add code here to draw text on screen using the
-	 * gfx_draw_string() function.
-	 */
+	snprintf(buffer, sizeof(buffer), "%3d", get_val_plot(plot));
+	gfx_draw_string(buffer,clip->origin.x, clip->origin.y, &sysfont,GFX_COLOR(255,255,255),GFX_COLOR(50,50,50));
+	
 }
 
 /**
@@ -294,7 +294,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	win_show(wtk_slider_as_child(slider));
 
 	// Application progress bar, placed right of the slider.
-	area.pos.x += area.size.x + SLIDER_PB_SPACING_X;
+	area.pos.y += area.size.y + 20;
 	area.size.x = PB_SIZE_X;
 	area.size.y = PB_SIZE_Y;
 
@@ -307,15 +307,64 @@ void app_widget_launch(struct workqueue_task *task) {
 			GFX_COLOR(90, 90, 90), WTK_PROGRESS_BAR_HORIZONTAL);
 	if (!progress_bar) {
 		goto error_widget;
-	}
-
-	// Draw the progress bar by showing the progress bar widget's window.
+	}	
+	
+	
 	win_show(wtk_progress_bar_as_child(progress_bar));
+	
+	
+	// Application plot
+	area.pos.x = SLIDER_POS_X + SLIDER_SIZE_X + 20;
+	area.pos.y = SLIDER_POS_Y;
+	area.size.x = 100;
+	area.size.y = 100;
+
+	plot = wtk_plot_create(parent, &area, 100, 11, GFX_COLOR(255, 0, 0),
+			GFX_COLOR(90, 90, 90),0);
+
+	if (!plot) {
+		goto error_widget;
+	}
+	win_show(wtk_plot_as_child(plot));
+	
+	wtk_plot_set_value(plot,50);
+	wtk_plot_set_value(plot,25);
+	wtk_plot_set_value(plot,100);
+	wtk_plot_set_value(plot,100);
+	wtk_plot_set_value(plot,0);
+	wtk_plot_set_value(plot,50);
+	wtk_plot_set_value(plot,70);
+	wtk_plot_set_value(plot,80);
+	wtk_plot_set_value(plot,90);
+	wtk_plot_set_value(plot,0);
+	wtk_plot_set_value(plot,99); 
+	
+	
+	// Draw the progress bar by showing the progress bar widget's window.
+	
+	
+
 
 	//! \todo Add code to set up button here.
 
 	//! \todo Add code to set up basic frame here.
-
+	area.pos.x =20;
+	area.pos.y =200;
+	area.size.x = 100;
+	area.size.y = 40;
+	
+	sub_frame_background.type = BITMAP_SOLID;
+	sub_frame_background.data.color = GFX_COLOR(127, 0, 0);
+	
+	sub_frame = wtk_basic_frame_create(parent, &area,
+		&sub_frame_background, sub_frame_draw_handler,
+		NULL, NULL);
+	if (!sub_frame) {
+		goto error_widget;
+	}
+	win_show(wtk_basic_frame_as_child(sub_frame));
+	
+	
 	return;
 
 error_widget:

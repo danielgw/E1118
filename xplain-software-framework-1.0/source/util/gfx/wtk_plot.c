@@ -73,8 +73,8 @@ struct wtk_plot {
 	uint8_t                 *plot_buffer;
 	//! Ring buffer start-point displacement
 	uint8_t					buffer_start;
-	//! Ring buffer array
-	uint8_t					rbuffer[datapoints];
+	// Ring buffer array
+	//uint8_t					rbuffer[datapoints]; Denne er ikke rett. dette skal gjøres med *plot_buffer
 	//! Configuration of orientation and behavior.
 	uint8_t                 option;
 	//! Color for plot.
@@ -120,58 +120,44 @@ bool wtk_plot_set_value(struct wtk_plot *plot, uint8_t value)
 {
 	
 	uint8_t length;
-	uint8_t option;
+	//uint8_t option;
 	uint8_t maximum;
 	struct win_area const *area;
 
 	assert(plot);
 	assert(value <= plot->maximum);
-/*  GAMMEL KODE, TRENGER VI OPTIONS NÅ?
+/*  
 	if (value != bar->value) {
 		bar->value = value;
-		option = bar->option;
-		maximum = bar->maximum;
-		area = win_get_area(bar->container);
+		option = bar->option;*/
+		maximum = plot->maximum;
+		
+		area = win_get_area(plot->container);
 
-		// Get length of progress bar from window.
-		if (option & WTK_PROGRESS_BAR_VERTICAL) {
-			length = area->size.y;
-		} else {
-			length = area->size.x;
-		}
-*/
 		length = area->size.y;
 			
 		length -= 2;
 		
-/*		
-		if (option & WTK_PROGRESS_BAR_INVERT) {
-			value = maximum - value;
-		}
-*/
-		plot->plot_buffer = &plot->rbuffer[buffer_start];
+		//plot->plot_buffer = &plot->rbuffer[buffer_start]; 
 		
-		*(plot_buffer + buffer_start) = value;
+		*(plot->plot_buffer + plot->buffer_start) = wtk_rescale_value(value, maximum, length);
 		
-		buffer_start++;
+		plot->buffer_start++;
 		
-		if(plot->buffer_start >= plot->datapoints-1)
+		if(plot->buffer_start >= plot->datapoints)
 		{
 			plot->buffer_start=0;
 		}
 
-		//TODO: fikses
-		// Rescale and draw
-		plot->position = wtk_rescale_value(value, maximum, length);
 		win_redraw(plot->container);
 
 		return true;
 
-	} else {
-		return false;
-	}
+	//} else {
+	//return false;
+	//}
 	
-//}
+}
 
 
 
@@ -251,13 +237,12 @@ static bool wtk_plot_handler(struct win_window *win,
 		// Draw a window border.
 		gfx_draw_rect(clip->origin.x, clip->origin.y, area->size.x,
 				area->size.y, WTK_PROGRESS_BAR_BORDER_COLOR);			
-				//TODO: gjennomgang av headerfil og nye ls defines for plot
 				
 
 		/* Draw plot interior.
 		 */
 		 
-		 gfx_draw_filled_rect(clip->origin.x + 1, 		//dummy draw code
+		 gfx_draw_filled_rect(clip->origin.x + 1, 		
 					clip->origin.y + 1,
 					area->size.x - 2,					
 					area->size.y - 2,
@@ -265,29 +250,27 @@ static bool wtk_plot_handler(struct win_window *win,
 		
 		uint8_t ring_buffer_offset=plot->buffer_start;
 		uint8_t x_error=plot->spacing_error;
-		uint8_t x_current=1+plot->spacing, y_current=0;
-		uint8_t x_previous=1, y_previous=*(plot->plot_buffer+ring_buffer_offset);
-		
-		y_previous=*(plot->plot_buffer+ring_buffer_offset);
-		
-		
-		
-		for(uint8_t datapoint= 1 ; datapoint <= plot->datapoints; datapoint++) {
+		uint8_t x_current=1+plot->spacing;
+		uint8_t x_previous=1, y_previous= *(plot->plot_buffer+ring_buffer_offset);
+				
+		for(uint8_t datapoint=1 ; datapoint < (plot->datapoints); datapoint++) {
 			//increment the datapointer around the ring buffer
 			ring_buffer_offset++;
-			if (ring_buffer_offset==plot->datapoints) {
+			if (ring_buffer_offset>=plot->datapoints) {
 				ring_buffer_offset=0;
 			}
 						
-			gfx_draw_line(
-				x_previous, y_previous,
-				x_current, *(plot->plot_buffer+ring_buffer_offset),
+			gfx_draw_line(clip->origin.x+x_previous, 
+				clip->origin.y+y_previous,
+				clip->origin.x+x_current,
+				clip->origin.y + *(plot->plot_buffer+ring_buffer_offset),
 				plot->draw_color);
 			
 			y_previous=*(plot->plot_buffer+ring_buffer_offset);
 			x_previous=x_current;
 			x_current+=plot->spacing;
 			x_error+=plot->spacing_error;
+			
 			if (x_error>=100){
 				x_current++;
 				x_error-=100;
@@ -304,7 +287,10 @@ static bool wtk_plot_handler(struct win_window *win,
 		/* Free up all memory allocated by widget.
 		 * The window is freed by the window system
 		 */
+		
+		membag_free(plot->plot_buffer);
 		membag_free(plot);
+		
 		return true;
 
 	default:
@@ -355,90 +341,96 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 		gfx_color_t draw_color, gfx_color_t background_color,
 		uint8_t option)
 {
+	uint8_t length;
+	// Do sanity check on parameters.
+	assert(maximum > 0);
+	assert(area);
+	assert(parent);
+	assert(datapoints>1)
+
+	// Attributes scratchpad.
+	struct win_attributes attr;
+	// Allocate memory for the control data.
+	struct wtk_plot *plot =
+			membag_alloc(sizeof(struct wtk_plot));
+	if (!plot) {
+		goto outofmem_plot;
+	}
 	
-									
-									uint8_t length;
+	// Allocate memory for the control data.
+	plot->plot_buffer =
+			membag_alloc(datapoints);
+	if (!plot) {
+		goto outofmem_plot;
+	}
+	
+	
 
-									// Do sanity check on parameters.
-									assert(maximum > 0);
-									//assert(value <= maximum);
-									assert(area);
-									assert(parent);
+	// Initialize the plot data.
+	plot->maximum = maximum;
+	plot->datapoints=datapoints;
+	//plot->value = value;
+	plot->option = option;
+	plot->draw_color = draw_color;
+	plot->background_color = background_color;
+	
 
-									// Attributes scratchpad.
-									struct win_attributes attr;
 
-									// Allocate memory for the control data.
-									struct wtk_plot *plot =
-											membag_alloc(sizeof(struct wtk_plot));
-									if (!plot) {
-										goto outofmem_plot;
-									}
-									
-									// Allocate memory for the control data.
-									plot->plot_buffer =
-											membag_alloc(datapoints);
-									if (!plot) {
-										goto outofmem_plot;
-									}
-									
-									
+	/* Do sanity check of specified window area parameters
+	 * according to the orientation of the progress bar.
+	 */
+	attr.area = *area;
+	assert(attr.area.size.x > 3);
+	assert(attr.area.size.y > 3);
 
-									// Initialize the plot data.
-									plot->maximum = maximum;
-									//plot->value = value;
-									plot->option = option;
-									plot->draw_color = draw_color;
-									plot->background_color = background_color;
+	
+	length = attr.area.size.x;
+	length -= 2;
+	
+	//TO DO! optimeres 
+	
+	
+	plot->spacing = length / (datapoints-1);
+	plot->spacing_error = (uint8_t)((((uint16_t)(length-plot->spacing*(datapoints-1)))*100)/((uint16_t)(datapoints-1)));
+	
 
-									// Set up handling information.
-									attr.event_handler = wtk_plot_handler;
-									attr.custom = plot;
+	// Set the progress bar's end position.
+	//bar->position = wtk_rescale_value(value, maximum, length);
 
-									/* Do sanity check of specified window area parameters
-									 * according to the orientation of the progress bar.
-									 */
-									attr.area = *area;
-									assert(attr.area.size.x > 3);
-									assert(attr.area.size.y > 3);
+	/* All drawing is done in wtk_progress_bar_handler() so no background is
+	 * needed.
+	 */
+	attr.background = NULL;
+	
+	// Set up handling information.
+	attr.event_handler = wtk_plot_handler;
+	attr.custom = plot;
+	
+	/* Since the widget has no transparent areas, the parent does not need
+	 * to be redrawn.
+	 */
+	attr.behavior = 0;
 
-									
-									length = attr.area.size.x;
-									length -= 2;
-									
-									//TO DO! optimeres 
-									
-									
-									plot->spacing = length / datapoints;
-									plot->spacing_error = (uint8_t)((((uint16_t)(length-plot->spacing*datapoints))*100)/((uint16_t)datapoints));
-									
+	// Create a new window for the progress bar.
+	plot->container = win_create(parent, &attr);
+	if (!plot->container) {
+		goto outofmem_container;
+	}
 
-									// Set the progress bar's end position.
-									//bar->position = wtk_rescale_value(value, maximum, length);
+	return plot;
 
-									/* All drawing is done in wtk_progress_bar_handler() so no background is
-									 * needed.
-									 */
-									attr.background = NULL;
+outofmem_container:
+	membag_free(plot);
 
-									/* Since the widget has no transparent areas, the parent does not need
-									 * to be redrawn.
-									 */
-									attr.behavior = 0;
-
-									// Create a new window for the progress bar.
-									plot->container = win_create(parent, &attr);
-									if (!plot->container) {
-										goto outofmem_container;
-									}
-
-									return plot;
-
-								outofmem_container:
-									membag_free(plot);
-
-								outofmem_plot:
-									return NULL;
+outofmem_plot:
+	return NULL;
 }
 
 //! @}
+
+
+
+uint8_t get_val_plot(struct wtk_plot *plot){
+
+	return plot->spacing;
+}
