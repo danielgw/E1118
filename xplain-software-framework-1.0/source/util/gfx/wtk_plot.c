@@ -73,6 +73,8 @@ struct wtk_plot {
 	uint8_t                 *plot_buffer;
 	//! Ring buffer start-point displacement
 	uint8_t					buffer_start;
+	//! Ring buffer array
+	uint8_t					rbuffer[datapoints];
 	//! Configuration of orientation and behavior.
 	uint8_t                 option;
 	//! Color for plot.
@@ -114,17 +116,17 @@ struct win_window *wtk_plot_as_child(struct wtk_plot *plot)
  *
  * \return True if progress bar's value was changed.
  */
-//bool wtk_progress_bar_set_value(struct wtk_plot *plot, uint8_t value) 
-//{
-	/*
+bool wtk_plot_set_value(struct wtk_plot *plot, uint8_t value) 
+{
+	
 	uint8_t length;
 	uint8_t option;
 	uint8_t maximum;
 	struct win_area const *area;
 
-	assert(bar);
-	assert(value <= bar->maximum);
-
+	assert(plot);
+	assert(value <= plot->maximum);
+/*  GAMMEL KODE, TRENGER VI OPTIONS NÅ?
 	if (value != bar->value) {
 		bar->value = value;
 		option = bar->option;
@@ -137,22 +139,38 @@ struct win_window *wtk_plot_as_child(struct wtk_plot *plot)
 		} else {
 			length = area->size.x;
 		}
-
+*/
+		length = area->size.y;
+			
 		length -= 2;
-
+		
+/*		
 		if (option & WTK_PROGRESS_BAR_INVERT) {
 			value = maximum - value;
 		}
+*/
+		plot->plot_buffer = &plot->rbuffer[buffer_start];
+		
+		*(plot_buffer + buffer_start) = value;
+		
+		buffer_start++;
+		
+		if(plot->buffer_start >= plot->datapoints-1)
+		{
+			plot->buffer_start=0;
+		}
 
-		bar->position = wtk_rescale_value(value, maximum, length);
-		win_redraw(bar->container);
+		//TODO: fikses
+		// Rescale and draw
+		plot->position = wtk_rescale_value(value, maximum, length);
+		win_redraw(plot->container);
 
 		return true;
 
 	} else {
 		return false;
 	}
-	*/
+	
 //}
 
 
@@ -239,33 +257,44 @@ static bool wtk_plot_handler(struct win_window *win,
 		/* Draw plot interior.
 		 */
 		 
-		 
-		/*if (option & WTK_PROGRESS_BAR_VERTICAL) {
-			// Draw the top section of the bar.
-			gfx_draw_filled_rect(clip->origin.x + 1,
+		 gfx_draw_filled_rect(clip->origin.x + 1, 		//dummy draw code
 					clip->origin.y + 1,
-					area->size.x - 2,
-					position, bar->fill_color);
-			// Draw the bottom section of the bar.
-			gfx_draw_filled_rect(clip->origin.x + 1,
-					clip->origin.y + 1 + position,
-					area->size.x - 2,
-					area->size.y - 2 - position,
-					bar->background_color);
-		} else {
-			// Draw the left section of the bar.
-			gfx_draw_filled_rect(clip->origin.x + 1,
-					clip->origin.y + 1,
-					bar->position,
-					area->size.y - 2, bar->fill_color);
-			// Draw the right section of the bar.
-			gfx_draw_filled_rect(clip->origin.x + 1 + position,
-					clip->origin.y + 1,
-					area->size.x - 2 - position,
+					area->size.x - 2,					
 					area->size.y - 2,
-					bar->background_color);
-		}*/
-
+					plot->background_color);
+		
+		uint8_t ring_buffer_offset=plot->buffer_start;
+		uint8_t x_error=plot->spacing_error;
+		uint8_t x_current=1+plot->spacing, y_current=0;
+		uint8_t x_previous=1, y_previous=*(plot->plot_buffer+ring_buffer_offset);
+		
+		y_previous=*(plot->plot_buffer+ring_buffer_offset);
+		
+		
+		
+		for(uint8_t datapoint= 1 ; datapoint <= plot->datapoints; datapoint++) {
+			//increment the datapointer around the ring buffer
+			ring_buffer_offset++;
+			if (ring_buffer_offset==plot->datapoints) {
+				ring_buffer_offset=0;
+			}
+						
+			gfx_draw_line(
+				x_previous, y_previous,
+				x_current, *(plot->plot_buffer+ring_buffer_offset),
+				plot->draw_color);
+			
+			y_previous=*(plot->plot_buffer+ring_buffer_offset);
+			x_previous=x_current;
+			x_current+=plot->spacing;
+			x_error+=plot->spacing_error;
+			if (x_error>=100){
+				x_current++;
+				x_error-=100;
+			}
+			
+		}
+		
 		/* Always accept DRAW events, as the return value is ignored
 		 * anyway for that event type.
 		 */
@@ -355,10 +384,12 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 									
 									
 
-									// Initialize the progress bar data.
+									// Initialize the plot data.
 									plot->maximum = maximum;
 									//plot->value = value;
 									plot->option = option;
+									plot->draw_color = draw_color;
+									plot->background_color = background_color;
 
 									// Set up handling information.
 									attr.event_handler = wtk_plot_handler;
@@ -376,6 +407,7 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 									length -= 2;
 									
 									//TO DO! optimeres 
+									
 									
 									plot->spacing = length / datapoints;
 									plot->spacing_error = (uint8_t)((((uint16_t)(length-plot->spacing*datapoints))*100)/((uint16_t)datapoints));
