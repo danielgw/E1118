@@ -103,14 +103,13 @@ struct win_window *wtk_plot_as_child(struct wtk_plot *plot)
 /**
  * \brief Add a value to the end of the plot.
  *
- * Updates the current value and issues a redrawing of the progress bar if its
- * value was indeed changed. In this case, a new end position for the progress
- * bar's fill area is also computed.
+ * Scales the input value to fit the plot dimensions and adds it to the end of 
+ * the ring buffer , and issues a redrawing of the plot
  *
- * \param bar Pointer to wtk_progress_bar struct to set new value for.
+ * \param bar Pointer to wtk_plot struct to set new value for.
  * \param value New value for the progress bar.
  *
- * \return True if progress bar's value was changed.
+ * \return True.
  */
 bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value) 
 {
@@ -148,10 +147,6 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
 
 		return true;
 
-	//} else {
-	//return false;
-	//}
-	
 }
 
 
@@ -209,7 +204,6 @@ static bool wtk_plot_handler(struct win_window *win,
 	struct win_clip_region const    *clip;
 	struct win_area const           *area;
 	struct wtk_plot					*plot;
-							//uint8_t                         position;
 	uint8_t                         option;
 
 	plot = (struct wtk_plot *)win_get_custom_data(win);
@@ -319,7 +313,7 @@ static bool wtk_plot_handler(struct win_window *win,
 				 *
  * \param parent Pointer to parent win_window struct.
  * \param area Pointer to win_area struct with position and size of the
- *             plot. Minimum size in both x and y direction is 3 pixels.
+ *             plot. Minimum size in both x and y direction is 4 pixels.
  
 					 * \param maximum Maximum value of the progress bar.
 					 * \param value Initial value of the progress bar.
@@ -375,12 +369,12 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 	 * according to the orientation of the progress bar.
 	 */
 	attr.area = *area;
-	assert(attr.area.size.x > 3);
-	assert(attr.area.size.y > 3);
+	assert(attr.area.size.x > 4);
+	assert(attr.area.size.y > 4);
 
 	
 	length = attr.area.size.x;
-	length -= 2;
+	length -= 3;
 	
 	//TO DO! optimeres 
 	
