@@ -177,7 +177,10 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 		break;
 
 	case BUTTON_ID:
-		//! \todo Add code here to handle button press.
+		
+		wtk_plot_set_value(plot,wtk_slider_get_value(slider));
+		counter++
+		win_redraw(wtk_basic_frame_as_child(sub_frame));
 		break;
 	}
 
@@ -196,8 +199,8 @@ static void sub_frame_draw_handler(struct win_window *win,
 {
 	char buffer[4];
 
-	snprintf(buffer, sizeof(buffer), "%3d", get_val_plot(plot));
-	gfx_draw_string(buffer,clip->origin.x, clip->origin.y, &sysfont,GFX_COLOR(255,255,255),GFX_COLOR(50,50,50));
+	snprintf(buffer, sizeof(buffer), "%3d", counter);
+	gfx_draw_string(buffer,clip->origin.x, clip->origin.y, &sysfont,GFX_COLOR(255,255,255),GFX_COLOR(90,90,90));
 	
 }
 
@@ -328,16 +331,16 @@ void app_widget_launch(struct workqueue_task *task) {
 	win_show(wtk_plot_as_child(plot));
 	
 	wtk_plot_set_value(plot,50);
-	wtk_plot_set_value(plot,25);
-	wtk_plot_set_value(plot,100);
-	wtk_plot_set_value(plot,100);
-	wtk_plot_set_value(plot,0);
-	wtk_plot_set_value(plot,50);
-	wtk_plot_set_value(plot,70);
-	wtk_plot_set_value(plot,80);
-	wtk_plot_set_value(plot,90);
-	wtk_plot_set_value(plot,0);
-	wtk_plot_set_value(plot,99); 
+	//wtk_plot_set_value(plot,25);
+	//wtk_plot_set_value(plot,100);
+	//wtk_plot_set_value(plot,100);
+	//wtk_plot_set_value(plot,0);
+	//wtk_plot_set_value(plot,50);
+	//wtk_plot_set_value(plot,70);
+	//wtk_plot_set_value(plot,80);
+	//wtk_plot_set_value(plot,90);
+	//wtk_plot_set_value(plot,0);
+	//wtk_plot_set_value(plot,99); 
 	
 	
 	// Draw the progress bar by showing the progress bar widget's window.
@@ -346,15 +349,25 @@ void app_widget_launch(struct workqueue_task *task) {
 
 
 	//! \todo Add code to set up button here.
+	area.pos.x = 10;
+	area.pos.y = 200;
+	area.size.x = 90;
+	area.size.y = 40;
+	btn = wtk_button_create(parent, &area, "Click",
+	(win_command_t)BUTTON_ID);
+	if (!btn) {
+		goto error_widget;
+	}
+	win_show(wtk_button_as_child(btn));
 
 	//! \todo Add code to set up basic frame here.
-	area.pos.x =20;
+	area.pos.x =120;
 	area.pos.y =200;
-	area.size.x = 100;
+	area.size.x = 90;
 	area.size.y = 40;
 	
 	sub_frame_background.type = BITMAP_SOLID;
-	sub_frame_background.data.color = GFX_COLOR(127, 0, 0);
+	sub_frame_background.data.color = GFX_COLOR(90, 90, 90);
 	
 	sub_frame = wtk_basic_frame_create(parent, &area,
 		&sub_frame_background, sub_frame_draw_handler,
