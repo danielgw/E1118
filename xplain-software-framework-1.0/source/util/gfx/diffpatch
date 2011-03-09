@@ -1,0 +1,595 @@
+diff --git a/xplain-software-framework-1.0/source/util/gfx/wtk_progress_bar.c b/xplain-software-framework-1.0/source/util/gfx/wtk_gauge.c
+index 3418088..277b645 100644
+--- a/xplain-software-framework-1.0/source/util/gfx/wtk_progress_bar.c
++++ b/xplain-software-framework-1.0/source/util/gfx/wtk_gauge.c
+@@ -1,7 +1,7 @@
+ /**
+  * \file
+  *
+- * \brief Progress bar widget implementation
++ * \brief Gauge widget implementation
+  *
+  * Copyright (C) 2009 - 2010 Atmel Corporation. All rights reserved.
+  *
+@@ -41,86 +41,121 @@
+ #include <membag.h>
+ #include <string.h>
+ #include <gfx/wtk.h>
++#include <gfx/gfx_generic.h>
++#include <avr/pgmspace.h> //! PROGMEM functions
+ 
+ /**
+- * \ingroup gfx_wtk_progress_bar
++ * \ingroup gfx_wtk_gauge
+  * @{
+  */
+ 
+ /**
+- * \brief Progress bar control struct.
++ * \brief Gauge control struct.
+  * \internal
+  *
+- * Contains a pointer to the progress bar's containing window, and non-window
++ * Contains a pointer to the Gauge's containing window, and non-window
+  * information necessary for its operation. Structs of this type are created
+- * with \ref wtk_progress_bar_create().
++ * with \ref wtk_gauge_create().
+  *
+  * \note Structure fields are only internally accessible. Only pointers to
+  * these structures are needed externally.
+  */
+-struct wtk_progress_bar {
+-	//! Container window of progress bar.
++
++
++/*
++ * \Storing trigonometric values in PROGMEM
++ * Used to draw the gauge line
++ *
++ * \TODO: Use the xplain's own progmem functions, then remove include <avr/pgmspace.h>
++ */
++uint8_t trigtable[128] PROGMEM = {
++		  0,  3,  6,  9, 13, 16, 19, 22, 25, 28, 31, 34, 37, 41, 44, 47,
++		 50, 53, 56, 59, 62, 65, 68, 71, 74, 77, 80, 83, 86, 89, 92, 95,
++		 98,100,103,106,109,112,115,117,120,123,126,128,131,134,136,139,
++		142,144,147,149,152,154,157,159,162,164,167,169,171,174,176,178,
++		180,183,185,187,189,191,193,195,197,199,201,203,205,207,208,210,
++		212,214,215,217,219,220,222,223,225,226,228,229,231,232,233,234,
++		236,237,238,239,240,241,242,243,244,245,246,247,247,248,249,249,
++		250,251,251,252,252,253,253,253,254,254,254,255,255,255,255,255
++	};
++	
++
++ 
++struct wtk_gauge {
++	//! Container window of gauge.
+ 	struct win_window       *container;
+-	//! Maximum value of progress bar.
++	//! Maximum value of gauge.
+ 	uint8_t                 maximum;
+-	//! Value of progress bar.
++	//! Value of gauge.
+ 	uint8_t                 value;
+-	//! End position of progress bar.
++	//! End position of gauge.
+ 	uint8_t                 position;
+ 	//! Configuration of orientation and behavior.
+ 	uint8_t                 option;
+-	//! Color for progress bar fill.
++	
++	//! Color for gauge fill.
+ 	gfx_color_t             fill_color;
+-	//! Color for progress bar background.
++	//! Color for gauge background.
+ 	gfx_color_t             background_color;
++	
++	//! Boolean for drawing gauge background once.
++	bool                    start;
++	
++	//! Variables for resizeing the gauge variables.
++    uint8_t                 xrescale;
++    uint8_t                 yrescale;
++   	uint8_t                 rescale;
++	uint8_t                 xangle;
++	uint8_t                 yangle;
++
+ };
+ 
+ /**
+- * \brief Get pointer to progress bar window.
++ * \brief Get gauge to gauge window.
+  *
+  * Returns a reference to the window that should be used when managing the
+  * widget, such as destroying, moving or reparenting it.
+  *
+- * \param bar Pointer to wtk_progress_bar struct to manage.
++ * \param gauge Pointer to wtk_gauge_gauge struct to manage.
+  *
+- * \return Pointer to window to be used for managing the progress bar.
++ * \return Pointer to window to be used for managing the gauge.
+  */
+-struct win_window *wtk_progress_bar_as_child(struct wtk_progress_bar *bar)
++struct win_window *wtk_gauge_as_child(struct wtk_gauge *gauge)
+ {
+-	assert(bar);
+-	return bar->container;
++	assert(gauge);
++	return gauge->container;
+ }
+ 
+ /**
+- * \brief Set new progress bar value.
++ * \brief Set new gauge value.
+  *
+- * Updates the current value and issues a redrawing of the progress bar if its
+- * value was indeed changed. In this case, a new end position for the progress
+- * bar's fill area is also computed.
++ * Updates the current value and issues a redrawing of the gauge if its
++ * value was indeed changed. In this case, a new end position for the
++ * gauge's fill area is also computed.
+  *
+- * \param bar Pointer to wtk_progress_bar struct to set new value for.
+- * \param value New value for the progress bar.
++ * \param gauge Pointer to wtk_gauge struct to set new value for.
++ * \param value New value for the gauge.
+  *
+- * \return True if progress bar's value was changed.
++ * \return True if gauge's value was changed.
+  */
+-bool wtk_progress_bar_set_value(struct wtk_progress_bar *bar, uint8_t value)
++bool wtk_gauge_set_value(struct wtk_gauge *gauge, uint8_t value)
+ {
+ 	uint8_t length;
+ 	uint8_t option;
+ 	uint8_t maximum;
+ 	struct win_area const *area;
+ 
+-	assert(bar);
+-	assert(value <= bar->maximum);
++	assert(gauge);
++	assert(value <= gauge->maximum);
+ 
+-	if (value != bar->value) {
+-		bar->value = value;
+-		option = bar->option;
+-		maximum = bar->maximum;
+-		area = win_get_area(bar->container);
++	if (value != gauge->value) {
++		gauge->value = value;
++		option = gauge->option;
++		maximum = gauge->maximum;
++		area = win_get_area(gauge->container);
+ 
+-		// Get length of progress bar from window.
+-		if (option & WTK_PROGRESS_BAR_VERTICAL) {
++		// Get length of progress gauge from window.
++		if (option & WTK_GAUGE_VERTICAL) {
+ 			length = area->size.y;
+ 		} else {
+ 			length = area->size.x;
+@@ -128,12 +163,12 @@ bool wtk_progress_bar_set_value(struct wtk_progress_bar *bar, uint8_t value)
+ 
+ 		length -= 2;
+ 
+-		if (option & WTK_PROGRESS_BAR_INVERT) {
++		if (option & WTK_GAUGE_INVERT) {
+ 			value = maximum - value;
+ 		}
+ 
+-		bar->position = wtk_rescale_value(value, maximum, length);
+-		win_redraw(bar->container);
++		gauge->position = wtk_rescale_value(value, maximum, length);
++		win_redraw(gauge->container);
+ 
+ 		return true;
+ 
+@@ -143,47 +178,67 @@ bool wtk_progress_bar_set_value(struct wtk_progress_bar *bar, uint8_t value)
+ }
+ 
+ /**
+- * \brief Get progress bar value.
++ * \brief Get gauge value.
+  *
+- * \param bar Pointer to wtk_progress_bar struct to get value from.
++ * \param gauge Pointer to wtk_gauge struct to get value from.
+  *
+- * \return Value of progress bar.
++ * \return Value of gauge.
++ */
++uint8_t wtk_gauge_get_value(struct wtk_gauge *gauge)
++{
++	assert(gauge);
++	return gauge->value;
++}
++
++/**
++ * \Returns the gauge struct values for testing
++ * \temporary test function
+  */
+-uint8_t wtk_progress_bar_get_value(struct wtk_progress_bar *bar)
++uint8_t wtk_gauge_get_test(struct wtk_gauge *gauge)
+ {
+-	assert(bar);
+-	return bar->value;
++	assert(gauge);
++	return gauge->rescale;
+ }
+ 
+ /**
+- * \brief Set new progress bar colors.
++ * \Trigtable access
++ * \temporary test function
++ */
++uint8_t wtk_gauge_trigtable(uint8_t angle)
++{
++     return pgm_read_byte(&(trigtable[angle]));
++}
++
++
++/**
++ * \brief Set new gauge colors.
+  *
+- * This sets new fill and background colors for the progress bar. If the bar is
++ * This sets new fill and background colors for the gauge. If the gauge is
+  * inverted, the two colors are switched.
+  *
+- * \param bar Pointer to wtk_progress_bar struct to set colors for.
+- * \param fill_color Fill color to set for progress bar.
+- * \param background_color Background color to set for progress bar.
++ * \param gauge Pointer to wtk_gauge struct to set colors for.
++ * \param fill_color Fill color to set for gauge.
++ * \param background_color Background color to set for gauge.
+  */
+-void wtk_progress_bar_set_colors(struct wtk_progress_bar *bar,
++void wtk_gauge_set_colors(struct wtk_gauge *gauge,
+ 		gfx_color_t fill_color, gfx_color_t background_color)
+ {
+-	assert(bar);
++	assert(gauge);
+ 
+-	if (bar->option & WTK_PROGRESS_BAR_INVERT) {
+-		bar->fill_color = background_color;
+-		bar->background_color = fill_color;
++	if (gauge->option & WTK_GAUGE_INVERT) {
++		gauge->fill_color = background_color;
++		gauge->background_color = fill_color;
+ 	} else {
+-		bar->fill_color = fill_color;
+-		bar->background_color = background_color;
++		gauge->fill_color = fill_color;
++		gauge->background_color = background_color;
+ 	}
+ }
+ 
+ /**
+- * \brief Progress bar event handler.
++ * \brief Gauge event handler.
+  *
+- * This is the window event handler for progress bar widgets. It handles the two
+- * relevant event types sent to a progress bar's container window, i.e., drawing,
++ * This is the window event handler for gauge widgets. It handles the two
++ * relevant event types sent to a gauge's container window, i.e., drawing,
+  * and destroy events.
+  *
+  * \param win Window receiving the event.
+@@ -192,19 +247,21 @@ void wtk_progress_bar_set_colors(struct wtk_progress_bar *bar,
+  *
+  * \return True if the event was recognized and accepted.
+  */
+-static bool wtk_progress_bar_handler(struct win_window *win,
++static bool wtk_gauge_handler(struct win_window *win,
+ 		enum win_event_type type, void const *data)
+ {
+ 	struct win_clip_region const    *clip;
+ 	struct win_area const           *area;
+-	struct wtk_progress_bar         *bar;
++	struct wtk_gauge                *gauge;
+ 	uint8_t                         position;
+ 	uint8_t                         option;
+ 
+-	bar = (struct wtk_progress_bar *)win_get_custom_data(win);
++
++
++	gauge = (struct wtk_gauge *)win_get_custom_data(win);
+ 
+ 	// Window receiving the event should be the widget's containing window.
+-	assert(win == bar->container);
++	assert(win == gauge->container);
+ 
+ 	switch (type) {
+ 	case WIN_EVENT_DRAW:
+@@ -215,43 +272,87 @@ static bool wtk_progress_bar_handler(struct win_window *win,
+ 		clip = (struct win_clip_region const *)data;
+ 		area = win_get_area(win);
+ 
+-		position = bar->position;
+-		option = bar->option;
+-
+-		// Draw a window border.
+-		gfx_draw_rect(clip->origin.x, clip->origin.y, area->size.x,
+-				area->size.y, WTK_PROGRESS_BAR_BORDER_COLOR);
+-
+-		/* Draw progress bar interior according to orientation.
+-		 * An inverted progress bar is drawn in the same way as a
+-		 * non-inverted, as this option is handled in the functions
+-		 * for setting the bar's colors and value.
+-		 */
+-		if (option & WTK_PROGRESS_BAR_VERTICAL) {
+-			// Draw the top section of the bar.
+-			gfx_draw_filled_rect(clip->origin.x + 1,
+-					clip->origin.y + 1,
+-					area->size.x - 2,
+-					position, bar->fill_color);
+-			// Draw the bottom section of the bar.
+-			gfx_draw_filled_rect(clip->origin.x + 1,
+-					clip->origin.y + 1 + position,
+-					area->size.x - 2,
+-					area->size.y - 2 - position,
+-					bar->background_color);
+-		} else {
+-			// Draw the left section of the bar.
+-			gfx_draw_filled_rect(clip->origin.x + 1,
+-					clip->origin.y + 1,
+-					bar->position,
+-					area->size.y - 2, bar->fill_color);
+-			// Draw the right section of the bar.
+-			gfx_draw_filled_rect(clip->origin.x + 1 + position,
+-					clip->origin.y + 1,
+-					area->size.x - 2 - position,
+-					area->size.y - 2,
+-					bar->background_color);
+-		}
++		position = gauge->position;
++		option = gauge->option;
++
++
++		/*
++         * !! NEW GAUGE STUFF !! 
++         *
++         * Draw gauge!
++         *
++		 * TODO:       *OTHER ANGLES FOR GAUGE
++		 * DONE:       *Table dont need to be adjusted, code values caused bending. Gauge line now correctly follows the tracking circle
++		 *             *The background frame now only draw once at start
++		 *             *Gauge line now erases itself at each draw event from old positions
++		 *             *The gauge rescaling is now optimized. And should not need more tuning for fitting in frames of different sizes and when recieving different values.
++		 *             *Gauge.c code can now run multiple gauges without interference
++         */
++        
++        //! Erases the previous gauge line using old x\y values, not enabled at first draw event
++ 		if (!gauge->start) {
++		gfx_generic_draw_line(clip->origin.x + gauge->xrescale + 1, clip->origin.y + area->size.y - gauge->yrescale - 2, clip->origin.x + area->size.x - 2, clip->origin.y + area->size.y - 2, gauge->background_color); //OK
++        }
++        
++        //! Draw the gauge background elements once
++        if (gauge->start) {
++                          
++            //! Draw a window border.
++    		gfx_draw_rect(clip->origin.x, clip->origin.y, area->size.x,
++    				area->size.y, WTK_PROGRESS_BAR_BORDER_COLOR);
++            
++            /* \Old redraw background - to be removed
++            gfx_draw_filled_rect(clip->origin.x + 1, clip->origin.y + 1, area->size.x - 2,
++    			area->size.y - 2, GFX_COLOR(50, 50, 50));
++   			*/
++    			
++    		//! Draws gauge track circle in quadrant 1
++    		gfx_draw_filled_circle(clip->origin.x + area->size.x - 2, clip->origin.y + area->size.y - 2, area->size.x - 3, gauge->background_color, GFX_QUADRANT1); //OK
++            //! Sets start to false so the background draw is halted and enables the gauge line erase function for next draw event.
++            gauge->start = false;
++        }
++		
++
++		
++		//! Rescales the position value for accessing data in the trigtable array
++		gauge->rescale = wtk_rescale_value(position, area->size.x - 2, 127);         // OK
++		
++		//! Reads x trigonometric value from PROGMEM array
++		gauge->xangle = 255 - pgm_read_byte(&(trigtable[127 - gauge->rescale]));     // OK
++        //! Reads x trigonometric value from PROGMEM array
++		gauge->yangle = pgm_read_byte(&(trigtable[gauge->rescale]));                 // OK
++		
++		//! Rescales the x trigonometric value for usage in the draw function
++		gauge->xrescale = wtk_rescale_value(gauge->xangle, 255, area->size.x - 3);   // OK
++		//! Rescales the y trigonometric value for usage in the draw function
++		gauge->yrescale = wtk_rescale_value(gauge->yangle, 255, area->size.y - 3);   // OK
++		
++
++        //! Draws the gauge line from the rescaled position value  
++        gfx_generic_draw_line(clip->origin.x + gauge->xrescale + 1, clip->origin.y + area->size.y - gauge->yrescale - 2, clip->origin.x + area->size.x - 2, clip->origin.y + area->size.y - 2, gauge->fill_color); //OK
++		
++		//! TESTS PIXEL POSITION IN SUBFRAME - to be removed
++		//gfx_draw_pixel(clip->origin.x + 1, clip->origin.y + area->size.y - 2, GFX_COLOR(255,0,0));
++		
++		//! Positions Xplained! :]
++		// clip->origin.(x\y)                               -- the frames start position top left cord(0.0) - start pixel
++		// area->size.(x/y)                                 -- the area size aquired from area defined in widget
++		// clip->origin.(x\y) + area.size - 1               -- the frames right bottom corner - end pixel
++		// clip->origin.(x\y) (+ 1)(+ area->size.y - 2)     -- the gauges start position 
++		
++                //! Old test variables
++                //clip->origin.x + area->size.x - 1 - gauge->xrescale, clip->origin.y + area->size.y + 2 - gauge->yrescale, clip->origin.x + area->size.x - 2/*OK*/, clip->origin.y + area->size.y - 2/*OK*/, gauge->fill_color
++                //clip->origin.x + area->size.x - xrescale, clip->origin.y + area->size.y - yrescale, clip->origin.x + area->size.x - 2, clip->origin.y + area->size.y - 2, gauge->fill_color
++                //clip->origin.x + area->size.x, clip->origin.y + area->size.y, area->size.x - 2 - position, area->size.y - 2,gauge->fill_color
++                //area->pos.x + position,area->pos.y,clip->origin.x ,area->pos.y + 20,gauge->fill_color
++                //area->pos.x,area->pos.y,area->pos.x + 20,area->pos.y + 20,gauge->fill_color
++                //GFX_COLOR(255,0,0)
++                //pgm_read_byte(&(trigtable[position]));                  
++        
++        /*
++         * Visibility circle - temporary out :P - change to arrow
++         * gfx_draw_circle(clip->origin.x + area->size.x - xrescale, clip->origin.y + area->size.y - yrescale - 2, 5, GFX_COLOR(255,0,0), GFX_WHOLE);{}
++         */
+ 
+ 		/* Always accept DRAW events, as the return value is ignored
+ 		 * anyway for that event type.
+@@ -262,7 +363,7 @@ static bool wtk_progress_bar_handler(struct win_window *win,
+ 		/* Free up all memory allocated by widget.
+ 		 * The window is freed by the window system
+ 		 */
+-		membag_free(bar);
++		membag_free(gauge);
+ 		return true;
+ 
+ 	default:
+@@ -271,41 +372,41 @@ static bool wtk_progress_bar_handler(struct win_window *win,
+ }
+ 
+ /**
+- * \brief Create a new progress bar widget.
++ * \brief Create a new gauge widget.
+  *
+  * Allocates the necessary memory and intializes the window and data for
+- * progress bar widgets. If there is not enough memory, the function returns
+- * NULL.\n To destroy a progress bar widget and all its contents, and free its
+- * memory, call \ref win_destroy() on the progress bar's child reference, given
+- * by \ref wtk_progress_bar_as_child(), like this:
+- * "win_destroy(wtk_progress_bar_as_child(my_progress_bar_ptr));".\par
++ * progress gauge widgets. If there is not enough memory, the function returns
++ * NULL.\n To destroy a gauge widget and all its contents, and free its
++ * memory, call \ref win_destroy() on the gauge's child reference, given
++ * by \ref wtk_gauge_as_child(), like this:
++ * "win_destroy(wtk_gauge_as_child(my_gauge_ptr));".\par
+  *
+- * Progress bar widgets divide their window area in two non-overlapping
++ * Gauge widgets divide their window area in two non-overlapping
+  * rectangles: one with a fill color, and one with a background color.
+- * The ratio between the two rectangles' sizes is given by the progress bar's
++ * The ratio between the two rectangles' sizes is given by the gauge's
+  * value relative to its maximum: a higher value gives a larger fill.\par
+  *
+- * By default, a vertically oriented progress bar fills from the top, while a
+- * horizontal one fills from the left. The progress bar's orientation and fill
++ * By default, a vertically oriented gauge fills from the top, while a
++ * horizontal one fills from the left. The gauge's orientation and fill
+  * direction can both be configured at the time of creation. The fill and
+  * background colors can be changed at runtime.\par
+  *
+  * Refer to <gfx/wtk.h> for available configuration options.
+  *
+- * \todo Revisit, support larger progress bars and values given a config symbol.
++ * \todo Revisit, support larger gauges and values given a config symbol.
+  *
+  * \param parent Pointer to parent win_window struct.
+  * \param area Pointer to win_area struct with position and size of the
+- *             progress bar. Minimum size in both x and y direction is 3 pixels.
+- * \param maximum Maximum value of the progress bar.
+- * \param value Initial value of the progress bar.
++ *             gauge. Minimum size in both x and y direction is 3 pixels.
++ * \param maximum Maximum value of the gauge.
++ * \param value Initial value of the gauge.
+  * \param fill_color Color for filled area.
+  * \param background_color Color for background area.
+- * \param option Configuration options for progress bar.
++ * \param option Configuration options for gauge.
+  *
+- * \return Pointer to new progress bar, if memory allocation was successful.
++ * \return Pointer to new gauge, if memory allocation was successful.
+  */
+-struct wtk_progress_bar *wtk_progress_bar_create(struct win_window *parent,
++struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
+ 		struct win_area const *area, uint8_t maximum, uint8_t value,
+ 		gfx_color_t fill_color, gfx_color_t background_color,
+ 		uint8_t option)
+@@ -322,41 +423,42 @@ struct wtk_progress_bar *wtk_progress_bar_create(struct win_window *parent,
+ 	struct win_attributes attr;
+ 
+ 	// Allocate memory for the control data.
+-	struct wtk_progress_bar *bar =
+-			membag_alloc(sizeof(struct wtk_progress_bar));
+-	if (!bar) {
+-		goto outofmem_bar;
++	struct wtk_gauge *gauge =
++			membag_alloc(sizeof(struct wtk_gauge));
++	if (!gauge) {
++		goto outofmem_gauge;
+ 	}
+ 
+-	// Initialize the progress bar data.
+-	bar->maximum = maximum;
+-	bar->value = value;
+-	bar->option = option;
++	// Initialize the gauge data.
++	gauge->maximum = maximum;
++	gauge->value = value;
++	gauge->option = option;
++	gauge->start = true;
+ 
+-	/* Set the progress bar's colors and prepare the value for computation
+-	 * of the bar's end position according to the invert option.
++	/* Set the gauge's colors and prepare the value for computation
++	 * of the gauge's end position according to the invert option.
+ 	 */
+-	if (option & WTK_PROGRESS_BAR_INVERT) {
+-		bar->fill_color = background_color;
+-		bar->background_color = fill_color;
++	if (option & WTK_GAUGE_INVERT) {
++		gauge->fill_color = background_color;
++		gauge->background_color = fill_color;
+ 		value = maximum - value;
+ 	} else {
+-		bar->fill_color = fill_color;
+-		bar->background_color = background_color;
++		gauge->fill_color = fill_color;
++		gauge->background_color = background_color;
+ 	}
+ 
+ 	// Set up handling information.
+-	attr.event_handler = wtk_progress_bar_handler;
+-	attr.custom = bar;
++	attr.event_handler = wtk_gauge_handler;
++	attr.custom = gauge;
+ 
+ 	/* Do sanity check of specified window area parameters
+-	 * according to the orientation of the progress bar.
++	 * according to the orientation of the gauge.
+ 	 */
+ 	attr.area = *area;
+ 	assert(attr.area.size.x > 3);
+ 	assert(attr.area.size.y > 3);
+ 
+-	if (option & WTK_PROGRESS_BAR_VERTICAL) {
++	if (option & WTK_GAUGE_VERTICAL) {
+ 		assert(attr.area.size.y < (uint8_t) ~ 0);
+ 		length = attr.area.size.y;
+ 	} else {
+@@ -366,10 +468,10 @@ struct wtk_progress_bar *wtk_progress_bar_create(struct win_window *parent,
+ 
+ 	length -= 2;
+ 
+-	// Set the progress bar's end position.
+-	bar->position = wtk_rescale_value(value, maximum, length);
++	// Set the gauge's end position.
++	gauge->position = wtk_rescale_value(value, maximum, length);
+ 
+-	/* All drawing is done in wtk_progress_bar_handler() so no background is
++	/* All drawing is done in wtk_gauge_handler() so no background is
+ 	 * needed.
+ 	 */
+ 	attr.background = NULL;
+@@ -379,18 +481,18 @@ struct wtk_progress_bar *wtk_progress_bar_create(struct win_window *parent,
+ 	 */
+ 	attr.behavior = 0;
+ 
+-	// Create a new window for the progress bar.
+-	bar->container = win_create(parent, &attr);
+-	if (!bar->container) {
++	// Create a new window for the gauge.
++	gauge->container = win_create(parent, &attr);
++	if (!gauge->container) {
+ 		goto outofmem_container;
+ 	}
+ 
+-	return bar;
++	return gauge;
+ 
+-outofmem_container:
+-	membag_free(bar);
++    outofmem_container:
++	membag_free(gauge);
+ 
+-outofmem_bar:
++    outofmem_gauge:
+ 	return NULL;
+ }
+ 
