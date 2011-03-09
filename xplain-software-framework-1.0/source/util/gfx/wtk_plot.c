@@ -356,7 +356,7 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 	plot->plot_buffer =
 			membag_alloc(datapoints);
 	if (!plot->plot_buffer) {
-		goto outofmem_plot;
+		goto outofmem_plot_buffer;
 	}
 	
 	
@@ -415,6 +415,9 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 	return plot;
 
 outofmem_container:
+	membag_free(plot->plot_buffer);
+
+outofmem_plot_buffer:	
 	membag_free(plot);
 
 outofmem_plot:
