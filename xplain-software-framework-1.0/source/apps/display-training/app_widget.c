@@ -179,7 +179,7 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 	case BUTTON_ID:
 		
 		wtk_plot_set_value(plot,wtk_slider_get_value(slider));
-		counter++
+		counter++;
 		win_redraw(wtk_basic_frame_as_child(sub_frame));
 		break;
 	}
@@ -330,17 +330,17 @@ void app_widget_launch(struct workqueue_task *task) {
 	}
 	win_show(wtk_plot_as_child(plot));
 	
-	wtk_plot_set_value(plot,50);
-	//wtk_plot_set_value(plot,25);
-	//wtk_plot_set_value(plot,100);
-	//wtk_plot_set_value(plot,100);
-	//wtk_plot_set_value(plot,0);
-	//wtk_plot_set_value(plot,50);
-	//wtk_plot_set_value(plot,70);
-	//wtk_plot_set_value(plot,80);
-	//wtk_plot_set_value(plot,90);
-	//wtk_plot_set_value(plot,0);
-	//wtk_plot_set_value(plot,99); 
+	wtk_plot_set_value(plot,50); 	//0
+	wtk_plot_set_value(plot,80); 	//1
+	wtk_plot_set_value(plot,97);	//2
+	wtk_plot_set_value(plot,97);	//3
+	wtk_plot_set_value(plot,80); 	//4
+	wtk_plot_set_value(plot,50);	//5
+	wtk_plot_set_value(plot,20);	//6
+	wtk_plot_set_value(plot,3);		//7
+	wtk_plot_set_value(plot,3);		//8
+	wtk_plot_set_value(plot,20); 	//9
+	wtk_plot_set_value(plot,50);  	//10
 	
 	
 	// Draw the progress bar by showing the progress bar widget's window.
