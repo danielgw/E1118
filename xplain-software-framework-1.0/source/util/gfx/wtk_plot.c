@@ -140,7 +140,7 @@ bool wtk_plot_set_value(struct wtk_plot *plot, uint8_t value)
 		
 		//plot->plot_buffer = &plot->rbuffer[buffer_start]; 
 		
-		*(plot->plot_buffer + plot->buffer_start) = wtk_rescale_value(value, maximum, length);
+		*(plot->plot_buffer + plot->buffer_start) = wtk_rescale_value((maximum-value), maximum, length);
 		
 		plot->buffer_start++;
 		

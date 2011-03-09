@@ -200,7 +200,7 @@ static void sub_frame_draw_handler(struct win_window *win,
 	char buffer[4];
 
 	snprintf(buffer, sizeof(buffer), "%3d", counter);
-	gfx_draw_string(buffer,clip->origin.x, clip->origin.y, &sysfont,GFX_COLOR(255,255,255),GFX_COLOR(90,90,90));
+	gfx_draw_string(buffer,clip->origin.x, clip->origin.y+10, &sysfont,GFX_COLOR(255,255,255),GFX_COLOR(90,90,90));
 	
 }
 
@@ -350,7 +350,7 @@ void app_widget_launch(struct workqueue_task *task) {
 
 	//! \todo Add code to set up button here.
 	area.pos.x = 10;
-	area.pos.y = 200;
+	area.pos.y = 180;
 	area.size.x = 90;
 	area.size.y = 40;
 	btn = wtk_button_create(parent, &area, "Click",
@@ -362,7 +362,7 @@ void app_widget_launch(struct workqueue_task *task) {
 
 	//! \todo Add code to set up basic frame here.
 	area.pos.x =120;
-	area.pos.y =200;
+	area.pos.y =180;
 	area.size.x = 90;
 	area.size.y = 40;
 	
