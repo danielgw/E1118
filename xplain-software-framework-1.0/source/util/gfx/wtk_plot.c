@@ -73,8 +73,6 @@ struct wtk_plot {
 	uint8_t                 *plot_buffer;
 	//! Ring buffer start-point displacement
 	uint8_t					buffer_start;
-	// Ring buffer array
-	//uint8_t					rbuffer[datapoints]; Denne er ikke rett. dette skal gjøres med *plot_buffer
 	//! Configuration of orientation and behavior.
 	uint8_t                 option;
 	//! Color for plot.
@@ -102,10 +100,8 @@ struct win_window *wtk_plot_as_child(struct wtk_plot *plot)
 
 
 
-			// TODO:							denne må endres totalt
-			//					legg til ny verdi i buffer og flytt pekeren.
 /**
- * \brief Set new progress bar value.
+ * \brief Add a value to the end of the plot.
  *
  * Updates the current value and issues a redrawing of the progress bar if its
  * value was indeed changed. In this case, a new end position for the progress
@@ -116,7 +112,7 @@ struct win_window *wtk_plot_as_child(struct wtk_plot *plot)
  *
  * \return True if progress bar's value was changed.
  */
-bool wtk_plot_set_value(struct wtk_plot *plot, uint8_t value) 
+bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value) 
 {
 	
 	uint8_t length;
@@ -138,9 +134,8 @@ bool wtk_plot_set_value(struct wtk_plot *plot, uint8_t value)
 			
 		length -= 2;
 		
-		//plot->plot_buffer = &plot->rbuffer[buffer_start]; 
 		
-		*(plot->plot_buffer + plot->buffer_start) = wtk_rescale_value((maximum-value), maximum, length);
+		*(plot->plot_buffer + plot->buffer_start) = 1+wtk_rescale_value((maximum-value), maximum, length);
 		
 		plot->buffer_start++;
 		
@@ -360,7 +355,7 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 	// Allocate memory for the control data.
 	plot->plot_buffer =
 			membag_alloc(datapoints);
-	if (!plot) {
+	if (!plot->plot_buffer) {
 		goto outofmem_plot;
 	}
 	
@@ -427,10 +422,3 @@ outofmem_plot:
 }
 
 //! @}
-
-
-
-uint8_t get_val_plot(struct wtk_plot *plot){
-
-	return plot->spacing;
-}

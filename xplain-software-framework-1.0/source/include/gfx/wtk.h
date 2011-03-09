@@ -350,12 +350,10 @@ void wtk_progress_bar_set_colors(struct wtk_progress_bar *bar,
 	 * @{
 	 */
 	struct wtk_plot;
-	//debug:
-	uint8_t get_val_plot(struct wtk_plot *plot);
+		
 	
 	
-	
-	bool wtk_plot_set_value(struct wtk_plot *plot, uint8_t value);
+	bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value);
 	
 	struct wtk_plot *wtk_plot_create(struct win_window *parent,
 		struct win_area const *area, uint8_t maximum, uint8_t datapoints,
