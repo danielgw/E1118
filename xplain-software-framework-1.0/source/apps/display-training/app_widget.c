@@ -323,7 +323,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	area.size.y = 100;
 
 	plot = wtk_plot_create(parent, &area, 100, 11, GFX_COLOR(255, 0, 0),
-			GFX_COLOR(90, 90, 90),0);
+			GFX_COLOR(90, 90, 90), 0);    //WTK_PLOT_RIGHT_TO_LEFT);
 
 	if (!plot) {
 		goto error_widget;
