@@ -106,8 +106,8 @@ struct win_window *wtk_plot_as_child(struct wtk_plot *plot)
  * Scales the input value to fit the plot dimensions and adds it to the end of 
  * the ring buffer , and issues a redrawing of the plot
  *
- * \param bar Pointer to wtk_plot struct to set new value for.
- * \param value New value for the progress bar.
+ * \param plot Pointer to wtk_plot struct to set new value for.
+ * \param value New value for the plot.
  *
  * \return True.
  */
@@ -137,6 +137,7 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
 		
 		plot->buffer_start++;
 		
+		// Increments ring buffer pointer and resets at end
 		if(plot->buffer_start >= plot->datapoints)
 		{
 			plot->buffer_start=0;
@@ -157,7 +158,7 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
  * This sets new draw and background colors for the plot. 
  *
  * \param plot Pointer to wtk_plot struct to set colors for.
- * \param draw_color draw color to set for plot.
+ * \param draw_color Draw color to set for plot.
  * \param background_color Background color to set for plot.
  */
  
@@ -266,6 +267,11 @@ static bool wtk_plot_handler(struct win_window *win,
 			x_current+=plot->spacing;
 			x_error+=plot->spacing_error;
 			
+			
+			
+			/* Adds together the leftover decimals of spacing error and adds one to the spacing between
+			 * two datapoints when it exceeds 1.
+			 */
 			if (x_error>=128){
 				x_current++;
 				x_error-=128;
@@ -303,28 +309,21 @@ static bool wtk_plot_handler(struct win_window *win,
  * by \ref wtk_plot_as_child(), like this:
  * "win_destroy(wtk_plot_as_child(my_plot_ptr));".\par
  *
-				 * Progress bar widgets divide their window area in two non-overlapping
-				 * rectangles: one with a fill color, and one with a background color.
-				 * The ratio between the two rectangles' sizes is given by the progress bar's
-				 * value relative to its maximum: a higher value gives a larger fill.\par
-				 *
-				 * By default, a vertically oriented progress bar fills from the top, while a
-				 * horizontal one fills from the left. The progress bar's orientation and fill
-				 * direction can both be configured at the time of creation. The fill and
-				 * background colors can be changed at runtime.\par
+ * The plotted graph will shift from right to left as new data values are added.
+ * Data values will be overwrited in the ring buffer as they shift out of the plot window.
+ * The maximum parameter scales the input value to fit the plot dimensions.
+ *
+ * The datapoints parameter must not exceed the maximum membag size, and never
+ * over 255. 
+ * 
  *
  * Refer to <gfx/wtk.h> for available configuration options.
  *
-				 * \todo Revisit, support larger progress bars and values given a config symbol.
-				 *
  * \param parent Pointer to parent win_window struct.
  * \param area Pointer to win_area struct with position and size of the
  *             plot. Minimum size in both x and y direction is 4 pixels.
- 
-					 * \param maximum Maximum value of the progress bar.
-					 * \param value Initial value of the progress bar.
- 
- 
+ * \param maximum Maximum value of the plot.
+ * \param datapoints Number of datapoints of the plot. 
  * \param draw_color Plot drawing color.
  * \param background_color Color for background area.
  * \param option Configuration options for plot.
@@ -383,7 +382,7 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 	
 	//TO DO! optimeres 
 	
-	
+	// Calculates the current spacing error.
 	plot->spacing = length / (datapoints-1);
 	plot->spacing_error = (uint8_t)(
 	(((uint16_t)(length-plot->spacing*(datapoints-1)))*128)
