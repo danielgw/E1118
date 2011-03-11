@@ -65,6 +65,7 @@
  * command event callback for certain widgets.
  */
 enum app_widget_ids {
+	
 	//! Event command ID for the slider.
 	SLIDER_ID = 1,
 	//! Event command ID for the button.
@@ -139,6 +140,8 @@ const static char                   *demo_string = "Demonstrating widgets";
  * @{
  */
 
+static struct wtk_frame             *frametest;
+
 //! Pointer to frame for application
 static struct wtk_basic_frame       *frame;
 //! Pointer to slider
@@ -176,6 +179,8 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 
 	case BUTTON_ID:
 		//! \todo Add code here to handle button press.
+		counter++;
+		win_redraw(wtk_basic_frame_as_child(sub_frame));
 		break;
 	}
 
@@ -199,6 +204,9 @@ static void sub_frame_draw_handler(struct win_window *win,
 	 * \todo Add code here to draw text on screen using the
 	 * gfx_draw_string() function.
 	 */
+	gfx_draw_string(buffer, clip->origin.x + 30, clip->origin.y + 12,
+			&sysfont, GFX_COLOR(255, 255, 255),
+			GFX_COLOR_TRANSPARENT);
 }
 
 /**
@@ -216,8 +224,8 @@ void app_widget_launch(struct workqueue_task *task) {
 	struct wtk_label        *lbl;
 	struct wtk_button       *btn;
 
-	// Use larger sysfont for this app
-	sysfont.scale = 2;
+	// Use regular sysfont for this app
+	sysfont.scale = 1;
 
 	// Get pointer to root window
 	win_root = win_get_root();
@@ -245,7 +253,8 @@ void app_widget_launch(struct workqueue_task *task) {
 	if (!frame) {
 		goto error_frame;
 	}
-
+	
+	
 	// Get a pointer to the widget's window for adding sub-widgets.
 	parent = wtk_basic_frame_as_child(frame);
 	/*
@@ -254,6 +263,22 @@ void app_widget_launch(struct workqueue_task *task) {
 	 * widget/window is shown.
 	 */
 	win_show(parent);
+	
+	area.pos.x = gfx_get_width() / 2;
+	area.pos.y = gfx_get_height() / 2;
+	area.size.x = gfx_get_width() / 4;
+	area.size.y = gfx_get_height() / 4;
+	
+	frametest = wtk_frame_create(parent, &area, demo_string, false, NULL, NULL);
+	if (!frametest) {
+		goto error_frame;
+	}
+	
+	win_show(wtk_frame_as_child(frametest));
+
+
+
+
 
 	// Application label
 	area.pos.x = LABEL_POS_X;
@@ -313,8 +338,31 @@ void app_widget_launch(struct workqueue_task *task) {
 	win_show(wtk_progress_bar_as_child(progress_bar));
 
 	//! \todo Add code to set up button here.
+	area.pos.x = 10;
+	area.pos.y = 150;
+	area.size.x = 90;
+	area.size.y = 40;
+
+	btn = wtk_button_create(parent, &area, "Click",
+			(win_command_t)BUTTON_ID);
+	if (!btn) {
+		goto error_widget;
+	}
+	win_show(wtk_button_as_child(btn));
 
 	//! \todo Add code to set up basic frame here.
+	area.pos.x += area.size.x + 40;
+
+	sub_frame_background.type = BITMAP_SOLID;
+	sub_frame_background.data.color = GFX_COLOR(127, 0, 0);
+
+	sub_frame = wtk_basic_frame_create(parent, &area,
+			&sub_frame_background, sub_frame_draw_handler,
+			NULL, NULL);
+	if (!sub_frame) {
+		goto error_widget;
+	}
+	win_show(wtk_basic_frame_as_child(sub_frame));
 
 	return;
 
