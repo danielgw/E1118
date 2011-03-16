@@ -111,6 +111,7 @@ struct win_window *wtk_plot_as_child(struct wtk_plot *plot)
  *
  * \return True.
  */
+ 
 bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value) 
 {
 	
@@ -122,8 +123,6 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
 	assert(plot);
 	assert(value <= plot->maximum);
 /*  
-	if (value != bar->value) {
-		bar->value = value;
 		option = bar->option;*/
 		maximum = plot->maximum;
 		
@@ -134,7 +133,7 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
 		length -= 2;
 		
 		
-		*(plot->plot_buffer + plot->buffer_start) = 1+wtk_rescale_value((maximum-value), maximum, length);
+		*(plot->plot_buffer + plot->buffer_start) = 1+wtk_rescale_value((value), maximum, length);
 		
 		plot->buffer_start++;
 		
@@ -152,20 +151,6 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
 
 
 
-			/*	/**
-				 * \brief Get progress bar value.
-				 *
-				 * \param bar Pointer to wtk_progress_bar struct to get value from.
-				 *
-				 * \return Value of progress bar.
-				 */
-															// TODO: trenger vi noe som denne? (sannsynligvis ikke)
-				/*uint8_t wtk_progress_bar_get_value(struct wtk_progress_bar *bar)
-				{
-					assert(bar);
-					return bar->value;
-				}
-				*/
 
 /**
  * \brief Set new plot colors.
@@ -238,18 +223,39 @@ static bool wtk_plot_handler(struct win_window *win,
 					area->size.y - 2,
 					plot->background_color);
 		
+		
 		uint8_t ring_buffer_offset=plot->buffer_start;
+		
+		if ( option & WTK_PLOT_RIGHT_TO_LEFT){
+			if (ring_buffer_offset==0){
+				ring_buffer_offset=plot->datapoints-1;
+			} else {
+				ring_buffer_offset--;
+			}
+		} 
+		
 		uint8_t x_error=plot->spacing_error;
 		uint8_t x_current=1+plot->spacing;
 		uint8_t x_previous=1, y_previous= *(plot->plot_buffer+ring_buffer_offset);
 				
 		for(uint8_t datapoint=1 ; datapoint < (plot->datapoints); datapoint++) {
+			
 			//increment the datapointer around the ring buffer
-			ring_buffer_offset++;
-			if (ring_buffer_offset>=plot->datapoints) {
-				ring_buffer_offset=0;
+			if ( option & WTK_PLOT_RIGHT_TO_LEFT){
+				if (ring_buffer_offset==0){
+					ring_buffer_offset=plot->datapoints-1;
+				} else {
+					ring_buffer_offset--;
+				}
+			} else {
+				ring_buffer_offset++;
+				if (ring_buffer_offset>=plot->datapoints) {
+					ring_buffer_offset=0;
+				}
 			}
-						
+
+
+			
 			gfx_draw_line(clip->origin.x+x_previous, 
 				clip->origin.y+y_previous,
 				clip->origin.x+x_current,
@@ -261,12 +267,14 @@ static bool wtk_plot_handler(struct win_window *win,
 			x_current+=plot->spacing;
 			x_error+=plot->spacing_error;
 			
+			
+			
 			/* Adds together the leftover decimals of spacing error and adds one to the spacing between
 			 * two datapoints when it exceeds 1.
 			 */
-			if (x_error>=100){
+			if (x_error>=128){
 				x_current++;
-				x_error-=100;
+				x_error-=128;
 			}
 			
 		}
@@ -355,7 +363,6 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 	// Initialize the plot data.
 	plot->maximum = maximum;
 	plot->datapoints=datapoints;
-	//plot->value = value;
 	plot->option = option;
 	plot->draw_color = draw_color;
 	plot->background_color = background_color;
@@ -366,8 +373,8 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 	 * according to the orientation of the progress bar.
 	 */
 	attr.area = *area;
-	assert(attr.area.size.x > 4);
-	assert(attr.area.size.y > 4);
+	assert(attr.area.size.x > 3);
+	assert(attr.area.size.y > 3);
 
 	
 	length = attr.area.size.x;
@@ -377,7 +384,10 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 	
 	// Calculates the current spacing error.
 	plot->spacing = length / (datapoints-1);
-	plot->spacing_error = (uint8_t)((((uint16_t)(length-plot->spacing*(datapoints-1)))*100)/((uint16_t)(datapoints-1)));
+	plot->spacing_error = (uint8_t)(
+	(((uint16_t)(length-plot->spacing*(datapoints-1)))*128)
+	/((uint16_t)(datapoints-1))
+	);
 	
 
 	// Set the progress bar's end position.

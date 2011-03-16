@@ -147,6 +147,8 @@ static struct wtk_slider            *slider;
 static struct wtk_progress_bar      *progress_bar;
 //! Pointer to progress bar
 static struct wtk_plot		        *plot;
+//! Pointer to backwards progress bar
+static struct wtk_plot		        *plot_2;
 //! Frame background bitmap
 static struct gfx_bitmap            frame_background;
 //! Counter for button
@@ -179,6 +181,7 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 	case BUTTON_ID:
 		
 		wtk_plot_add_value(plot,wtk_slider_get_value(slider));
+		wtk_plot_add_value(plot_2,wtk_slider_get_value(slider));
 		counter++;
 		win_redraw(wtk_basic_frame_as_child(sub_frame));
 		break;
@@ -317,19 +320,36 @@ void app_widget_launch(struct workqueue_task *task) {
 	
 
 	// Application plot
-	area.pos.x = SLIDER_POS_X + SLIDER_SIZE_X + 20;
+	area.pos.x = SLIDER_POS_X + SLIDER_SIZE_X + 10;
 	area.pos.y = SLIDER_POS_Y;
 	area.size.x = 100;
 	area.size.y = 100;
 
 	
 	plot = wtk_plot_create(parent, &area, 100, 11, GFX_COLOR(255, 0, 0),
-			GFX_COLOR(90, 90, 90),0);
+			GFX_COLOR(90, 90, 90), 0);    //WTK_PLOT_RIGHT_TO_LEFT);
 
 	if (!plot) {
 		goto error_widget;
 	}
 	win_show(wtk_plot_as_child(plot));
+	
+	
+	
+	// Application plot_2
+	area.pos.x = SLIDER_POS_X + SLIDER_SIZE_X + 120;
+	area.pos.y = SLIDER_POS_Y;
+	area.size.x = 100;
+	area.size.y = 100;
+
+	
+	plot_2 = wtk_plot_create(parent, &area, 100, 11, GFX_COLOR(255, 0, 0),
+			GFX_COLOR(90, 90, 90), WTK_PLOT_RIGHT_TO_LEFT);
+
+	if (!plot_2) {
+		goto error_widget;
+	}
+	win_show(wtk_plot_as_child(plot_2));
 	
 	wtk_plot_add_value(plot,50); 	//0
 	wtk_plot_add_value(plot,80); 	//1
@@ -342,6 +362,18 @@ void app_widget_launch(struct workqueue_task *task) {
 	wtk_plot_add_value(plot,3);		//8
 	wtk_plot_add_value(plot,20); 	//9
 	wtk_plot_add_value(plot,50);  	//10
+	
+	wtk_plot_add_value(plot_2,50); 	//0
+	wtk_plot_add_value(plot_2,80); 	//1
+	wtk_plot_add_value(plot_2,97);	//2
+	wtk_plot_add_value(plot_2,97);	//3
+	wtk_plot_add_value(plot_2,80); 	//4
+	wtk_plot_add_value(plot_2,50);	//5
+	wtk_plot_add_value(plot_2,20);	//6
+	wtk_plot_add_value(plot_2,3);		//7
+	wtk_plot_add_value(plot_2,3);		//8
+	wtk_plot_add_value(plot_2,20); 	//9
+	wtk_plot_add_value(plot_2,50);  	//10
 	
 	
 	// Draw the progress bar by showing the progress bar widget's window.

@@ -349,10 +349,42 @@ void wtk_progress_bar_set_colors(struct wtk_progress_bar *bar,
 	 * \defgroup gfx_wtk_plot Plot widget
 	 * @{
 	 */
+	
+
+
+		/**
+		 * \defgroup gfx_wtk_plot_options Plot widget options
+		 * These options can be ORed together to specify the behaviour of a
+		 * plot widget when creating it with \ref wtk_plot_create
+		 * @{
+		 */
+
+		/**
+		 * \name Plot orientation configuration options.
+		 * For use with the option parameter of \ref wtk_plot_create
+		 * @{
+		 */
+
+		//! Plot draws values from left to right
+		#define WTK_PLOT_LEFT_TO_RIGHT    (0 << 0)
+		//! Plot draws values from right to left
+		#define WTK_PLOT_RIGHT_TO_LEFT    (1 << 0)
+
+		//! @}
+
+		/**
+		 * \name Plot widget invert configuration options.
+		 * For use with the option parameter of \ref wtk_plot_create
+		 * @{
+		 */
+		//! Plot is inverted.
+		#define WTK_PLOT_INVERT        (1 << 1)
+
+		//! @}
+
+		//! @}
 	struct wtk_plot;
 		
-	
-	
 	bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value);
 	
 	struct wtk_plot *wtk_plot_create(struct win_window *parent,
