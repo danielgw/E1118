@@ -414,8 +414,8 @@ void app_widget_launch(struct workqueue_task *task) {
 	 * occured while creating the gauge.
 	 */
 	gauge = wtk_gauge_create(parent, &area, SLIDER_MAX_VALUE + TRAVEL,
-			(SLIDER_MAX_VALUE + TRAVEL) / 2, GFX_COLOR(0, 255, 0),
-			GFX_COLOR(90, 90, 90), WTK_GAUGE_HORIZONTAL);
+			(SLIDER_MAX_VALUE + TRAVEL) / 2, GFX_COLOR(255, 0, 0),
+			GFX_COLOR(100, 100, 100), WTK_GAUGE_HORIZONTAL);
 	if (!gauge) {
 		goto error_widget;
 	}
@@ -436,8 +436,8 @@ void app_widget_launch(struct workqueue_task *task) {
 	 * occured while creating the gauge.
 	 */
 	gaugetwo = wtk_gauge_create(parent, &area, SLIDERTWO_MAX_VALUE + TRAVEL,
-			(SLIDERTWO_MAX_VALUE + TRAVEL) / 2, GFX_COLOR(0, 255, 0),
-			GFX_COLOR(90, 90, 90), WTK_GAUGE_INVERT|WTK_GAUGE_HORIZONTAL);
+			(SLIDERTWO_MAX_VALUE + TRAVEL) / 2, GFX_COLOR(255, 0, 0),
+			GFX_COLOR(100, 100, 100), WTK_GAUGE_INVERT|WTK_GAUGE_HORIZONTAL);
 	if (!gaugetwo) {
 		goto error_widget;
 	}
