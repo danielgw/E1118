@@ -79,6 +79,21 @@ struct wtk_plot {
 	gfx_color_t             draw_color;
 	//! Color for plot background.
 	gfx_color_t             background_color;
+	//! Configuration of scale, grid and zero-line behaviour.
+	uint8_t                 scale_option;
+	//! Space between x-axis grid/scale lines.
+	uint8_t                 scale_spacing_x;
+	//! Grid/scale offset along the x-axis.
+	uint8_t                 scale_offset_x;
+	//! Space between y-axis grid/scale lines.
+	uint8_t                 scale_spacing_y;
+	//! Grid/scale offset along the y-axis.
+	uint8_t                 scale_offset_y;
+	//! Color for the scale and grid lines.
+	gfx_color_t             scale_color;
+	//! Color for the zero line.
+	gfx_color_t             scale_zero_color;
+	
 };
 
 /**
@@ -150,6 +165,38 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
 }
 
 
+/**
+ * \brief Set grid/scale parameters.
+ *
+ * This function sets the grid and scale options,  colors for the plot. 
+ *
+ * \param plot Pointer to wtk_plot struct to set colors for.
+ * \param scale_option Configuration of scale, grid and zero-line behaviour.
+ * \param scale_spacing_x Space between x-axis grid/scale lines.
+ * \param scale_offset_x Grid/scale offset along the x-axis.
+ * \param scale_spacing_y Space between y-axis grid/scale lines.
+ * \param scale_offset_y Grid/scale offset along the y-axis.
+ * \param scale_color Color for the scale and grid lines.
+ * \param scale_zero_color Color for the zero line.
+ */
+
+ void wtk_plot_grid(struct wtk_plot *plot,
+		uint8_t scale_option,
+		uint8_t scale_spacing_x, uint8_t scale_offset_x,
+		uint8_t scale_spacing_y, uint8_t scale_offset_y,
+		gfx_color_t scale_color,
+		gfx_color_t scale_zero_color)
+{
+	assert(plot);
+	
+	plot->scale_option=scale_option;
+	plot->scale_spacing_x=scale_spacing_x;
+	plot->scale_offset_x=scale_offset_x;
+	plot->scale_spacing_y=scale_spacing_y;
+	plot->scale_offset_y=scale_offset_y;
+	plot->scale_color=scale_color;
+	plot->scale_zero_color=scale_zero_color;	
+}
 
 
 /**
