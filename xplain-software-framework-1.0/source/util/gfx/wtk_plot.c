@@ -79,6 +79,21 @@ struct wtk_plot {
 	gfx_color_t             draw_color;
 	//! Color for plot background.
 	gfx_color_t             background_color;
+	//! Configuration of scale, grid and zero-line behaviour.
+	uint8_t                 scale_option;
+	//! Space between x-axis grid/scale lines.
+	uint8_t                 scale_spacing_x;
+	//! Grid/scale offset along the x-axis.
+	uint8_t                 scale_offset_x;
+	//! Space between y-axis grid/scale lines.
+	uint8_t                 scale_spacing_y;
+	//! Grid/scale offset along the y-axis.
+	uint8_t                 scale_offset_y;
+	//! Color for the scale and grid lines.
+	gfx_color_t             scale_color;
+	//! Color for the zero line.
+	gfx_color_t             scale_zero_color;
+	
 };
 
 /**
@@ -150,6 +165,38 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
 }
 
 
+/**
+ * \brief Set grid/scale parameters.
+ *
+ * This function sets the grid and scale options,  colors for the plot. 
+ *
+ * \param plot Pointer to wtk_plot struct to set colors for.
+ * \param scale_option Configuration of scale, grid and zero-line behaviour.
+ * \param scale_spacing_x Space between x-axis grid/scale lines.
+ * \param scale_offset_x Grid/scale offset along the x-axis.
+ * \param scale_spacing_y Space between y-axis grid/scale lines.
+ * \param scale_offset_y Grid/scale offset along the y-axis.
+ * \param scale_color Color for the scale and grid lines.
+ * \param scale_zero_color Color for the zero line.
+ */
+
+ void wtk_plot_grid(struct wtk_plot *plot,
+		uint8_t scale_option,
+		uint8_t scale_spacing_x, uint8_t scale_offset_x,
+		uint8_t scale_spacing_y, uint8_t scale_offset_y,
+		gfx_color_t scale_color,
+		gfx_color_t scale_zero_color)
+{
+	assert(plot);
+	
+	plot->scale_option=scale_option;
+	plot->scale_spacing_x=scale_spacing_x;
+	plot->scale_offset_x=scale_offset_x;
+	plot->scale_spacing_y=scale_spacing_y;
+	plot->scale_offset_y=scale_offset_y;
+	plot->scale_color=scale_color;
+	plot->scale_zero_color=scale_zero_color;	
+}
 
 
 /**
@@ -211,19 +258,19 @@ static bool wtk_plot_handler(struct win_window *win,
 
 		// Draw a window border.
 		gfx_draw_rect(clip->origin.x, clip->origin.y, area->size.x,
-				area->size.y, WTK_PROGRESS_BAR_BORDER_COLOR);			
+				area->size.y, WTK_PROGRESS_BAR_BORDER_COLOR);
 				
 
-		/* Draw plot interior.
-		 */
+		// Draw plot interior.
 		 
-		 gfx_draw_filled_rect(clip->origin.x + 1, 		
+		 
+		 gfx_draw_filled_rect(clip->origin.x + 1, 
 					clip->origin.y + 1,
-					area->size.x - 2,					
+					area->size.x - 2,
 					area->size.y - 2,
 					plot->background_color);
 		
-		
+		// 
 		uint8_t ring_buffer_offset=plot->buffer_start;
 		
 		if ( option & WTK_PLOT_RIGHT_TO_LEFT){
@@ -237,25 +284,19 @@ static bool wtk_plot_handler(struct win_window *win,
 		uint8_t x_error=plot->spacing_error;
 		uint8_t x_current=1+plot->spacing;
 		uint8_t x_previous=1, y_previous= *(plot->plot_buffer+ring_buffer_offset);
-				
+		
+		
 		for(uint8_t datapoint=1 ; datapoint < (plot->datapoints); datapoint++) {
-			
 			//increment the datapointer around the ring buffer
+			
 			if ( option & WTK_PLOT_RIGHT_TO_LEFT){
 				if (ring_buffer_offset==0){
 					ring_buffer_offset=plot->datapoints-1;
-				} else {
-					ring_buffer_offset--;
-				}
+				} else {ring_buffer_offset--;}
 			} else {
 				ring_buffer_offset++;
-				if (ring_buffer_offset>=plot->datapoints) {
-					ring_buffer_offset=0;
-				}
+				if (ring_buffer_offset>=plot->datapoints) { ring_buffer_offset=0;}
 			}
-
-
-			
 			gfx_draw_line(clip->origin.x+x_previous, 
 				clip->origin.y+y_previous,
 				clip->origin.x+x_current,
@@ -266,8 +307,6 @@ static bool wtk_plot_handler(struct win_window *win,
 			x_previous=x_current;
 			x_current+=plot->spacing;
 			x_error+=plot->spacing_error;
-			
-			
 			
 			/* Adds together the leftover decimals of spacing error and adds one to the spacing between
 			 * two datapoints when it exceeds 1.

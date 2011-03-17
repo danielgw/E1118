@@ -387,14 +387,18 @@ void wtk_progress_bar_set_colors(struct wtk_progress_bar *bar,
 		
 	bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value);
 	
+	void wtk_plot_grid(struct wtk_plot *plot, uint8_t scale_option,
+		uint8_t scale_spacing_x, uint8_t scale_offset_x,
+		uint8_t scale_spacing_y, uint8_t scale_offset_y,
+		gfx_color_t scale_color, gfx_color_t scale_zero_color);
+		
 	struct wtk_plot *wtk_plot_create(struct win_window *parent,
 		struct win_area const *area, uint8_t maximum, uint8_t datapoints,
 		gfx_color_t draw_color, gfx_color_t background_color,
 		uint8_t option);
 			
 	struct win_window *wtk_plot_as_child(struct wtk_plot *plot);
-	//int8_t wtk_progress_bar_get_value(struct wtk_progress_bar *bar);
-	//bool wtk_progress_bar_set_value(struct wtk_progress_bar *bar, uint8_t value); -- må endres totalt
+	
 	void wtk_plot_set_colors(struct wtk_plot *plot,
 		gfx_color_t draw_color, gfx_color_t background_color);
 
