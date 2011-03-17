@@ -258,19 +258,19 @@ static bool wtk_plot_handler(struct win_window *win,
 
 		// Draw a window border.
 		gfx_draw_rect(clip->origin.x, clip->origin.y, area->size.x,
-				area->size.y, WTK_PROGRESS_BAR_BORDER_COLOR);			
+				area->size.y, WTK_PROGRESS_BAR_BORDER_COLOR);
 				
 
-		/* Draw plot interior.
-		 */
+		// Draw plot interior.
 		 
-		 gfx_draw_filled_rect(clip->origin.x + 1, 		
+		 
+		 gfx_draw_filled_rect(clip->origin.x + 1, 
 					clip->origin.y + 1,
-					area->size.x - 2,					
+					area->size.x - 2,
 					area->size.y - 2,
 					plot->background_color);
 		
-		
+		// 
 		uint8_t ring_buffer_offset=plot->buffer_start;
 		
 		if ( option & WTK_PLOT_RIGHT_TO_LEFT){
@@ -284,25 +284,19 @@ static bool wtk_plot_handler(struct win_window *win,
 		uint8_t x_error=plot->spacing_error;
 		uint8_t x_current=1+plot->spacing;
 		uint8_t x_previous=1, y_previous= *(plot->plot_buffer+ring_buffer_offset);
-				
+		
+		
 		for(uint8_t datapoint=1 ; datapoint < (plot->datapoints); datapoint++) {
-			
 			//increment the datapointer around the ring buffer
+			
 			if ( option & WTK_PLOT_RIGHT_TO_LEFT){
 				if (ring_buffer_offset==0){
 					ring_buffer_offset=plot->datapoints-1;
-				} else {
-					ring_buffer_offset--;
-				}
+				} else {ring_buffer_offset--;}
 			} else {
 				ring_buffer_offset++;
-				if (ring_buffer_offset>=plot->datapoints) {
-					ring_buffer_offset=0;
-				}
+				if (ring_buffer_offset>=plot->datapoints) { ring_buffer_offset=0;}
 			}
-
-
-			
 			gfx_draw_line(clip->origin.x+x_previous, 
 				clip->origin.y+y_previous,
 				clip->origin.x+x_current,
@@ -313,8 +307,6 @@ static bool wtk_plot_handler(struct win_window *win,
 			x_previous=x_current;
 			x_current+=plot->spacing;
 			x_error+=plot->spacing_error;
-			
-			
 			
 			/* Adds together the leftover decimals of spacing error and adds one to the spacing between
 			 * two datapoints when it exceeds 1.
