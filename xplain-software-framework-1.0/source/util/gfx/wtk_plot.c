@@ -275,23 +275,45 @@ static bool wtk_plot_handler(struct win_window *win,
 		//Draw the scale/grid.
 		{
 			uint8_t scale_option=plot->scale_option;
+			uint8_t scale_spacing_x =plot->scale_spacing_x;
+			uint8_t scale_offset_x  =plot->scale_offset_x;
+			uint8_t scale_spacing_y =plot->scale_spacing_y;
+			uint8_t scale_offset_y  =plot->scale_offset_y;
+			uint8_t scale_color     =plot->scale_color=scale_color;
+			
 			
 			if (scale_option&WTK_PLOT_GRID_VERTICAL){
 				//draw vertical lines
+				for(uint8_t offset=scale_offset_y; offset<area->size.y-2; offset+=scale_spacing_y) {
+					gfx_draw_line(clip->origin.x, 
+								clip->origin.y+offset,
+								clip->origin.x+area->size.x-2,
+								clip->origin.y+offset,
+								plot->scale_color);
+				}
 			} 
-			else if(scale_option&WTK_PLOT_GRID_VERTICAL){
+			else if(scale_option&WTK_PLOT_SCALE_VERTICAL){
 				//draw vertical notches
+				for(uint8_t offset=scale_offset_y; offset<area->size.y-2; offset+=scale_spacing_y) {
+					gfx_draw_line(clip->origin.x, 
+								clip->origin.y+offset,
+								clip->origin.x+5,
+								clip->origin.y+offset,
+								plot->scale_color);
+				}
 			}
 			
-			if (scale_option&WTK_PLOT_GRID_VERTICAL){
+			if (scale_option&WTK_PLOT_GRID_HORIZONTAL){
 				//draw vertical lines
 			} 
-			else if(scale_option&WTK_PLOT_GRID_VERTICAL){
+			else if(scale_option&WTK_PLOT_SCALE_HORIZONTAL){
 				//draw vertical notches
 			}
 			
 			if (scale_option&WTK_PLOT_ZERO){
-				//draw zero-line
+				gfx_draw_line(clip->origin.x, clip->origin.y+plot->scale_offset_y,
+					clip->origin.x+area->size.x-2,clip->origin.y+plot->scale_offset_y,
+					plot->scale_zero_color);
 			} 
 			
 			
