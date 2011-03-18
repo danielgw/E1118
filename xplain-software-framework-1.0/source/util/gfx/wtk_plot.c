@@ -119,7 +119,7 @@ struct win_window *wtk_plot_as_child(struct wtk_plot *plot)
  * \brief Add a value to the end of the plot.
  *
  * Scales the input value to fit the plot dimensions and adds it to the end of 
- * the ring buffer , and issues a redrawing of the plot
+ * the ring buffer.
  *
  * \param plot Pointer to wtk_plot struct to set new value for.
  * \param value New value for the plot.
@@ -157,8 +157,6 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
 		{
 			plot->buffer_start=0;
 		}
-
-		win_redraw(plot->container);
 
 		return true;
 
