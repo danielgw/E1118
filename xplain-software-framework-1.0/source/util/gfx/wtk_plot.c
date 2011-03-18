@@ -284,7 +284,7 @@ static bool wtk_plot_handler(struct win_window *win,
 			
 			if (scale_option&WTK_PLOT_GRID_VERTICAL){
 				//draw vertical lines
-				for(uint8_t offset=scale_offset_y; offset<area->size.y-2; offset+=scale_spacing_y) {
+				for(uint8_t offset=scale_offset_y; offset < (area->size.y-2); offset+=scale_spacing_y) {
 					gfx_draw_line(clip->origin.x, 
 								clip->origin.y+offset,
 								clip->origin.x+area->size.x-2,
@@ -294,7 +294,7 @@ static bool wtk_plot_handler(struct win_window *win,
 			} 
 			else if(scale_option&WTK_PLOT_SCALE_VERTICAL){
 				//draw vertical notches
-				for(uint8_t offset=scale_offset_y; offset<area->size.y-2; offset+=scale_spacing_y) {
+				for(uint8_t offset=scale_offset_y; offset<(area->size.y-2); offset+=scale_spacing_y) {
 					gfx_draw_line(clip->origin.x, 
 								clip->origin.y+offset,
 								clip->origin.x+5,
@@ -312,10 +312,13 @@ static bool wtk_plot_handler(struct win_window *win,
 								clip->origin.y+area->size.y-2,
 								plot->scale_color);
 				}
-				for(uint8_t offset=scale_offset_x-scale_spacing_x; offset>0; offset-=scale_spacing_x) {
-					gfx_draw_line(clip->origin.x+offset, 
+				for(uint8_t offset=scale_offset_x-scale_spacing_x;
+					offset<scale_spacing_x; 
+					offset+=scale_spacing_x) {
+					
+					gfx_draw_line(clip->origin.x-offset, 
 								clip->origin.y,
-								clip->origin.x+offset,
+								clip->origin.x-offset,
 								clip->origin.y+area->size.y-2,
 								plot->scale_color);
 				}
@@ -347,6 +350,9 @@ static bool wtk_plot_handler(struct win_window *win,
 			
 			
 		}
+		
+		
+		
 		
 
 		//Start drawing the plot itself
