@@ -332,6 +332,8 @@ void app_widget_launch(struct workqueue_task *task) {
 	if (!plot) {
 		goto error_widget;
 	}
+	wtk_plot_grid(plot,WTK_PLOT_GRID_HORIZONTAL|WTK_PLOT_GRID_vertical,
+	10,5,10,5,GFX_COLOR(90, 30, 30),GFX_COLOR(90, 90, 90)); //testkode
 	win_show(wtk_plot_as_child(plot));
 	
 	
