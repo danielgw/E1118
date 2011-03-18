@@ -188,12 +188,19 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
 		gfx_color_t scale_zero_color)
 {
 	assert(plot);
+	
+	uint8_t height;
+	struct win_area const *area;
+	
+	area = win_get_area(plot->container);
+	height = area->size.y;
+	height -= 3;
 
 	plot->scale_option=scale_option;
 	plot->scale_spacing_x=scale_spacing_x;
 	plot->scale_offset_x=scale_offset_x;
-	plot->scale_spacing_y=scale_spacing_y;
-	plot->scale_offset_y=scale_offset_y;
+	plot->scale_spacing_y=scale_spacing_y; //wtk_rescale_value(scale_spacing_y,plot->maximum,height);
+	plot->scale_offset_y=scale_offset_y; //wtk_rescale_value(scale_offset_y,plot->maximum,height);
 	plot->scale_color=scale_color;
 	plot->scale_zero_color=scale_zero_color;
 }
@@ -267,55 +274,79 @@ static bool wtk_plot_handler(struct win_window *win,
 					area->size.y - 2,
 					plot->background_color);
 
-		//Draw the scale/grid:
+		//Draw the scale/grid.
+		{
+			uint8_t scale_option=plot->scale_option;
+			
+			if (scale_option&WTK_PLOT_GRID_VERTICAL){
+				//draw vertical lines
+			} 
+			else if(scale_option&WTK_PLOT_GRID_VERTICAL){
+				//draw vertical notches
+			}
+			
+			if (scale_option&WTK_PLOT_GRID_VERTICAL){
+				//draw vertical lines
+			} 
+			else if(scale_option&WTK_PLOT_GRID_VERTICAL){
+				//draw vertical notches
+			}
+			
+			if (scale_option&WTK_PLOT_ZERO){
+				//draw zero-line
+			} 
+			
+			
+		}
 		
 
 		//Start drawing the plot itself
-		uint8_t ring_buffer_offset=plot->buffer_start;
+		{
+			uint8_t ring_buffer_offset=plot->buffer_start;
 
-		if ( option & WTK_PLOT_RIGHT_TO_LEFT){
-			if (ring_buffer_offset==0){
-				ring_buffer_offset=plot->datapoints-1;
-			} else {
-				ring_buffer_offset--;
-			}
-		} 
-
-		uint8_t x_error=plot->spacing_error;
-		uint8_t x_current=1+plot->spacing;
-		uint8_t x_previous=1, y_previous= *(plot->plot_buffer+ring_buffer_offset);
-
-		// Draws updated plot.
-		for(uint8_t datapoint=1 ; datapoint < (plot->datapoints); datapoint++) {
-
-			//increment the datapointer around the ring buffer
 			if ( option & WTK_PLOT_RIGHT_TO_LEFT){
 				if (ring_buffer_offset==0){
 					ring_buffer_offset=plot->datapoints-1;
-				} else {ring_buffer_offset--;}
-			} else {
-				ring_buffer_offset++;
-				if (ring_buffer_offset>=plot->datapoints) { ring_buffer_offset=0;}
+				} else {
+					ring_buffer_offset--;
+				}
+			} 
+
+			uint8_t x_error=plot->spacing_error;
+			uint8_t x_current=1+plot->spacing;
+			uint8_t x_previous=1, y_previous= *(plot->plot_buffer+ring_buffer_offset);
+
+			// Draws updated plot.
+			for(uint8_t datapoint=1 ; datapoint < (plot->datapoints); datapoint++) {
+
+				//increment the datapointer around the ring buffer
+				if ( option & WTK_PLOT_RIGHT_TO_LEFT){
+					if (ring_buffer_offset==0){
+						ring_buffer_offset=plot->datapoints-1;
+					} else {ring_buffer_offset--;}
+				} else {
+					ring_buffer_offset++;
+					if (ring_buffer_offset>=plot->datapoints) { ring_buffer_offset=0;}
+				}
+				gfx_draw_line(clip->origin.x+x_previous, 
+					clip->origin.y+y_previous,
+					clip->origin.x+x_current,
+					clip->origin.y + *(plot->plot_buffer+ring_buffer_offset),
+					plot->draw_color);
+
+				y_previous=*(plot->plot_buffer+ring_buffer_offset);
+				x_previous=x_current;
+				x_current+=plot->spacing;
+				x_error+=plot->spacing_error;
+
+				/* Adds together the leftover decimals of spacing error and adds one to the spacing between
+				 * two datapoints when it exceeds 1.
+				 */
+				if (x_error>=128){
+					x_current++;
+					x_error-=128;
+				}
 			}
-			gfx_draw_line(clip->origin.x+x_previous, 
-				clip->origin.y+y_previous,
-				clip->origin.x+x_current,
-				clip->origin.y + *(plot->plot_buffer+ring_buffer_offset),
-				plot->draw_color);
-
-			y_previous=*(plot->plot_buffer+ring_buffer_offset);
-			x_previous=x_current;
-			x_current+=plot->spacing;
-			x_error+=plot->spacing_error;
-
-			/* Adds together the leftover decimals of spacing error and adds one to the spacing between
-			 * two datapoints when it exceeds 1.
-			 */
-			if (x_error>=128){
-				x_current++;
-				x_error-=128;
-			}
-
 		}
 
 		/* Always accept DRAW events, as the return value is ignored
