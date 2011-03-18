@@ -195,7 +195,7 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
 	plot->scale_spacing_y=scale_spacing_y;
 	plot->scale_offset_y=scale_offset_y;
 	plot->scale_color=scale_color;
-	plot->scale_zero_color=scale_zero_color;	
+	plot->scale_zero_color=scale_zero_color;
 }
 
 
@@ -267,6 +267,10 @@ static bool wtk_plot_handler(struct win_window *win,
 					area->size.y - 2,
 					plot->background_color);
 
+		//Draw the scale/grid:
+		
+
+		//Start drawing the plot itself
 		uint8_t ring_buffer_offset=plot->buffer_start;
 
 		if ( option & WTK_PLOT_RIGHT_TO_LEFT){

@@ -383,6 +383,57 @@ void wtk_progress_bar_set_colors(struct wtk_progress_bar *bar,
 		//! @}
 
 		//! @}
+		
+		/**
+		 * \defgroup gfx_wtk_plot_grid_options Plot widget grid options
+		 * These options can be ORed together to specify the behaviour of a
+		 * plot widget grid when adjusting it./ref wtk_plot_grid
+		 * @{
+		 */
+
+			/**
+			 * \name grid orientation options.
+			 * For use with the option parameter of \ref wtk_plot_grid
+			 * @{
+			 */
+
+			//! Draw horizontal grid lines along the vertical axis
+			#define WTK_PLOT_GRID_VERTICAL    (1 << 0)
+			//! Draw vertical grid lines along the horizontal axis
+			#define WTK_PLOT_GRID_HORIZONTAL  (1 << 1)
+
+			//! @}
+			/**
+			 * \name scale orientation options.
+			 * For use with the option parameter of \ref wtk_plot_grid
+			 * @{
+			 */
+
+			//! Draw scale notches along the vertical axis
+			#define WTK_PLOT_SCALE_VERTICAL    (1 << 2)
+			//! Draw scale notches along the horizontal axis
+			#define WTK_PLOT_SCALE_HORIZONTAL  (1 << 3)
+
+			//! @}
+
+			/**
+			 * \name zero line options options.
+			 * For use with the option parameter of \ref wtk_plot_grid
+			 * @{
+			 */
+
+			//! Draw the zero line
+			#define WTK_PLOT_ZERO              (1 << 4)
+			//! @}
+			
+
+
+		//! @}
+
+		//! @}
+		
+		
+		
 	struct wtk_plot;
 		
 	bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value);
