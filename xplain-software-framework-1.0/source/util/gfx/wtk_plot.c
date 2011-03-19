@@ -291,7 +291,7 @@ static bool wtk_plot_handler(struct win_window *win,
 					gfx_draw_line(clip->origin.x,  clip->origin.y+offset,
 								clip->origin.x+area->size.x-2,
 								clip->origin.y+offset,
-								plot->scale_color);
+								scale_color);
 				}
 				
 				// if scale_offset>scale spacing:
@@ -304,7 +304,7 @@ static bool wtk_plot_handler(struct win_window *win,
 							offset+=scale_spacing_y) {
 					gfx_draw_line(clip->origin.x,  clip->origin.y+offset,
 								clip->origin.x+5,  clip->origin.y+offset,
-								plot->scale_color);
+								scale_color);
 								
 				}
 				
@@ -319,17 +319,17 @@ static bool wtk_plot_handler(struct win_window *win,
 							offset+=scale_spacing_x) {
 					gfx_draw_line(clip->origin.x+offset,  clip->origin.y,
 								  clip->origin.x+offset,  clip->origin.y+area->size.y-2,
-								  plot->scale_color);
+								  scale_color);
 				}
 				// if scale_offset>scale spacing:
-				if (scale_offse_x>scale_spacing_x){
+				if (scale_offset_x>scale_spacing_x){
 					for(uint8_t offset=scale_offset_x-scale_spacing_x;
 						offset>scale_spacing_x; 
 						offset+=scale_spacing_x) {
 						
 						gfx_draw_line(clip->origin.x-offset,  clip->origin.y,
 									clip->origin.x-offset,    clip->origin.y+area->size.y-2,
-									plot->scale_color);
+									scale_color);
 					}
 				}
 			} 
@@ -341,18 +341,19 @@ static bool wtk_plot_handler(struct win_window *win,
 							
 					gfx_draw_line(clip->origin.x+offset,  clip->origin.y,
 								clip->origin.x+offset,    clip->origin.y+5,
-								plot->scale_color);
+								scale_color);
 				}
 				
 				// if scale_offset>scale spacing:
-				if (scale_offse_x>scale_spacing_x){
+				if (scale_offset_x>scale_spacing_x){
 					for(uint8_t offset=scale_offset_x-scale_spacing_x;
 						offset>scale_spacing_x; 
 						offset+=scale_spacing_x) {
 						
 						gfx_draw_line(clip->origin.x-offset,  clip->origin.y,
 									clip->origin.x-offset,    clip->origin.y+5,
-									plot->scale_color);
+									scale_color);
+					}
 					
 				}
 			}
