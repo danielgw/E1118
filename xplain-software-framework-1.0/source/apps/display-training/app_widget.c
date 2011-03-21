@@ -182,6 +182,9 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 		
 		wtk_plot_add_value(plot,wtk_slider_get_value(slider));
 		wtk_plot_add_value(plot_2,wtk_slider_get_value(slider));
+		win_redraw(wtk_plot_as_child(plot));
+		win_redraw(wtk_plot_as_child(plot_2));
+	
 		counter++;
 		win_redraw(wtk_basic_frame_as_child(sub_frame));
 		break;
@@ -372,12 +375,14 @@ void app_widget_launch(struct workqueue_task *task) {
 	wtk_plot_add_value(plot_2,80); 	//4
 	wtk_plot_add_value(plot_2,50);	//5
 	wtk_plot_add_value(plot_2,20);	//6
-	wtk_plot_add_value(plot_2,3);		//7
-	wtk_plot_add_value(plot_2,3);		//8
+	wtk_plot_add_value(plot_2,3);	//7
+	wtk_plot_add_value(plot_2,3);	//8
 	wtk_plot_add_value(plot_2,20); 	//9
-	wtk_plot_add_value(plot_2,50);  	//10
+	wtk_plot_add_value(plot_2,50);  //10
 	
 	
+	win_redraw(wtk_plot_as_child(plot));
+	win_redraw(wtk_plot_as_child(plot_2));
 	// Draw the progress bar by showing the progress bar widget's window.
 	
 	
