@@ -132,7 +132,7 @@ enum app_widget_ids {
 //! Gaugetwo position
 #define GTWO_POS_Y				   80
 //! Gaugetwo size on display
-#define GTWO_SIZE				   90
+#define GTWO_SIZE				  100
 
 
 //! Gauge line height start position
@@ -437,7 +437,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	 */
 	gaugetwo = wtk_gauge_create(parent, &area, SLIDERTWO_MAX_VALUE + TRAVEL,
 			(SLIDERTWO_MAX_VALUE + TRAVEL) / 2, GFX_COLOR(255, 0, 0),
-			GFX_COLOR(100, 100, 100), WTK_GAUGE_INVERT|WTK_GAUGE_HORIZONTAL);
+			GFX_COLOR(100, 100, 100), WTK_GAUGE_CIRCLE|WTK_GAUGE_INVERT|WTK_GAUGE_HORIZONTAL);
 	if (!gaugetwo) {
 		goto error_widget;
 	}

@@ -355,6 +355,12 @@ void wtk_progress_bar_set_colors(struct wtk_progress_bar *bar,
 
 #define WTK_GAUGE_INVERT        (1 << 1)
 
+#define WTK_GAUGE_NORMAL        (0 << 2)
+
+#define WTK_GAUGE_CIRCLE       (1 << 2)
+
+
+
 struct wtk_gauge;
 
 struct wtk_gauge *wtk_gauge_create(struct win_window *parent,

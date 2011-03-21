@@ -101,17 +101,27 @@ struct wtk_gauge {
 	//! Boolean for drawing gauge background once.
 	bool                    start;
 	
-	//! Variables for resizeing the gauge variables.
-    uint8_t                 xrescale;
-    uint8_t                 yrescale;
-    
-    uint8_t                 x2rescale;
+	/* Variables for resizeing the gauge variables. */
+
+	//! Rescaled data position value, rescaled to fit accessing trigtable array 128 values
+   	uint8_t                 rescale;
+	
+    //! Inverted trigtable value accessed with rescale
+    uint8_t                 xangle;
+	//! Trigtable value accessed with rescale
+    uint8_t                 yangle;
+	
+	//! Rescaled xangle for drawing the first gauge line position correctly
+	uint8_t					xrescale;
+	//! Rescaled yangle for drawing the first gauge line position correctly
+	uint8_t                 yrescale;
+	
+	//! Rescaled xangle for drawing the second gauge line position correctly
+	uint8_t                 x2rescale;
+	//! Rescaled yangle for drawing the second gauge line position correctly
     uint8_t                 y2rescale;
    	
-   	uint8_t                 rescale;
-    
-    uint8_t                 xangle;
-    uint8_t                 yangle;
+
 
 };
 
@@ -227,19 +237,10 @@ void wtk_gauge_set_colors(struct wtk_gauge *gauge,
 {
 	assert(gauge);
   
-  gauge->fill_color = fill_color;
+	gauge->fill_color = fill_color;
 		
 	gauge->background_color = background_color;
-  
-  /*
-	if (gauge->option & WTK_GAUGE_INVERT) {
-		gauge->fill_color = background_color;
-		gauge->background_color = fill_color;
-	} else {
-		gauge->fill_color = fill_color;
-		gauge->background_color = background_color;
-	}
-	*/
+
 }
 
 /**
@@ -285,19 +286,25 @@ static bool wtk_gauge_handler(struct win_window *win,
 
 
 		/*
-         * !! NEW GAUGE STUFF !! 
+         * !! GAUGE !! 
          *
          * Draw gauge!
          *
-		 * TODO:       *OTHER ANGLES FOR GAUGE
-		 * DONE:       *Table dont need to be adjusted, code values caused bending. Gauge line now correctly follows the tracking circle
-		 *             *The background frame now only draw once at start
-		 *             *Gauge line now erases itself at each draw event from old positions
-		 *             *The gauge rescaling is now optimized. And should not need more tuning for fitting in frames of different sizes and when recieving different values.
-		 *             *Gauge.c code can now run multiple gauges without interference
+		 * Need to define more external colors
+		 * 
          */
         
-        //! Erases the previous gauge line using old x\y values, not enabled at first draw event
+        
+    /* New gauge option, for drawing different gauges */
+    if (option & WTK_GAUGE_CIRCLE) {
+           
+	}
+		
+	else {
+		
+    
+    
+    //! Erases the previous gauge line using old x\y values, not enabled at first draw event
  		if (!gauge->start) {
 		        gfx_generic_draw_line(clip->origin.x + gauge->xrescale + area->size.x / 7,
                               clip->origin.y + area->size.y - gauge->yrescale - 3,
@@ -305,13 +312,13 @@ static bool wtk_gauge_handler(struct win_window *win,
                               clip->origin.y + area->size.y - 3 - gauge->y2rescale,
                               gauge->background_color);
         
-        //! +1 X -1 Y                   
+        //! Right line +1 X -1 Y                   
         gfx_generic_draw_line(clip->origin.x + gauge->xrescale + area->size.x / 7 + 1,
                               clip->origin.y + area->size.y - gauge->yrescale - 3,
                               clip->origin.x + area->size.x - 3 - area->size.x / 3 + gauge->x2rescale + 1,
                               clip->origin.y + area->size.y - 3 - gauge->y2rescale,
                               gauge->background_color);
-      //! -1 X +1 Y
+      //! Left line -1 X +1 Y
       gfx_generic_draw_line(clip->origin.x + gauge->xrescale + area->size.x / 7,
                               clip->origin.y + area->size.y - gauge->yrescale - 3 + 1,
                               clip->origin.x + area->size.x - 3 - area->size.x / 3 + gauge->x2rescale,
@@ -334,7 +341,6 @@ static bool wtk_gauge_handler(struct win_window *win,
             
     			
     		//! Draws gauge track circle in quadrant 1
-    		
     		gfx_draw_filled_circle(clip->origin.x + area->size.x - 2,
                                      clip->origin.y + area->size.y - 2,
                                      area->size.x - 2,
@@ -369,13 +375,13 @@ static bool wtk_gauge_handler(struct win_window *win,
         //! Reads x trigonometric value from PROGMEM array
 		gauge->yangle = pgm_read_byte(&(trigtable[gauge->rescale]));
 		
-		//! Rescales the x trigonometric value for usage in the draw function
+		//! Rescales the first x trigonometric value for usage in the draw function
 		gauge->xrescale = wtk_rescale_value(gauge->xangle, 255, area->size.x - 3 - area->size.x / 7);
-		//! Rescales the y trigonometric value for usage in the draw function
+		//! Rescales the first y trigonometric value for usage in the draw function
 		gauge->yrescale = wtk_rescale_value(gauge->yangle, 255, area->size.y - 3 - area->size.x / 7);
-		
+		//! Rescales the second x trigonometric value for usage in the draw function
 		gauge->x2rescale = wtk_rescale_value(gauge->xangle, 255, area->size.x / 3);
-		
+		//! Rescales the second y trigonometric value for usage in the draw function
 		gauge->y2rescale = wtk_rescale_value(gauge->yangle, 255, area->size.y / 3);
 		
 
@@ -386,13 +392,13 @@ static bool wtk_gauge_handler(struct win_window *win,
                               clip->origin.y + area->size.y - 3 - gauge->y2rescale,
                               gauge->fill_color);
         
-        //! +1 X -1 Y                   
+        //! Right line +1 X -1 Y                   
         gfx_generic_draw_line(clip->origin.x + gauge->xrescale + area->size.x / 7 + 1,
                               clip->origin.y + area->size.y - gauge->yrescale - 3,
                               clip->origin.x + area->size.x - 3 - area->size.x / 3 + gauge->x2rescale + 1,
                               clip->origin.y + area->size.y - 3 - gauge->y2rescale,
                               GFX_COLOR(200, 0, 0));
-      //! -1 X +1 Y
+      //! Left line -1 X +1 Y
       gfx_generic_draw_line(clip->origin.x + gauge->xrescale + area->size.x / 7,
                               clip->origin.y + area->size.y - gauge->yrescale - 3 + 1,
                               clip->origin.x + area->size.x - 3 - area->size.x / 3 + gauge->x2rescale,
@@ -404,30 +410,18 @@ static bool wtk_gauge_handler(struct win_window *win,
 		//! TESTS PIXEL POSITION IN SUBFRAME - to be removed
 		//gfx_draw_pixel(clip->origin.x + 1, clip->origin.y + area->size.y - 2, GFX_COLOR(255,0,0));
 		
-		//! Positions Xplained! :]
+		//! Positions Xplained!
 		// clip->origin.(x\y)                               -- the frames start position top left cord(0.0) - start pixel
-		// area->size.(x/y)                                 -- the area size aquired from area defined in widget
-		// clip->origin.(x\y) + area.size - 1               -- the frames right bottom corner - end pixel
-		// clip->origin.(x\y) (+ 1)(+ area->size.y - 2)     -- the gauges start position 
-		
-                //! Old test variables
-                //clip->origin.x + gauge->xrescale + 1 + area->size.x / 7, clip->origin.y + area->size.y - gauge->yrescale - 2, clip->origin.x + area->size.x - 2 - area->size.x / 3 + gauge->x2rescale, clip->origin.y + area->size.y - 2 - gauge->y2rescale
-                //clip->origin.x + area->size.x - 1 - gauge->xrescale, clip->origin.y + area->size.y + 2 - gauge->yrescale, clip->origin.x + area->size.x - 2/*OK*/, clip->origin.y + area->size.y - 2/*OK*/, gauge->fill_color
-                //clip->origin.x + area->size.x - xrescale, clip->origin.y + area->size.y - yrescale, clip->origin.x + area->size.x - 2, clip->origin.y + area->size.y - 2, gauge->fill_color
-                //clip->origin.x + area->size.x, clip->origin.y + area->size.y, area->size.x - 2 - position, area->size.y - 2,gauge->fill_color
-                //area->pos.x + position,area->pos.y,clip->origin.x ,area->pos.y + 20,gauge->fill_color
-                //area->pos.x,area->pos.y,area->pos.x + 20,area->pos.y + 20,gauge->fill_color
-                //GFX_COLOR(255,0,0)
-                //pgm_read_byte(&(trigtable[position]));                  
+		// area->size.(x\y)                                 -- the area size aquired from area defined in widget
+		// clip->origin.(x\y) + area.size.(x\y) - 1               -- the frames right bottom corner - end pixel
+		// clip->origin.(x\y) (+ 1)(+ area->size.y - 3)     -- the gauges start position 
+		                
         
-        /*
-         * Visibility circle - temporary out :P - change to arrow
-         * gfx_draw_circle(clip->origin.x + area->size.x - xrescale, clip->origin.y + area->size.y - yrescale - 2, 5, GFX_COLOR(255,0,0), GFX_WHOLE);{}
-         */
 
 		/* Always accept DRAW events, as the return value is ignored
 		 * anyway for that event type.
 		 */
+		 }
 		return true;
 
 	case WIN_EVENT_DESTROY:
@@ -506,8 +500,8 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 	gauge->option = option;
 	gauge->start = true;
 
-	/* Set the gauge's colors and prepare the value for computation
-	 * of the gauge's end position according to the invert option.
+	/* Set the gauge's colors
+	 * 
 	 */
 	 
 	gauge->fill_color = fill_color;
@@ -529,13 +523,10 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 	assert(attr.area.size.x > 3);
 	assert(attr.area.size.y > 3);
 
-	if (option & WTK_GAUGE_VERTICAL) {
-		assert(attr.area.size.y < (uint8_t) ~ 0);
-		length = attr.area.size.y;
-	} else {
-		assert(attr.area.size.x < (uint8_t) ~ 0);
-		length = attr.area.size.x;
-	}
+
+	assert(attr.area.size.x < (uint8_t) ~ 0);
+	length = attr.area.size.x;
+
 
 	length -= 2;
 
