@@ -147,8 +147,10 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
 		length = area->size.y;
 		length -= 3;
 
-		// Rescales the added value to fit inside the plot and stores it in the ring buffer.
-		*(plot->plot_buffer + plot->buffer_start) = 1+wtk_rescale_value((value), maximum, length);
+		// Rescales the added value to fit inside the plot
+		// and stores it in the ring buffer.
+		*(plot->plot_buffer + plot->buffer_start) = 
+					1+wtk_rescale_value((value), maximum, length);
 
 		plot->buffer_start++;
 
@@ -197,8 +199,8 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
 	plot->scale_option=scale_option;
 	plot->scale_spacing_x=scale_spacing_x;
 	plot->scale_offset_x=scale_offset_x;
-	plot->scale_spacing_y=scale_spacing_y; //wtk_rescale_value(scale_spacing_y,plot->maximum,height);
-	plot->scale_offset_y=scale_offset_y; //wtk_rescale_value(scale_offset_y,plot->maximum,height);
+	plot->scale_spacing_y=scale_spacing_y; 
+	plot->scale_offset_y=scale_offset_y; 
 	plot->scale_color=scale_color;
 	plot->scale_zero_color=scale_zero_color;
 }
@@ -281,87 +283,63 @@ static bool wtk_plot_handler(struct win_window *win,
 			uint8_t scale_offset_y  =plot->scale_offset_y;
 			uint8_t scale_color     =plot->scale_color;
 			
-			
-			if ((scale_option&WTK_PLOT_GRID_VERTICAL)&&(scale_spacing_y>0)){
-				//draw vertical lines
-				for(uint8_t offset=scale_offset_y;
-							offset<(area->size.y-2); 
-							offset+=scale_spacing_y) {
-							
-					gfx_draw_line(clip->origin.x,  clip->origin.y+offset,
-								clip->origin.x+area->size.x-2,
-								clip->origin.y+offset,
-								scale_color);
+			//draw lines/notches along the vertical axis:
+			if (scale_spacing_y>0) {
+				gfx_coord_t grid_width=0;
+				gfx_coord_t offset=scale_offset_y;
+				if (scale_option&WTK_PLOT_GRID_VERTICAL){
+					grid_width=area->size.x-2;
+				} else if(scale_option&WTK_PLOT_SCALE_VERTICAL){
+					grid_width=5;
 				}
-				
-				// if scale_offset>scale spacing:
-				//todo
-			} 
-			else if((scale_option&WTK_PLOT_SCALE_VERTICAL)&&(scale_spacing_y>0)){
-				//draw vertical notches
-				for(uint8_t offset=scale_offset_y;
-							offset<(area->size.y-2); 
-							offset+=scale_spacing_y) {
-					gfx_draw_line(clip->origin.x,  clip->origin.y+offset,
-								clip->origin.x+5,  clip->origin.y+offset,
-								scale_color);
 								
+				while(offset>scale_spacing_y){
+					offset-=scale_spacing_y;
 				}
 				
-				// if scale_offset>scale spacing:
-				//todo
-			}
-			
-			if ((scale_option&WTK_PLOT_GRID_HORIZONTAL)&&(scale_spacing_x>0)){
-				//draw horizontal lines
-				for(uint8_t offset=scale_offset_x;
-							offset<area->size.x-2;
-							offset+=scale_spacing_x) {
-					gfx_draw_line(clip->origin.x+offset,  clip->origin.y,
-								  clip->origin.x+offset,  clip->origin.y+area->size.y-2,
-								  scale_color);
-				}
-				// if scale_offset>scale spacing:
-				if (scale_offset_x>scale_spacing_x){
-					for(uint8_t offset=scale_offset_x-scale_spacing_x;
-						offset>scale_spacing_x; 
-						offset+=scale_spacing_x) {
-						
-						gfx_draw_line(clip->origin.x-offset,  clip->origin.y,
-									clip->origin.x-offset,    clip->origin.y+area->size.y-2,
-									scale_color);
-					}
-				}
-			} 
-			else if((scale_option&WTK_PLOT_SCALE_HORIZONTAL)&&(scale_spacing_x>0)){
-				//draw horizontal notches
-				for(uint8_t offset=scale_offset_x;
-							offset<area->size.x-2; 
-							offset+=scale_spacing_x) {
+				while(offset<(area->size.y-2)){
+					gfx_draw_line(clip->origin.x,  clip->origin.y+offset,
+							clip->origin.x+grid_width,
+							clip->origin.y+offset,
+							scale_color);
 							
-					gfx_draw_line(clip->origin.x+offset,  clip->origin.y,
-								clip->origin.x+offset,    clip->origin.y+5,
-								scale_color);
+					offset+=scale_spacing_y;
 				}
 				
-				// if scale_offset>scale spacing:
-				if (scale_offset_x>scale_spacing_x){
-					for(uint8_t offset=scale_offset_x-scale_spacing_x;
-						offset>scale_spacing_x; 
-						offset+=scale_spacing_x) {
-						
-						gfx_draw_line(clip->origin.x-offset,  clip->origin.y,
-									clip->origin.x-offset,    clip->origin.y+5,
-									scale_color);
-					}
-					
+			}
+			//draw lines/notches along the horizontal axis
+			if (scale_spacing_x>0) {
+				gfx_coord_t grid_height=0;
+				gfx_coord_t offset=scale_offset_x;
+				
+				if (scale_option&WTK_PLOT_GRID_HORIZONTAL){
+					grid_height=area->size.y-2;
+				}else if(scale_option&WTK_PLOT_SCALE_HORIZONTAL){
+					grid_height=5;
 				}
+				
+				while(offset>scale_spacing_x){
+					offset-=scale_spacing_x;
+				}
+				
+				while(offset<(area->size.x-2)){
+					gfx_draw_line(clip->origin.x+offset,  clip->origin.y,
+								  clip->origin.x+offset,  
+								  clip->origin.y+grid_height,
+								  scale_color);
+		
+		
+					offset+=scale_spacing_x;
+				}
+				
 			}
 			
 			if (scale_option&WTK_PLOT_ZERO){
-				gfx_draw_line(clip->origin.x, clip->origin.y+plot->scale_offset_y,
-					clip->origin.x+area->size.x-2,clip->origin.y+plot->scale_offset_y,
-					plot->scale_zero_color);
+				gfx_draw_line(clip->origin.x, 
+							clip->origin.y+plot->scale_offset_y,
+							clip->origin.x+area->size.x-2,
+							clip->origin.y+plot->scale_offset_y,
+							plot->scale_zero_color);
 			} 
 			
 			
@@ -385,11 +363,12 @@ static bool wtk_plot_handler(struct win_window *win,
 
 			uint8_t x_error=plot->spacing_error;
 			uint8_t x_current=1+plot->spacing;
-			uint8_t x_previous=1, y_previous= *(plot->plot_buffer+ring_buffer_offset);
+			uint8_t x_previous=1;
+			uint8_t y_previous= *(plot->plot_buffer+ring_buffer_offset);
 
 			// Draws updated plot.
-			for(uint8_t datapoint=1 ; datapoint < (plot->datapoints); datapoint++) {
-
+			for(uint8_t datapoint=1; datapoint < (plot->datapoints);datapoint++)
+			{
 				//increment the datapointer around the ring buffer
 				if ( option & WTK_PLOT_RIGHT_TO_LEFT){
 					if (ring_buffer_offset==0){
@@ -397,7 +376,9 @@ static bool wtk_plot_handler(struct win_window *win,
 					} else {ring_buffer_offset--;}
 				} else {
 					ring_buffer_offset++;
-					if (ring_buffer_offset>=plot->datapoints) { ring_buffer_offset=0;}
+					if (ring_buffer_offset>=plot->datapoints){ 
+						ring_buffer_offset=0;
+					}
 				}
 				gfx_draw_line(clip->origin.x+x_previous, 
 					clip->origin.y+y_previous,
@@ -410,8 +391,9 @@ static bool wtk_plot_handler(struct win_window *win,
 				x_current+=plot->spacing;
 				x_error+=plot->spacing_error;
 
-				/* Adds together the leftover decimals of spacing error and adds one to the spacing between
-				 * two datapoints when it exceeds 1.
+				/* Adds together the leftover decimals of spacing error and 
+				 * adds one to the spacing between two datapoints when it
+				 * exceeds 1.
 				 */
 				if (x_error>=128){
 					x_current++;
