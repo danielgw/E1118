@@ -3,7 +3,7 @@
  *
  * \brief Plot widget implementation
  *
- * Copyright (C) 2009 - 2010 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2009 - 2011 Atmel Corporation. All rights reserved.
  *
  * \page License
  *
@@ -173,7 +173,7 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
 /**
  * \brief Set grid/scale parameters.
  *
- * This function sets the grid and scale options,  colors for the plot. 
+ * This function sets the grid and scale options, colors for the plot. 
  *
  * \param plot Pointer to wtk_plot struct to set colors for.
  * \param scale_option Configuration of scale, grid and zero-line behaviour.
@@ -216,9 +216,9 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
  *
  * This sets new draw and background colors for the plot. 
  *
- * \param plot Pointer to wtk_plot struct to set colors for.
+ * \param plot       Pointer to wtk_plot struct to set colors for.
  * \param draw_color Draw color to set for plot.
- * \param background_color Background color to set for plot.
+ * \param background Background color to set for plot.
  */
  
 void wtk_plot_set_colors(struct wtk_plot *plot,
@@ -237,6 +237,10 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
  * \internal
  *
  * Draws the grid.
+ *
+ * \param plot Pointer to wtk_plot struct to draw.
+ * \param area Pointer to win_area struct with position and size of the plot.
+ * \param clip Pointer to win_clip_region.
  * 
  * Called by the event handler to draw the grid.
  */
@@ -318,6 +322,10 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
  * \internal
  *
  * Draws the plot itself.
+ *
+ * \param plot Pointer to wtk_plot struct to draw.
+ * \param area Pointer to win_area struct with position and size of the plot.
+ * \param clip Pointer to win_clip_region.
  * 
  * Called by the event handler to draw the plot.
  */
@@ -477,7 +485,10 @@ static bool wtk_plot_handler(struct win_window *win,
  * \param maximum Maximum value of the plot.
  * \param datapoints Number of datapoints of the plot. 
  * \param draw_color Plot drawing color.
- * \param background_color Color for background area.
+ * \param background Pointer to background bitmap for frame. NULL for
+ *                   transparent background. When background is transparent
+ *                   the parent window will automatically be redrawn
+ *                   when the basic frame is drawn.
  * \param option Configuration options for plot.
  *
  * \return Pointer to new plot, if memory allocation was successful.
