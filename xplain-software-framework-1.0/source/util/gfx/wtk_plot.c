@@ -163,7 +163,7 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
 	// Increments ring buffer pointer and resets at end
 	if(plot->buffer_start >= plot->datapoints)
 	{
-		plot->buffer_start=0;
+		plot->buffer_start = 0;
 	}
 
 	return true;
@@ -426,9 +426,9 @@ static bool wtk_plot_handler(struct win_window *win,
 					WTK_PLOT_BORDER_COLOR);
 		}
 
-		wtk_plot_grid_draw(plot,area,clip);
+		wtk_plot_grid_draw(plot, area, clip);
 		
-		wtk_plot_draw(plot,area,clip);
+		wtk_plot_draw(plot, area, clip);
 
 		/* Always accept DRAW events, as the return value is ignored
 		 * anyway for that event type.
@@ -461,7 +461,8 @@ static bool wtk_plot_handler(struct win_window *win,
  * "win_destroy(wtk_plot_as_child(my_plot_ptr));".\par
  *
  * The plotted graph will shift from right to left as new data values are added.
- * Data values will be overwritten in the ring buffer as they shift out of the plot window.
+ * Data values will be overwritten in the ring buffer as they shift out of
+ * the plot window.
  * The maximum parameter scales the input value to fit the plot dimensions.
  *
  * The datapoints parameter must not exceed the maximum membag size, and never
@@ -482,19 +483,22 @@ static bool wtk_plot_handler(struct win_window *win,
  * \return Pointer to new plot, if memory allocation was successful.
  */
 struct wtk_plot *wtk_plot_create(struct win_window *parent,
-		struct win_area const *area, uint8_t maximum, uint8_t datapoints, 
-		gfx_color_t draw_color, struct gfx_bitmap *background,
-		uint8_t option)
+		struct win_area const *area, uint8_t maximum,
+		uint8_t datapoints, gfx_color_t draw_color,
+		struct gfx_bitmap *background, uint8_t option)
 {
+
 	uint8_t length;
+
 	// Do sanity check on parameters.
 	assert(maximum > 0);
 	assert(area);
 	assert(parent);
-	assert(datapoints>1)
+	assert(datapoints > 1)
 
 	// Attributes scratchpad.
 	struct win_attributes attr;
+	
 	// Allocate memory for the control data.
 	struct wtk_plot *plot =
 			membag_alloc(sizeof(struct wtk_plot));
@@ -511,7 +515,7 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 
 	// Initialize the plot data.
 	plot->maximum = maximum;
-	plot->datapoints=datapoints;
+	plot->datapoints = datapoints;
 	plot->option = option;
 	plot->draw_color = draw_color;
 	plot->background = background;
@@ -528,28 +532,14 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 	length -= 3;
 
 	// Calculates the current spacing error.
-	plot->spacing = length / (datapoints-1);
+	plot->spacing = length / (datapoints - 1);
 	plot->spacing_error = (uint8_t)(
 	(((uint16_t)(length-plot->spacing*(datapoints - 1)))
-	* WTK_PLOT_SCALE_FACTOR) / ((uint16_t)(datapoints - 1))
-	);
-
-/*
-	// All drawing is done in wtk_plot_handler() so no background is
-	// needed.
-	//
-	attr.background = NULL;
-*/
+	* WTK_PLOT_SCALE_FACTOR) / ((uint16_t)(datapoints - 1)));
 
 	// Set up handling information.
 	attr.event_handler = wtk_plot_handler;
 	attr.custom = plot;
-
-/*
-	//Since the widget has no transparent areas, the parent does not need
-	// to be redrawn.
-	attr.behavior = 0;
-*/
 
 	// Set background for window
 	if (background) {
