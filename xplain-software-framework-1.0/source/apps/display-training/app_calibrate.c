@@ -61,7 +61,7 @@
  */
 
 //! Offset from the display edges to calibration circles
-#define CAL_OFFSET      60
+#define CAL_OFFSET      40
 //! Radius of calibration circles
 #define CAL_RADIUS      14
 //! Threshold for unintended touches on display

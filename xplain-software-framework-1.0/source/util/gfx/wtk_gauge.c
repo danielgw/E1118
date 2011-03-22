@@ -96,9 +96,14 @@ struct wtk_gauge {
 	gfx_color_t				fill_color;
 	//! Color for gauge background.
 	gfx_color_t				background_color;
+	//! Color for parent background.
+	gfx_color_t				parent_background_color;
 	
 	//! Boolean for drawing gauge background once.
 	bool					start;
+	
+	//! Boolean for drawing after transparent background redraw parent.
+	bool					solidbg;
 	
 	/* Variables for resizeing the gauge variables. */
 
@@ -303,20 +308,21 @@ static bool wtk_gauge_handler(struct win_window *win,
 	
 	
 	//! Erases the previous gauge line using old x\y values, not enabled at first draw event
- 		if (!gauge->start) {
+ 		if (!gauge->start&gauge->solidbg) {
+			//! Middle line
 			gfx_generic_draw_line(clip->origin.x + gauge->xrescale + area->size.x / 7,
 				clip->origin.y + area->size.y - gauge->yrescale - 3,
 				clip->origin.x + area->size.x - 3 - area->size.x / 3 + gauge->x2rescale,
 				clip->origin.y + area->size.y - 3 - gauge->y2rescale,
 				gauge->background_color);
 	
-		//! Right line +1 X -1 Y                   
+			//! Right line +1 X -1 Y                   
 			gfx_generic_draw_line(clip->origin.x + gauge->xrescale + area->size.x / 7 + 1,
 				clip->origin.y + area->size.y - gauge->yrescale - 3,
 				clip->origin.x + area->size.x - 3 - area->size.x / 3 + gauge->x2rescale + 1,
 				clip->origin.y + area->size.y - 3 - gauge->y2rescale,
 				gauge->background_color);
-		//! Left line -1 X +1 Y
+			//! Left line -1 X +1 Y
 			gfx_generic_draw_line(clip->origin.x + gauge->xrescale + area->size.x / 7,
 				clip->origin.y + area->size.y - gauge->yrescale - 3 + 1,
 				clip->origin.x + area->size.x - 3 - area->size.x / 3 + gauge->x2rescale,
@@ -326,7 +332,7 @@ static bool wtk_gauge_handler(struct win_window *win,
 		
 		
 		//! Draw the gauge background elements once
-		if (gauge->start) {
+		if (gauge->start&gauge->solidbg) {
 		
 		//! Draw a window border.
 			gfx_draw_rect(clip->origin.x, clip->origin.y, area->size.x,
@@ -365,6 +371,11 @@ static bool wtk_gauge_handler(struct win_window *win,
 			gauge->start = false;
 		}
 		
+		//! For draw functions with transparent background
+		if(!gauge->solidbg) {
+
+		}
+		
 
 		
 		//! Rescales the position value for accessing data in the trigtable array
@@ -390,13 +401,13 @@ static bool wtk_gauge_handler(struct win_window *win,
 			clip->origin.y + area->size.y - gauge->yrescale - 3,
 			clip->origin.x + area->size.x - 3 - area->size.x / 3 + gauge->x2rescale,
 			clip->origin.y + area->size.y - 3 - gauge->y2rescale,
-			gauge->fill_color);
+			GFX_COLOR(200, 0, 0));
 		//! Right line +1 X -1 Y
 		gfx_generic_draw_line(clip->origin.x + gauge->xrescale + area->size.x / 7 + 1,
 			clip->origin.y + area->size.y - gauge->yrescale - 3,
 			clip->origin.x + area->size.x - 3 - area->size.x / 3 + gauge->x2rescale + 1,
 			clip->origin.y + area->size.y - 3 - gauge->y2rescale,
-			GFX_COLOR(200, 0, 0));
+			gauge->fill_color);
 		//! Left line -1 X +1 Y
 		gfx_generic_draw_line(clip->origin.x + gauge->xrescale + area->size.x / 7,
 			clip->origin.y + area->size.y - gauge->yrescale - 3 + 1,
@@ -470,7 +481,7 @@ static bool wtk_gauge_handler(struct win_window *win,
  */
 struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 		struct win_area const *area, struct gfx_bitmap *background, uint8_t maximum, uint8_t value,
-		gfx_color_t fill_color, gfx_color_t background_color,
+		gfx_color_t fill_color, gfx_color_t background_color, gfx_color_t parent_background_color,
 		uint8_t option)
 {
 	uint8_t length;
@@ -505,6 +516,8 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 		
 	gauge->background_color = background_color;
 	
+	gauge->parent_background_color = parent_background_color;
+	
 	if (option & WTK_GAUGE_INVERT) {
 		value = maximum - value;
 	}
@@ -530,13 +543,17 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 	// Set the gauge's end position.
 	gauge->position = wtk_rescale_value(value, maximum, length);
 
-	// Set background for window
+	// Set background for gauge window
 	if (background) {
+		// solid background bitmap
 		attr.background = NULL;
 		attr.behavior = 0;
+		gauge->solidbg = true;
 	} else {
+		// transparent, redraw parent
 		attr.background = NULL;
 		attr.behavior = WIN_BEHAVIOR_REDRAW_PARENT;
+		gauge->solidbg = false;
 	}
 
 	// Create a new window for the gauge.
