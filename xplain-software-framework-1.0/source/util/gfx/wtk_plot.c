@@ -78,7 +78,7 @@ struct wtk_plot {
 	//! Color for plot.
 	gfx_color_t             draw_color;
 	//! Color for plot background.
-	gfx_color_t             background_color;
+	struct gfx_bitmap       *background;
 	//! Configuration of scale, grid and zero-line behaviour.
 	uint8_t                 scale_option;
 	//! Space between x-axis grid/scale lines.
@@ -217,12 +217,12 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
  */
  
 void wtk_plot_set_colors(struct wtk_plot *plot,
-		gfx_color_t draw_color, gfx_color_t background_color)
+		gfx_color_t draw_color, struct gfx_bitmap *background)
 {
 	assert(plot);
 
 	plot->draw_color = draw_color;
-	plot->background_color = background_color;
+	//plot->background_color = background_color;
 }
 
 /**
@@ -244,6 +244,7 @@ static bool wtk_plot_handler(struct win_window *win,
 	struct win_clip_region const    *clip;
 	struct win_area const           *area;
 	struct wtk_plot                 *plot;
+	struct gfx_bitmap               *background;
 	uint8_t                         option;
 
 	plot = (struct wtk_plot *)win_get_custom_data(win);
@@ -259,20 +260,25 @@ static bool wtk_plot_handler(struct win_window *win,
 		 */
 		clip = (struct win_clip_region const *)data;
 		area = win_get_area(win);
+		background = plot->background;
 
 		//position = plot->position;
 		option = plot->option;
 
-		// Draw a window border.
-		gfx_draw_rect(clip->origin.x, clip->origin.y, area->size.x,
-				area->size.y, WTK_PROGRESS_BAR_BORDER_COLOR);
-
+		if (background != NULL){
+		
+			// Draw a window border.
+			gfx_draw_rect(clip->origin.x, clip->origin.y, area->size.x,
+					area->size.y, WTK_PROGRESS_BAR_BORDER_COLOR);
+		}
+/*
 		// Draw plot interior.
 		 gfx_draw_filled_rect(clip->origin.x + 1, 
 					clip->origin.y + 1,
 					area->size.x - 2,
 					area->size.y - 2,
 					plot->background_color);
+*/
 
 		//Draw the scale/grid.
 		{
@@ -455,7 +461,7 @@ static bool wtk_plot_handler(struct win_window *win,
  */
 struct wtk_plot *wtk_plot_create(struct win_window *parent,
 		struct win_area const *area, uint8_t maximum, uint8_t datapoints, 
-		gfx_color_t draw_color, gfx_color_t background_color,
+		gfx_color_t draw_color, struct gfx_bitmap *background,
 		uint8_t option)
 {
 	uint8_t length;
@@ -486,7 +492,7 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 	plot->datapoints=datapoints;
 	plot->option = option;
 	plot->draw_color = draw_color;
-	plot->background_color = background_color;
+	plot->background = background;
 
 	/* Do sanity check of specified window area parameters
 	 * according to the orientation of the progress bar.
@@ -506,19 +512,31 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 	/((uint16_t)(datapoints-1))
 	);
 
-	/* All drawing is done in wtk_plot_handler() so no background is
-	 * needed.
-	 */
+/*
+	// All drawing is done in wtk_plot_handler() so no background is
+	// needed.
+	//
 	attr.background = NULL;
+*/
 
 	// Set up handling information.
 	attr.event_handler = wtk_plot_handler;
 	attr.custom = plot;
 
-	/* Since the widget has no transparent areas, the parent does not need
-	 * to be redrawn.
-	 */
+/*
+	//Since the widget has no transparent areas, the parent does not need
+	// to be redrawn.
 	attr.behavior = 0;
+*/
+
+	// Set background for window
+	if (background) {
+		attr.background = background;
+		attr.behavior = 0;
+	} else {
+		attr.background = NULL;
+		attr.behavior = WIN_BEHAVIOR_REDRAW_PARENT;
+	}
 
 	// Create a new window for the plot.
 	plot->container = win_create(parent, &attr);

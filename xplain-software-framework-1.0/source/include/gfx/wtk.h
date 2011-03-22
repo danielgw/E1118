@@ -445,13 +445,13 @@ void wtk_progress_bar_set_colors(struct wtk_progress_bar *bar,
 		
 	struct wtk_plot *wtk_plot_create(struct win_window *parent,
 		struct win_area const *area, uint8_t maximum, uint8_t datapoints,
-		gfx_color_t draw_color, gfx_color_t background_color,
+		gfx_color_t draw_color, struct gfx_bitmap *background,
 		uint8_t option);
 			
 	struct win_window *wtk_plot_as_child(struct wtk_plot *plot);
 	
 	void wtk_plot_set_colors(struct wtk_plot *plot,
-		gfx_color_t draw_color, gfx_color_t background_color);
+		gfx_color_t draw_color, struct gfx_bitmap *background);
 
 	//! @}
 
