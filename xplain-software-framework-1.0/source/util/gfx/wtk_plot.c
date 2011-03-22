@@ -202,13 +202,13 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
 	height = area->size.y;
 	height -= 3;
 
-	plot->scale_option=scale_option;
-	plot->scale_spacing_x=scale_spacing_x;
-	plot->scale_offset_x=scale_offset_x;
-	plot->scale_spacing_y=scale_spacing_y; 
-	plot->scale_offset_y=scale_offset_y; 
-	plot->scale_color=scale_color;
-	plot->scale_zero_color=scale_zero_color;
+	plot->scale_option     = scale_option;
+	plot->scale_spacing_x  = scale_spacing_x;
+	plot->scale_offset_x   = scale_offset_x;
+	plot->scale_spacing_y  = scale_spacing_y; 
+	plot->scale_offset_y   = scale_offset_y; 
+	plot->scale_color      = scale_color;
+	plot->scale_zero_color = scale_zero_color;
 }
 
 
@@ -336,11 +336,11 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 		}
 	} 
 
-	uint8_t x_error = plot->spacing_error;
-	uint8_t x_current = 1 + plot->spacing;
+	uint8_t x_error    = plot->spacing_error;
+	uint8_t x_current  = 1 + plot->spacing;
 	uint8_t x_previous = 1;
 	uint8_t y_current;
-	uint8_t y_previous= *(plot->plot_buffer + ring_buffer_offset);
+	uint8_t y_previous = *(plot->plot_buffer + ring_buffer_offset);
 
 
 	for(uint8_t datapoint = 1; datapoint < (plot->datapoints) ;datapoint++)
@@ -535,8 +535,8 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 	// Calculates the current spacing error.
 	plot->spacing = length / (datapoints - 1);
 	plot->spacing_error = (uint8_t)(
-	(((uint16_t)(length-plot->spacing*(datapoints - 1)))
-	* WTK_PLOT_SCALE_FACTOR) / ((uint16_t)(datapoints - 1)));
+		(((uint16_t)(length-plot->spacing*(datapoints - 1)))
+		* WTK_PLOT_SCALE_FACTOR) / ((uint16_t)(datapoints - 1)));
 
 	// Set up handling information.
 	attr.event_handler = wtk_plot_handler;
