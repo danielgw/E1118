@@ -188,6 +188,9 @@ static struct wtk_basic_frame       *sub_frame, *sub_frame_test, *sub_frame_test
 //! Sub-frame background bitmap
 static struct gfx_bitmap            sub_frame_background;
 
+//! Gauge background bitmap
+static struct gfx_bitmap			gauge_background;
+
 //! Pointer to gauge
 static struct wtk_gauge      		*gauge;
 //! Pointer to gaugetwo
@@ -410,10 +413,14 @@ void app_widget_launch(struct workqueue_task *task) {
 
 
 	/*
-	 * Create the gauge and check the return value if an error
+	 * Create the first gauge and check the return value if an error
 	 * occured while creating the gauge.
 	 */
-	gauge = wtk_gauge_create(parent, &area, SLIDER_MAX_VALUE + TRAVEL,
+
+	sub_frame_background.type = BITMAP_SOLID;
+	sub_frame_background.data.color = GFX_COLOR(255, 255, 255);
+
+	gauge = wtk_gauge_create(parent, &area, &sub_frame_background, SLIDER_MAX_VALUE + TRAVEL,
 			(SLIDER_MAX_VALUE + TRAVEL) / 2, GFX_COLOR(255, 0, 0),
 			GFX_COLOR(100, 100, 100), WTK_GAUGE_HORIZONTAL);
 	if (!gauge) {
@@ -432,17 +439,17 @@ void app_widget_launch(struct workqueue_task *task) {
 
 
 	/*
-	 * Create the gaugetwo and check the return value if an error
+	 * Create the second gauge and check the return value if an error
 	 * occured while creating the gauge.
 	 */
-	gaugetwo = wtk_gauge_create(parent, &area, SLIDERTWO_MAX_VALUE + TRAVEL,
+	gaugetwo = wtk_gauge_create(parent, &area, NULL, SLIDERTWO_MAX_VALUE + TRAVEL,
 			(SLIDERTWO_MAX_VALUE + TRAVEL) / 2, GFX_COLOR(255, 0, 0),
-			GFX_COLOR(100, 100, 100), WTK_GAUGE_CIRCLE|WTK_GAUGE_INVERT|WTK_GAUGE_HORIZONTAL);
+			GFX_COLOR(100, 100, 100), WTK_GAUGE_INVERT|WTK_GAUGE_HORIZONTAL);
 	if (!gaugetwo) {
 		goto error_widget;
 	}
 
-	// Draw the gaugetwo by showing the gauge widget's window.
+	// Draw the second gauge by showing the gauge widget's window.
 	win_show(wtk_gauge_as_child(gaugetwo));
 
 
@@ -464,18 +471,18 @@ void app_widget_launch(struct workqueue_task *task) {
 	area.size.x = 50;
 	area.size.y = 20;
 
-	sub_frame_background.type = BITMAP_SOLID;
-	sub_frame_background.data.color = GFX_COLOR(255, 255, 255);
+	gauge_background.type = BITMAP_SOLID;
+	gauge_background.data.color = GFX_COLOR(255, 255, 255);
 
 	sub_frame = wtk_basic_frame_create(parent, &area,
-			&sub_frame_background, sub_frame_draw_handler,
+			&gauge_background, sub_frame_draw_handler,
 			NULL, NULL);
 	if (!sub_frame) {
 		goto error_widget;
 	}
 	win_show(wtk_basic_frame_as_child(sub_frame));
 
-	//! Test frame code
+	//! First test frame code
 	area.pos.x = 260;
 	area.pos.y =   4;
 	area.size.x = 50;
@@ -492,7 +499,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	}
 	win_show(wtk_basic_frame_as_child(sub_frame_test));
 
-	//! Test2 frame code
+	//! Second test frame code
 	area.pos.x = 260;
 	area.pos.y =  30;
 	area.size.x = 50;
