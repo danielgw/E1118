@@ -519,6 +519,16 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 	plot->option = option;
 	plot->draw_color = draw_color;
 	plot->background = background;
+	plot->scale_option;
+	
+	plot->scale_spacing_x  = 0;
+	plot->scale_offset_x   = 0;
+	plot->scale_spacing_y  = 0;
+	plot->scale_offset_y   = 0;
+	plot->scale_color      = 0;
+	plot->scale_zero_color = 0;
+
+	
 
 	/* Do sanity check of specified window area parameters
 	 * according to the orientation of the plot.
