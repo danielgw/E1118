@@ -137,8 +137,7 @@ struct win_window *wtk_plot_as_child(struct wtk_plot *plot)
 bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value) 
 {
 
-	uint8_t length;
-	//uint8_t option;
+	uint8_t height;
 	uint8_t maximum;
 	struct win_area const *area;
 
@@ -150,13 +149,13 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
 	area = win_get_area(plot->container);
 
 	// Makes the plot fit inside the window border.
-	length = area->size.y;
-	length -= 3;
+	height = area->size.y;
+	height -= 3;
 
 	// Rescales the added value to fit inside the plot
 	// and stores it in the ring buffer.
 	*(plot->plot_buffer + plot->buffer_start) = 
-				1 + wtk_rescale_value((value), maximum, length);
+				1 + wtk_rescale_value((value), maximum, height);
 
 	plot->buffer_start++;
 
