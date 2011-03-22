@@ -43,7 +43,7 @@
 #include <gfx/wtk.h>
 #include <gfx/gfx_generic.h>
 #include <progmem.h>
-#include <avr/pgmspace.h> //! To be removed
+//#include <avr/pgmspace.h> //! To be removed
 
 /**
  * \ingroup gfx_wtk_gauge
@@ -69,7 +69,9 @@
  *
  * \TODO: Use the xplain's own progmem functions, then remove include <avr/pgmspace.h>
  */
-uint8_t trigtable[128] PROGMEM = {
+
+ //! Defines trigtable for [INSERT SOMETHING USEFUL] \TODO: export to separate file
+DEFINE_PROGMEM (uint8_t, trigtable[128]) = {
 		  0,  3,  6,  9, 13, 16, 19, 22, 25, 28, 31, 34, 37, 41, 44, 47,
 		 50, 53, 56, 59, 62, 65, 68, 71, 74, 77, 80, 83, 86, 89, 92, 95,
 		 98,100,103,106,109,112,115,117,120,123,126,128,131,134,136,139,
@@ -79,7 +81,8 @@ uint8_t trigtable[128] PROGMEM = {
 		236,237,238,239,240,241,242,243,244,245,246,247,247,248,249,249,
 		250,251,251,252,252,253,253,253,254,254,254,255,255,255,255,255
 	};
-	
+
+
 struct wtk_gauge {
 	//! Container window of gauge.
 	struct win_window		*container;
@@ -217,9 +220,13 @@ uint8_t wtk_gauge_get_test(struct wtk_gauge *gauge)
  * \Trigtable access
  * \temporary test function
  */
-uint8_t wtk_gauge_trigtable(uint8_t angle)
+ 
+ //DGW_FIX
+ 
+ uint8_t wtk_gauge_trigtable(uint8_t angle)
 {
-	return pgm_read_byte(&(trigtable[angle]));
+	return progmem_read8(&(trigtable[angle]));
+	//return pgm_read_byte(&(trigtable[angle]));
 }
 
 
@@ -381,10 +388,14 @@ static bool wtk_gauge_handler(struct win_window *win,
 		//! Rescales the position value for accessing data in the trigtable array
 		gauge->rescale = wtk_rescale_value(position, area->size.x - 2, 127);
 		
+		
+		//DGW_FIX
 		//! Reads x trigonometric value from PROGMEM array
-		gauge->xangle = 255 - pgm_read_byte(&(trigtable[127 - gauge->rescale]));
+		gauge->xangle = 255 - progmem_read8(&(trigtable[127 - gauge->rescale]));
+		//gauge->xangle = 255 - pgm_read_byte(&(trigtable[127 - gauge->rescale]));
 		//! Reads x trigonometric value from PROGMEM array
-		gauge->yangle = pgm_read_byte(&(trigtable[gauge->rescale]));
+		gauge->yangle = progmem_read8(&(trigtable[gauge->rescale]));
+		//gauge->yangle = pgm_read_byte(&(trigtable[gauge->rescale]));
 		
 		//! Rescales the first x trigonometric value for usage in the draw function
 		gauge->xrescale = wtk_rescale_value(gauge->xangle, 255, area->size.x - 3 - area->size.x / 7);
