@@ -226,7 +226,7 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 	assert(plot);
 
 	plot->draw_color = draw_color;
-	//plot->background_color = background_color;
+	plot->background = background;
 }
 
 /**
@@ -285,9 +285,9 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 		 * adds one to the spacing between two datapoints when it
 		 * exceeds 1.
 		 */
-		if (x_error>=128){
+		if (x_error >= WTK_PLOT_SCALE_FACTOR){
 			x_current++;
-			x_error-=128;
+			x_error -= WTK_PLOT_SCALE_FACTOR;
 		}
 	} 
  }
@@ -336,7 +336,7 @@ static bool wtk_plot_handler(struct win_window *win,
 		
 			// Draw a window border.
 			gfx_draw_rect(clip->origin.x, clip->origin.y, area->size.x,
-					area->size.y, WTK_PROGRESS_BAR_BORDER_COLOR);
+					area->size.y, WTK_PLOT_BORDER_COLOR);
 		}
 
 
@@ -500,7 +500,7 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 	plot->background = background;
 
 	/* Do sanity check of specified window area parameters
-	 * according to the orientation of the progress bar.
+	 * according to the orientation of the plot.
 	 */
 	attr.area = *area;
 	assert(attr.area.size.x > 3);
@@ -513,8 +513,8 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 	// Calculates the current spacing error.
 	plot->spacing = length / (datapoints-1);
 	plot->spacing_error = (uint8_t)(
-	(((uint16_t)(length-plot->spacing*(datapoints-1)))*128)
-	/((uint16_t)(datapoints-1))
+	(((uint16_t)(length-plot->spacing*(datapoints - 1)))
+	* WTK_PLOT_SCALE_FACTOR) / ((uint16_t)(datapoints - 1))
 	);
 
 /*
