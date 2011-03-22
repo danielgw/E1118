@@ -141,30 +141,29 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
 
 	assert(plot);
 	assert(value <= plot->maximum);
-/*  
-		option = bar->option;*/
-		maximum = plot->maximum;
+  
+	maximum = plot->maximum;
 
-		area = win_get_area(plot->container);
+	area = win_get_area(plot->container);
 
-		// Makes the plot fit inside the window border.
-		length = area->size.y;
-		length -= 3;
+	// Makes the plot fit inside the window border.
+	length = area->size.y;
+	length -= 3;
 
-		// Rescales the added value to fit inside the plot
-		// and stores it in the ring buffer.
-		*(plot->plot_buffer + plot->buffer_start) = 
-					1+wtk_rescale_value((value), maximum, length);
+	// Rescales the added value to fit inside the plot
+	// and stores it in the ring buffer.
+	*(plot->plot_buffer + plot->buffer_start) = 
+				1 + wtk_rescale_value((value), maximum, length);
 
-		plot->buffer_start++;
+	plot->buffer_start++;
 
-		// Increments ring buffer pointer and resets at end
-		if(plot->buffer_start >= plot->datapoints)
-		{
-			plot->buffer_start=0;
-		}
+	// Increments ring buffer pointer and resets at end
+	if(plot->buffer_start >= plot->datapoints)
+	{
+		plot->buffer_start=0;
+	}
 
-		return true;
+	return true;
 
 }
 
@@ -242,7 +241,6 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
  	
 	uint8_t option = plot->option;;
 	uint8_t ring_buffer_offset=plot->buffer_start;
-
 	if ( option & WTK_PLOT_RIGHT_TO_LEFT){
 		if (ring_buffer_offset==0){
 			ring_buffer_offset=plot->datapoints-1;
@@ -397,7 +395,6 @@ static bool wtk_plot_handler(struct win_window *win,
 		
 					offset+=scale_spacing_x;
 				}
-				
 			}
 			
 			if (scale_option&WTK_PLOT_ZERO){
