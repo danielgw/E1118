@@ -43,7 +43,6 @@
 #include <gfx/wtk.h>
 #include <gfx/gfx_generic.h>
 #include <progmem.h>
-//#include <avr/pgmspace.h> //! To be removed
 
 /**
  * \ingroup gfx_wtk_gauge
@@ -66,11 +65,9 @@
 /*
  * \Storing trigonometric values in PROGMEM
  * Used to draw the gauge line
- *
- * \TODO: Use the xplain's own progmem functions, then remove include <avr/pgmspace.h>
+ * \TODO: export to separate file
  */
 
- //! Defines trigtable for [INSERT SOMETHING USEFUL] \TODO: export to separate file
 DEFINE_PROGMEM (uint8_t, trigtable[128]) = {
 		  0,  3,  6,  9, 13, 16, 19, 22, 25, 28, 31, 34, 37, 41, 44, 47,
 		 50, 53, 56, 59, 62, 65, 68, 71, 74, 77, 80, 83, 86, 89, 92, 95,
@@ -219,14 +216,12 @@ uint8_t wtk_gauge_get_test(struct wtk_gauge *gauge)
 /**
  * \Trigtable access
  * \temporary test function
+ * \TODO: remove
  */
- 
- //DGW_FIX
  
  uint8_t wtk_gauge_trigtable(uint8_t angle)
 {
 	return progmem_read8(&(trigtable[angle]));
-	//return pgm_read_byte(&(trigtable[angle]));
 }
 
 
@@ -389,14 +384,12 @@ static bool wtk_gauge_handler(struct win_window *win,
 		gauge->rescale = wtk_rescale_value(position, area->size.x - 2, 127);
 		
 		
-		//DGW_FIX
+		
 		//! Reads x trigonometric value from PROGMEM array
 		gauge->xangle = 255 - progmem_read8(&(trigtable[127 - gauge->rescale]));
-		//gauge->xangle = 255 - pgm_read_byte(&(trigtable[127 - gauge->rescale]));
 		//! Reads x trigonometric value from PROGMEM array
 		gauge->yangle = progmem_read8(&(trigtable[gauge->rescale]));
-		//gauge->yangle = pgm_read_byte(&(trigtable[gauge->rescale]));
-		
+				
 		//! Rescales the first x trigonometric value for usage in the draw function
 		gauge->xrescale = wtk_rescale_value(gauge->xangle, 255, area->size.x - 3 - area->size.x / 7);
 		//! Rescales the first y trigonometric value for usage in the draw function
