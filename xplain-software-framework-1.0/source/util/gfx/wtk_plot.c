@@ -204,8 +204,10 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
 	plot->scale_option     = scale_option;
 	plot->scale_spacing_x  = scale_spacing_x;
 	plot->scale_offset_x   = scale_offset_x;
-	plot->scale_spacing_y  = scale_spacing_y; 
-	plot->scale_offset_y   = scale_offset_y; 
+	plot->scale_spacing_y  = wtk_rescale_value(scale_spacing_y,
+			plot->maximum,height); 
+	plot->scale_offset_y   = height - wtk_rescale_value(scale_offset_y,
+			plot->maximum,height);
 	plot->scale_color      = scale_color;
 	plot->scale_zero_color = scale_zero_color;
 }
