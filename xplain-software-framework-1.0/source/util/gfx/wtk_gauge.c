@@ -43,6 +43,7 @@
 #include <gfx/wtk.h>
 #include <gfx/gfx_generic.h>
 #include <progmem.h>
+#include <trigtable.h>
 
 /**
  * \ingroup gfx_wtk_gauge
@@ -65,8 +66,8 @@
 /*
  * \Storing trigonometric values in PROGMEM
  * Used to draw the gauge line
- * \TODO: export to separate file
- */
+ * \TODO: remove this, has been moved to trigtable.h
+
 
 DEFINE_PROGMEM (uint8_t, trigtable[128]) = {
 		  0,  3,  6,  9, 13, 16, 19, 22, 25, 28, 31, 34, 37, 41, 44, 47,
@@ -78,7 +79,7 @@ DEFINE_PROGMEM (uint8_t, trigtable[128]) = {
 		236,237,238,239,240,241,242,243,244,245,246,247,247,248,249,249,
 		250,251,251,252,252,253,253,253,254,254,254,255,255,255,255,255
 	};
-
+*/
 
 struct wtk_gauge {
 	//! Container window of gauge.
