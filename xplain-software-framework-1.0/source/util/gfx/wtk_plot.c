@@ -97,10 +97,10 @@ struct wtk_plot {
 };
 
 void wtk_plot_draw(struct wtk_plot *plot,struct win_area const *area, 
-			struct win_clip_region const *clip);
+		struct win_clip_region const *clip);
 
 void wtk_plot_grid_draw(struct wtk_plot *plot,struct win_area const *area, 
-			struct win_clip_region const *clip);
+		struct win_clip_region const *clip);
 
 
 /**
@@ -246,8 +246,8 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
  */
 
  void wtk_plot_grid_draw(struct wtk_plot *plot,struct win_area const *area, 
-			struct win_clip_region const *clip){
-
+		struct win_clip_region const *clip)
+{
 	uint8_t scale_option    = plot->scale_option;
 	uint8_t scale_spacing_x = plot->scale_spacing_x;
 	uint8_t scale_offset_x  = plot->scale_offset_x;
@@ -265,7 +265,7 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 		} else if(scale_option & WTK_PLOT_SCALE_VERTICAL){
 			grid_width = 5;
 		}
-						
+
 		while(offset > scale_spacing_y){
 			offset -= scale_spacing_y;
 		}
@@ -331,8 +331,8 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
  */
 
  void wtk_plot_draw(struct wtk_plot *plot,struct win_area const *area, 
-			struct win_clip_region const *clip){
- 	
+		struct win_clip_region const *clip)
+{
 	uint8_t option = plot->option;;
 	uint8_t ring_buffer_offset = plot->buffer_start;
 	if ( option & WTK_PLOT_RIGHT_TO_LEFT){
@@ -511,15 +511,13 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 	struct win_attributes attr;
 	
 	// Allocate memory for the control data.
-	struct wtk_plot *plot =
-			membag_alloc(sizeof(struct wtk_plot));
+	struct wtk_plot *plot =	membag_alloc(sizeof(struct wtk_plot));
 	if (!plot) {
 		goto outofmem_plot;
 	}
 
 	// Allocate memory for the control data.
-	plot->plot_buffer =
-			membag_alloc(datapoints);
+	plot->plot_buffer = membag_alloc(datapoints);
 	if (!plot->plot_buffer) {
 		goto outofmem_plot_buffer;
 	}
