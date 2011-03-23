@@ -62,25 +62,6 @@
  * these structures are needed externally.
  */
 
-
-/*
- * \Storing trigonometric values in PROGMEM
- * Used to draw the gauge line
- * \TODO: remove this, has been moved to trigtable.h
-
-
-DEFINE_PROGMEM (uint8_t, trigtable[128]) = {
-		  0,  3,  6,  9, 13, 16, 19, 22, 25, 28, 31, 34, 37, 41, 44, 47,
-		 50, 53, 56, 59, 62, 65, 68, 71, 74, 77, 80, 83, 86, 89, 92, 95,
-		 98,100,103,106,109,112,115,117,120,123,126,128,131,134,136,139,
-		142,144,147,149,152,154,157,159,162,164,167,169,171,174,176,178,
-		180,183,185,187,189,191,193,195,197,199,201,203,205,207,208,210,
-		212,214,215,217,219,220,222,223,225,226,228,229,231,232,233,234,
-		236,237,238,239,240,241,242,243,244,245,246,247,247,248,249,249,
-		250,251,251,252,252,253,253,253,254,254,254,255,255,255,255,255
-	};
-*/
-
 struct wtk_gauge {
 	//! Container window of gauge.
 	struct win_window		*container;
@@ -310,7 +291,9 @@ static bool wtk_gauge_handler(struct win_window *win,
 		
 	
 	
-	//! Erases the previous gauge line using old x\y values, not enabled at first draw event
+	/*! Erases the previous gauge line using old x\y values, 
+	not enabled at first draw event
+	*/
  		if (!gauge->start&gauge->solidbg) {
 			//! Middle line
 			gfx_generic_draw_line(clip->origin.x + gauge->xrescale + area->size.x / 7,
