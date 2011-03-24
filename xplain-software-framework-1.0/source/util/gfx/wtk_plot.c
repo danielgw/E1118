@@ -206,8 +206,10 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
 	plot->scale_offset_x   = scale_offset_x;
 	plot->scale_spacing_y  = wtk_rescale_value(scale_spacing_y,
 			plot->maximum,height); 
+			
 	plot->scale_offset_y   = height - wtk_rescale_value(scale_offset_y,
 			plot->maximum,height);
+			
 	plot->scale_color      = scale_color;
 	plot->scale_zero_color = scale_zero_color;
 }
@@ -273,7 +275,8 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 		}
 		
 		while(offset<(area->size.y - 2)){
-			gfx_draw_line(clip->origin.x,  clip->origin.y + offset,
+			gfx_draw_line(clip->origin.x,  
+					clip->origin.y + offset,
 					clip->origin.x + grid_width,
 					clip->origin.y + offset,
 					scale_color);
@@ -284,13 +287,18 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 	}
 	//draw lines/notches along the horizontal axis
 	if (scale_spacing_x > 0) {
-		gfx_coord_t grid_height = 0;
+		
+		gfx_coord_t plot_height = area->size.y - 2;
+		gfx_coord_t grid_height_top = 0;
+		gfx_coord_t grid_height_bottom = 0;
 		gfx_coord_t offset = scale_offset_x;
 		
+		
 		if (scale_option & WTK_PLOT_GRID_HORIZONTAL){
-			grid_height = area->size.y - 2;
+			grid_height_bottom = plot_height;
 		}else if(scale_option & WTK_PLOT_SCALE_HORIZONTAL){
-			grid_height = 5;
+			grid_height_top = plot_height - 5;
+			grid_height_bottom = plot_height;
 		}
 		
 		while(offset > scale_spacing_x){
@@ -298,9 +306,10 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 		}
 		
 		while(offset<(area->size.x - 2)){
-			gfx_draw_line(clip->origin.x + offset,  clip->origin.y,
+			gfx_draw_line(clip->origin.x + offset,  
+					clip->origin.y + grid_height_bottom,
 					clip->origin.x + offset,  
-					clip->origin.y + grid_height,
+					clip->origin.y + grid_height_top,
 					scale_color);
 
 

@@ -339,7 +339,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	if (!plot) {
 		goto error_widget;
 	}
-	wtk_plot_grid(plot, WTK_PLOT_GRID_HORIZONTAL | WTK_PLOT_GRID_VERTICAL |
+	wtk_plot_grid(plot, WTK_PLOT_SCALE_HORIZONTAL | WTK_PLOT_SCALE_VERTICAL |
 			WTK_PLOT_ZERO, 20,0,20,50,
 			GFX_COLOR(90, 30, 30), GFX_COLOR(0, 0, 100));
 	
