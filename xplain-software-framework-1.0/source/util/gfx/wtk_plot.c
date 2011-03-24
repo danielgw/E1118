@@ -261,60 +261,91 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 	
 	//draw lines/notches along the vertical axis:
 	if (scale_spacing_y > 0) {
-		gfx_coord_t grid_width = 0;
+	
+		gfx_coord_t plot_width = area->size.x - 2;
 		gfx_coord_t offset = scale_offset_y;
 		
-		if (scale_option & WTK_PLOT_GRID_VERTICAL){
-			grid_width = area->size.x - 2;
-		} else if(scale_option & WTK_PLOT_SCALE_VERTICAL){
-			grid_width = 5;
-		}
-
+		
 		while(offset > scale_spacing_y){
 			offset -= scale_spacing_y;
 		}
 		
-		while(offset<(area->size.y - 2)){
-			gfx_draw_line(clip->origin.x,  
-					clip->origin.y + offset,
-					clip->origin.x + grid_width,
-					clip->origin.y + offset,
-					scale_color);
-					
-			offset += scale_spacing_y;
+		if (scale_option & WTK_PLOT_GRID_VERTICAL){
+			
+			while(offset<(area->size.y - 2)){
+				gfx_draw_line(clip->origin.x,  
+						clip->origin.y + offset,
+						clip->origin.x + plot_width,
+						clip->origin.y + offset,
+						scale_color);
+						
+				offset += scale_spacing_y;
+			}
+		} else if (scale_option & WTK_PLOT_SCALE_VERTICAL){
+			while(offset<(area->size.y - 2)){
+				gfx_draw_line(clip->origin.x,  
+						clip->origin.y + offset,
+						clip->origin.x + 5,
+						clip->origin.y + offset,
+						scale_color);
+				
+				gfx_draw_line(clip->origin.x + plot_width-5,  
+						clip->origin.y + offset,
+						clip->origin.x + plot_width,
+						clip->origin.y + offset,
+						scale_color);
+						
+				offset += scale_spacing_y;
+			}
 		}
+
+		
 		
 	}
 	//draw lines/notches along the horizontal axis
 	if (scale_spacing_x > 0) {
 		
 		gfx_coord_t plot_height = area->size.y - 2;
-		gfx_coord_t grid_height_top = 0;
-		gfx_coord_t grid_height_bottom = 0;
 		gfx_coord_t offset = scale_offset_x;
-		
-		
-		if (scale_option & WTK_PLOT_GRID_HORIZONTAL){
-			grid_height_bottom = plot_height;
-		}else if(scale_option & WTK_PLOT_SCALE_HORIZONTAL){
-			grid_height_top = plot_height - 5;
-			grid_height_bottom = plot_height;
-		}
 		
 		while(offset > scale_spacing_x){
 			offset -= scale_spacing_x;
 		}
 		
-		while(offset<(area->size.x - 2)){
-			gfx_draw_line(clip->origin.x + offset,  
-					clip->origin.y + grid_height_bottom,
-					clip->origin.x + offset,  
-					clip->origin.y + grid_height_top,
-					scale_color);
+		if (scale_option & WTK_PLOT_GRID_HORIZONTAL){
+			while(offset<(area->size.x - 2)){
+				gfx_draw_line(clip->origin.x + offset,  
+						clip->origin.y,
+						clip->origin.x + offset,  
+						clip->origin.y + plot_height,
+						scale_color);
 
 
 			offset += scale_spacing_x;
+			}
+		} else if (scale_option & WTK_PLOT_SCALE_HORIZONTAL){
+			while(offset<(area->size.x - 2)){
+				gfx_draw_line(clip->origin.x + offset,  
+						clip->origin.y,
+						clip->origin.x + offset,  
+						clip->origin.y + 5,
+						scale_color);
+				
+				gfx_draw_line(clip->origin.x + offset,  
+						clip->origin.y + plot_height - 5,
+						clip->origin.x + offset,  
+						clip->origin.y + plot_height,
+						scale_color);
+
+
+			offset += scale_spacing_x;
+			}
+			
 		}
+		
+		
+		
+
 	}
 	
 	if (scale_option & WTK_PLOT_ZERO){
