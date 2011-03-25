@@ -380,6 +380,11 @@ typedef uint8_t wtk_radio_group_size_t;
 # define WTK_PLOT_SCALE_FACTOR           128
 #endif
 
+#ifndef WTK_PLOT_SCALE_MARKER_LENGTH
+//! The length of the scale marker.
+# define WTK_PLOT_SCALE_MARKER_LENGTH           5
+#endif
+
 //! @}
 
 #endif /* DEFAULT_WTK_H_INCLUDED */

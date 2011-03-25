@@ -174,6 +174,10 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
  * \brief Set grid/scale parameters.
  *
  * This function sets the grid and scale options, colors for the plot. 
+ * The scale_spacing_y and scale_offset_y parameter is rescaled to fit the plot.
+ * Both grid and scale can not be used on the same plot.
+ * 
+ * Refer to <gfx/wtk.h> for available configuration options.
  *
  * \param plot Pointer to wtk_plot struct to set colors for.
  * \param scale_option Configuration of scale, grid and zero-line behaviour.
@@ -193,10 +197,10 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
 		gfx_color_t scale_zero_color)
 {
 	assert(plot);
-	
+
 	uint8_t height;
 	struct win_area const *area;
-	
+
 	area = win_get_area(plot->container);
 	height = area->size.y;
 	height -= 3;
@@ -206,10 +210,10 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
 	plot->scale_offset_x   = scale_offset_x;
 	plot->scale_spacing_y  = wtk_rescale_value(scale_spacing_y,
 			plot->maximum,height); 
-			
+
 	plot->scale_offset_y   = height - wtk_rescale_value(scale_offset_y,
 			plot->maximum,height);
-			
+
 	plot->scale_color      = scale_color;
 	plot->scale_zero_color = scale_zero_color;
 }
@@ -220,7 +224,7 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
  *
  * This sets new draw and background colors for the plot. 
  *
- * \param plot       Pointer to wtk_plot struct to set colors for.
+ * \param plot Pointer to wtk_plot struct to set colors for.
  * \param draw_color Draw color to set for plot.
  * \param background Background color to set for plot.
  */
@@ -240,7 +244,7 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
  * \brief Grid draw function.
  * \internal
  *
- * Draws the grid.
+ * Draws the grid or scale, and zero line based on options.
  *
  * \param plot Pointer to wtk_plot struct to draw.
  * \param area Pointer to win_area struct with position and size of the plot.
@@ -258,94 +262,87 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 	uint8_t scale_spacing_y = plot->scale_spacing_y;
 	uint8_t scale_offset_y  = plot->scale_offset_y;
 	uint8_t scale_color     = plot->scale_color;
-	
+
 	//draw lines/notches along the vertical axis:
 	if (scale_spacing_y > 0) {
-	
+
 		gfx_coord_t plot_width = area->size.x - 2;
 		gfx_coord_t offset = scale_offset_y;
-		
-		
+
 		while(offset > scale_spacing_y){
 			offset -= scale_spacing_y;
 		}
-		
+
 		if (scale_option & WTK_PLOT_GRID_VERTICAL){
-			
-			while(offset<(area->size.y - 2)){
+
+			while(offset < plot_width){
 				gfx_draw_line(clip->origin.x,  
 						clip->origin.y + offset,
 						clip->origin.x + plot_width,
 						clip->origin.y + offset,
 						scale_color);
-						
+
 				offset += scale_spacing_y;
 			}
 		} else if (scale_option & WTK_PLOT_SCALE_VERTICAL){
-			while(offset<(area->size.y - 2)){
+			while(offset < plot_width){
 				gfx_draw_line(clip->origin.x,  
 						clip->origin.y + offset,
-						clip->origin.x + 5,
+						clip->origin.x 
+						+ WTK_PLOT_SCALE_MARKER_LENGTH,
 						clip->origin.y + offset,
 						scale_color);
-				
-				gfx_draw_line(clip->origin.x + plot_width-5,  
+
+				gfx_draw_line(clip->origin.x + plot_width
+						- WTK_PLOT_SCALE_MARKER_LENGTH,  
 						clip->origin.y + offset,
 						clip->origin.x + plot_width,
 						clip->origin.y + offset,
 						scale_color);
-						
+
 				offset += scale_spacing_y;
 			}
 		}
-
-		
-		
 	}
 	//draw lines/notches along the horizontal axis
 	if (scale_spacing_x > 0) {
-		
+
 		gfx_coord_t plot_height = area->size.y - 2;
 		gfx_coord_t offset = scale_offset_x;
-		
+
 		while(offset > scale_spacing_x){
 			offset -= scale_spacing_x;
 		}
-		
+
 		if (scale_option & WTK_PLOT_GRID_HORIZONTAL){
-			while(offset<(area->size.x - 2)){
+			while(offset < plot_height){
 				gfx_draw_line(clip->origin.x + offset,  
 						clip->origin.y,
 						clip->origin.x + offset,  
 						clip->origin.y + plot_height,
 						scale_color);
 
-
-			offset += scale_spacing_x;
+				offset += scale_spacing_x;
 			}
 		} else if (scale_option & WTK_PLOT_SCALE_HORIZONTAL){
-			while(offset<(area->size.x - 2)){
+			while(offset < plot_height){
 				gfx_draw_line(clip->origin.x + offset,  
 						clip->origin.y,
 						clip->origin.x + offset,  
-						clip->origin.y + 5,
+						clip->origin.y 
+						+ WTK_PLOT_SCALE_MARKER_LENGTH,
 						scale_color);
-				
+
 				gfx_draw_line(clip->origin.x + offset,  
-						clip->origin.y + plot_height - 5,
+						clip->origin.y + plot_height 
+						- WTK_PLOT_SCALE_MARKER_LENGTH,
 						clip->origin.x + offset,  
 						clip->origin.y + plot_height,
 						scale_color);
 
-
-			offset += scale_spacing_x;
+				offset += scale_spacing_x;
 			}
-			
 		}
-		
-		
-		
-
 	}
 	
 	if (scale_option & WTK_PLOT_ZERO){
@@ -391,8 +388,7 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 	uint8_t y_current;
 	uint8_t y_previous = *(plot->plot_buffer + ring_buffer_offset);
 
-
-	for(uint8_t datapoint = 1; datapoint < (plot->datapoints) ;datapoint++)
+	for(uint8_t datapoint = 1; datapoint < (plot->datapoints); datapoint++)
 	{
 		//increment the datapointer around the ring buffer
 		if ( option & WTK_PLOT_RIGHT_TO_LEFT){
@@ -406,7 +402,7 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 			}
 		}
 		y_current = *(plot->plot_buffer + ring_buffer_offset);
-		
+
 		gfx_draw_line(clip->origin.x + x_previous, 
 			clip->origin.y + y_previous,
 			clip->origin.x + x_current,
@@ -466,7 +462,6 @@ static bool wtk_plot_handler(struct win_window *win,
 		area = win_get_area(win);
 		background = plot->background;
 
-		//position = plot->position;
 		option = plot->option;
 
 		if (background != NULL){
@@ -477,7 +472,7 @@ static bool wtk_plot_handler(struct win_window *win,
 		}
 
 		wtk_plot_grid_draw(plot, area, clip);
-		
+
 		wtk_plot_draw(plot, area, clip);
 
 		/* Always accept DRAW events, as the return value is ignored
@@ -489,7 +484,6 @@ static bool wtk_plot_handler(struct win_window *win,
 		/* Free up all memory allocated by widget.
 		 * The window is freed by the window system
 		 */
-
 		membag_free(plot->plot_buffer);
 		membag_free(plot);
 
@@ -540,7 +534,6 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 		uint8_t datapoints, gfx_color_t draw_color,
 		struct gfx_bitmap *background, uint8_t option)
 {
-
 	uint8_t length;
 
 	// Do sanity check on parameters.
@@ -551,7 +544,7 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 
 	// Attributes scratchpad.
 	struct win_attributes attr;
-	
+
 	// Allocate memory for the control data.
 	struct wtk_plot *plot =	membag_alloc(sizeof(struct wtk_plot));
 	if (!plot) {
@@ -570,7 +563,7 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 	plot->option = option;
 	plot->draw_color = draw_color;
 	plot->background = background;
-	
+
 	plot->scale_option     = 0;
 	plot->scale_spacing_x  = 0;
 	plot->scale_offset_x   = 0;
@@ -578,8 +571,6 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 	plot->scale_offset_y   = 0;
 	plot->scale_color      = 0;
 	plot->scale_zero_color = 0;
-
-	
 
 	/* Do sanity check of specified window area parameters
 	 * according to the orientation of the plot.
