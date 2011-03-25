@@ -77,7 +77,7 @@ struct wtk_plot {
 	uint8_t                 option;
 	//! Color for plot.
 	gfx_color_t             draw_color;
-	//! Color for plot background.
+	//! Pointer to plot background bitmap.
 	struct gfx_bitmap       *background;
 	//! Configuration of scale, grid and zero-line behaviour.
 	uint8_t                 scale_option;
@@ -143,23 +143,23 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
 
 	assert(plot);
 	assert(value <= plot->maximum);
+	assert(plot->buffer_start < plot->datapoints);
   
 	maximum = plot->maximum;
 
 	area = win_get_area(plot->container);
 
 	// Makes the plot fit inside the window border.
-	height = area->size.y;
-	height -= 3;
+	height = area->size.y - 3;
 
 	// Rescales the added value to fit inside the plot
 	// and stores it in the ring buffer.
 	*(plot->plot_buffer + plot->buffer_start) = 
-				1 + wtk_rescale_value((value), maximum, height);
+			1 + wtk_rescale_value((value), maximum, height);
 
-	plot->buffer_start++;
 
 	// Increments ring buffer pointer and resets at end
+	plot->buffer_start++;
 	if(plot->buffer_start >= plot->datapoints)
 	{
 		plot->buffer_start = 0;
@@ -202,8 +202,7 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
 	struct win_area const *area;
 
 	area = win_get_area(plot->container);
-	height = area->size.y;
-	height -= 3;
+	height = area->size.y - 3;
 
 	plot->scale_option     = scale_option;
 	plot->scale_spacing_x  = scale_spacing_x;
@@ -267,12 +266,13 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 	gfx_coord_t plot_width  = area->size.x - 2;
 	gfx_coord_t plot_top    = clip->origin.y + 1;
 	gfx_coord_t plot_right  = clip->origin.x + 1;
-		
+
 	//draw lines/notches along the vertical axis:
 	if (scale_spacing_y > 0) {
 
 		gfx_coord_t offset = scale_offset_y;
-		
+
+		// Roll offset back to top line
 		while(offset > scale_spacing_y){
 			offset -= scale_spacing_y;
 		}
@@ -313,6 +313,7 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 
 		gfx_coord_t offset = scale_offset_x;
 
+		// Roll offset back to top line
 		while(offset > scale_spacing_x){
 			offset -= scale_spacing_x;
 		}
@@ -347,7 +348,7 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 			}
 		}
 	}
-	
+
 	if (scale_option & WTK_PLOT_ZERO){
 		gfx_draw_line(plot_right, 
 				plot_top + plot->scale_offset_y,
