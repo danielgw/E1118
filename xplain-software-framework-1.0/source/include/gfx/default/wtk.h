@@ -376,7 +376,7 @@ typedef uint8_t wtk_radio_group_size_t;
 #endif
 
 #ifndef WTK_PLOT_SCALE_FACTOR
-//! Scale factor to add leftover decimals.
+//! Scale factor for fixed-point calculation.
 # define WTK_PLOT_SCALE_FACTOR           128
 #endif
 

@@ -587,10 +587,12 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 	length = attr.area.size.x;
 	length -= 3;
 
-	// Calculates the current spacing error.
+	// Calculate the spacing between datapoints.
 	plot->spacing = length / (datapoints - 1);
+	
+	// Calculate the fixed-point remainder of the above operation.
 	plot->spacing_error = (uint8_t)(
-		(((uint16_t)(length-plot->spacing*(datapoints - 1)))
+		(((uint16_t)(length - plot->spacing*(datapoints - 1)))
 		* WTK_PLOT_SCALE_FACTOR) / ((uint16_t)(datapoints - 1)));
 
 	// Set up handling information.
