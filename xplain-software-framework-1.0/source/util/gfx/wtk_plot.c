@@ -96,10 +96,10 @@ struct wtk_plot {
 
 };
 
-void wtk_plot_draw(struct wtk_plot *plot,struct win_area const *area, 
+static void wtk_plot_draw(struct wtk_plot *plot,struct win_area const *area, 
 		struct win_clip_region const *clip);
 
-void wtk_plot_grid_draw(struct wtk_plot *plot,struct win_area const *area, 
+static void wtk_plot_grid_draw(struct wtk_plot *plot,struct win_area const *area, 
 		struct win_clip_region const *clip);
 
 
@@ -585,7 +585,7 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 
 	// Makes the plot fit inside the window border.
 	length = attr.area.size.x;
-	length -= 3;
+	length -= 2;
 
 	// Calculate the spacing between datapoints.
 	plot->spacing = length / (datapoints - 1);
