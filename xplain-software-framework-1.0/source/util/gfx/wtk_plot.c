@@ -418,9 +418,9 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 		x_current += plot->spacing;
 		x_error   += plot->spacing_error;
 
-		/* Adds together the leftover decimals of spacing error and 
-		 * adds one to the spacing between two datapoints when it
-		 * exceeds 1.
+		/* Add together the fixed-point remainder from plot->spacing and 
+		 * add one to the spacing between two datapoints when it
+		 * exceeds a full pixel.
 		 */
 		if (x_error >= WTK_PLOT_SCALE_FACTOR){
 			x_current++;

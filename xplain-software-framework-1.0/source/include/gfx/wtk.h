@@ -377,7 +377,7 @@ void wtk_progress_bar_set_colors(struct wtk_progress_bar *bar,
  * For use with the option parameter of \ref wtk_plot_create
  * @{
  */
-//! Plot is inverted.
+//! Plot is inverted along y-axis.
 #define WTK_PLOT_INVERT        (1 << 1)
 
 //! @}
