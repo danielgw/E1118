@@ -279,7 +279,7 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 
 		if (axis_option & WTK_PLOT_GRID_VERTICAL){
 
-			while(offset < plot_width){
+			while(offset < plot_height){
 				gfx_draw_line(plot_right,  
 						plot_top + offset,
 						plot_right + plot_width,
@@ -289,7 +289,7 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 				offset += axis_spacing_y;
 			}
 		} else if (axis_option & WTK_PLOT_AXIS_VERTICAL){
-			while(offset < plot_width){
+			while(offset < plot_height){
 				gfx_draw_line(plot_right,  
 						plot_top + offset,
 						plot_right 
@@ -319,7 +319,7 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 		}
 
 		if (axis_option & WTK_PLOT_GRID_HORIZONTAL){
-			while(offset < plot_height){
+			while(offset < plot_width){
 				gfx_draw_line(plot_right + offset,  
 						plot_top,
 						plot_right + offset,  
@@ -329,7 +329,7 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 				offset += axis_spacing_x;
 			}
 		} else if (axis_option & WTK_PLOT_AXIS_HORIZONTAL){
-			while(offset < plot_height){
+			while(offset < plot_width){
 				gfx_draw_line(plot_right + offset,  
 						plot_top,
 						plot_right + offset,  
