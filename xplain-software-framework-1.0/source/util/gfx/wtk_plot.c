@@ -189,7 +189,7 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
  * \param axis_zero_color Color for the zero line.
  */
 
- void wtk_plot_grid(struct wtk_plot *plot,
+ void wtk_plot_set_grid(struct wtk_plot *plot,
 		uint8_t axis_option,
 		uint8_t axis_spacing_x, uint8_t axis_offset_x,
 		uint8_t axis_spacing_y, uint8_t axis_offset_y,

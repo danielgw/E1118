@@ -387,7 +387,7 @@ void wtk_progress_bar_set_colors(struct wtk_progress_bar *bar,
 /**
  * \defgroup gfx_wtk_plot_grid_options Plot widget grid options
  * These options can be ORed together to specify the behaviour of a
- * plot widget grid when adjusting it./ref wtk_plot_grid
+ * plot widget grid when adjusting it.\ref wtk_plot_grid
  * @{
  */
 
@@ -438,7 +438,7 @@ struct wtk_plot;
 
 bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value);
 
-void wtk_plot_grid(struct wtk_plot *plot, uint8_t axis_option,
+void wtk_plot_set_grid(struct wtk_plot *plot, uint8_t axis_option,
 		uint8_t axis_spacing_x, uint8_t axis_offset_x,
 		uint8_t axis_spacing_y, uint8_t axis_offset_y,
 		gfx_color_t axis_color, gfx_color_t axis_zero_color);
