@@ -564,9 +564,11 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 	// Initialize the plot data.
 	plot->maximum = maximum;
 	plot->datapoints = datapoints;
+	plot->buffer_start=0;
 	plot->option = option;
 	plot->draw_color = draw_color;
 	plot->background = background;
+
 
 	plot->axis_option     = 0;
 	plot->axis_spacing_x  = 0;
