@@ -188,8 +188,8 @@ uint8_t wtk_gauge_get_value(struct wtk_gauge *gauge)
 }
 
 /**
- * \Returns the gauge struct values for testing
- * \temporary test function
+ * Returns the gauge struct values for testing
+ * temporary test function
  */
 uint8_t wtk_gauge_get_test(struct wtk_gauge *gauge)
 {
@@ -198,9 +198,9 @@ uint8_t wtk_gauge_get_test(struct wtk_gauge *gauge)
 }
 
 /**
- * \Trigtable access
- * \temporary test function
- * \TODO: remove
+ * Trigtable access
+ * temporary test function
+ * \todo remove
  */
  
  uint8_t wtk_gauge_trigtable(uint8_t angle)

@@ -347,7 +347,13 @@ void wtk_progress_bar_set_colors(struct wtk_progress_bar *bar,
 //! @}
 
 //! @}
-
+/**
+ * \defgroup gfx_wtk_gauge Gauge widget
+ *
+ * Gauge widget provides a gauge. Size and position can be configured.
+ * Can take input from userdefinable input.
+ * @{
+ */
 
 #define WTK_GAUGE_HORIZONTAL    (0 << 0)
 
