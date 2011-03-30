@@ -208,7 +208,7 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
 	plot->axis_spacing_x  = axis_spacing_x;
 	plot->axis_offset_x   = axis_offset_x;
 	plot->axis_spacing_y  = wtk_rescale_value(axis_spacing_y,
-			plot->maximum,height); 
+			plot->maximum,height);
 
 	plot->axis_offset_y   = height - wtk_rescale_value(axis_offset_y,
 			plot->maximum,height);
@@ -280,7 +280,7 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 		if (axis_option & WTK_PLOT_GRID_VERTICAL){
 
 			while(offset < plot_height){
-				gfx_draw_line(plot_right,  
+				gfx_draw_line(plot_right,
 						plot_top + offset,
 						plot_right + plot_width,
 						plot_top + offset,
@@ -290,7 +290,7 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 			}
 		} else if (axis_option & WTK_PLOT_AXIS_VERTICAL){
 			while(offset < plot_height){
-				gfx_draw_line(plot_right,  
+				gfx_draw_line(plot_right,
 						plot_top + offset,
 						plot_right 
 						+ WTK_PLOT_TICK_MARKER_LENGTH,
@@ -298,7 +298,7 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 						axis_color);
 
 				gfx_draw_line(plot_right + plot_width
-						- WTK_PLOT_TICK_MARKER_LENGTH,  
+						- WTK_PLOT_TICK_MARKER_LENGTH,
 						plot_top + offset,
 						plot_right + plot_width,
 						plot_top + offset,
@@ -320,9 +320,9 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 
 		if (axis_option & WTK_PLOT_GRID_HORIZONTAL){
 			while(offset < plot_width){
-				gfx_draw_line(plot_right + offset,  
+				gfx_draw_line(plot_right + offset,
 						plot_top,
-						plot_right + offset,  
+						plot_right + offset,
 						plot_top + plot_height,
 						axis_color);
 
@@ -330,17 +330,17 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 			}
 		} else if (axis_option & WTK_PLOT_AXIS_HORIZONTAL){
 			while(offset < plot_width){
-				gfx_draw_line(plot_right + offset,  
+				gfx_draw_line(plot_right + offset,
 						plot_top,
-						plot_right + offset,  
+						plot_right + offset,
 						plot_top 
 						+ WTK_PLOT_TICK_MARKER_LENGTH,
 						axis_color);
 
-				gfx_draw_line(plot_right + offset,  
+				gfx_draw_line(plot_right + offset,
 						plot_top + plot_height 
 						- WTK_PLOT_TICK_MARKER_LENGTH,
-						plot_right + offset,  
+						plot_right + offset,
 						plot_top + plot_height,
 						axis_color);
 
@@ -401,7 +401,7 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 			} else {ring_buffer_offset--;}
 		} else {
 			ring_buffer_offset++;
-			if (ring_buffer_offset >= plot->datapoints){ 
+			if (ring_buffer_offset >= plot->datapoints){
 				ring_buffer_offset = 0;
 			}
 		}
