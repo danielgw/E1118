@@ -264,8 +264,6 @@ void wtk_radio_button_size_hint(struct win_point *size, const char *caption);
 
 //! @}
 
-//! @}
-
 struct wtk_slider;
 
 struct wtk_slider *wtk_slider_create(struct win_window *parent,
