@@ -55,6 +55,7 @@
  * - \ref gfx_wtk_button
  * - \ref gfx_wtk_check_box
  * - \ref gfx_wtk_progress_bar
+ * - \ref gfx_wtk_plot
  * - \ref gfx_wtk_radio_button
  * - \ref gfx_wtk_slider
  * - \ref gfx_wtk_label
@@ -428,7 +429,7 @@ void wtk_progress_bar_set_colors(struct wtk_progress_bar *bar,
 
 
 
-//! @}
+
 
 //! @}
 
