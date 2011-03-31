@@ -150,12 +150,12 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
 	area = win_get_area(plot->container);
 
 	// Makes the plot fit inside the window border.
-	height = area->size.y - 3;
+	height = area->size.y - 2;
 
 	// Rescales the added value to fit inside the plot
 	// and stores it in the ring buffer.
 	*(plot->plot_buffer + plot->buffer_start) = 
-			1 + wtk_rescale_value((value), maximum, height);
+			height - wtk_rescale_value((value), maximum, height);
 
 
 	// Increments ring buffer pointer and resets at end
