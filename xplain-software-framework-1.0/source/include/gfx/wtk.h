@@ -381,6 +381,20 @@ void wtk_progress_bar_set_colors(struct wtk_progress_bar *bar,
 //! Plot is inverted along y-axis.
 #define WTK_PLOT_INVERT        (1 << 1)
 
+
+
+//! @}
+
+/**
+ * \name Redraw parent disable options.
+ * For use with the option parameter of \ref wtk_plot_create
+ * @{
+ */
+//! Parent is not redrawn if background is transparent.
+#define WTK_PLOT_DONT_REDRAW_PARENT        (1 << 2)
+
+
+
 //! @}
 
 //! @}
@@ -429,19 +443,7 @@ void wtk_progress_bar_set_colors(struct wtk_progress_bar *bar,
 
 //! @}
 
-/**
- * \name redraw parent options.
- * For use with the option parameter of \ref wtk_plot_grid
- * @{
- */
-
-//! Disable redraw parent when background is transparent
-#define WTK_PLOT_DONT_REDRAW_PARENT    (1 << 5)
-
-
 //! @}
-
-
 
 struct wtk_plot;
 
@@ -462,15 +464,10 @@ struct win_window *wtk_plot_as_child(struct wtk_plot *plot);
 void wtk_plot_set_colors(struct wtk_plot *plot,
 		gfx_color_t draw_color, struct gfx_bitmap *background);
 
-//! @}
 
 
 
 
-uint8_t wtk_rescale_value(uint8_t value, uint8_t from_scale, uint8_t to_scale);
-void wtk_copy_string(char *dest, char const *source);
-
-void wtk_shade_pixel(gfx_color_t *pixel, uint8_t alpha);
 
 //! @}
 
