@@ -623,7 +623,11 @@ struct wtk_plot *wtk_plot_create(struct win_window *parent,
 		attr.behavior = 0;
 	} else {
 		attr.background = NULL;
-		attr.behavior = WIN_BEHAVIOR_REDRAW_PARENT;
+		if (option & WTK_PLOT_DONT_REDRAW_PARENT){
+			attr.behavior = 0;
+		} else {
+			attr.behavior = WIN_BEHAVIOR_REDRAW_PARENT;
+		}
 	}
 
 	// Create a new window for the plot.
