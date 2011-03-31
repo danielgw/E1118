@@ -404,6 +404,7 @@ void wtk_progress_bar_set_colors(struct wtk_progress_bar *bar,
 #define WTK_PLOT_GRID_HORIZONTAL  (1 << 1)
 
 //! @}
+
 /**
  * \name scale orientation options.
  * For use with the option parameter of \ref wtk_plot_grid
@@ -418,17 +419,24 @@ void wtk_progress_bar_set_colors(struct wtk_progress_bar *bar,
 //! @}
 
 /**
- * \name zero line options options.
+ * \name zero line options.
  * For use with the option parameter of \ref wtk_plot_grid
  * @{
  */
 
 //! Draw the zero line
 #define WTK_PLOT_ZERO              (1 << 4)
+
 //! @}
 
+/**
+ * \name redraw parent options.
+ * For use with the option parameter of \ref wtk_plot_grid
+ * @{
+ */
 
-
+//! Disable redraw parent when background is transparent
+#define WTK_PLOT_DONT_REDRAW_PARENT    (1 << 5)
 
 
 //! @}
