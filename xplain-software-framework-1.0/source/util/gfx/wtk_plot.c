@@ -150,12 +150,12 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
 	area = win_get_area(plot->container);
 
 	// Makes the plot fit inside the window border.
-	height = area->size.y - 3;
+	height = area->size.y - 2;
 
 	// Rescales the added value to fit inside the plot
 	// and stores it in the ring buffer.
 	*(plot->plot_buffer + plot->buffer_start) = 
-			1 + wtk_rescale_value((value), maximum, height);
+			height - wtk_rescale_value((value), maximum, height-1);
 
 
 	// Increments ring buffer pointer and resets at end
@@ -384,14 +384,23 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 		} else {
 			ring_buffer_offset--;
 		}
-	} 
-
-	uint8_t x_error    = plot->spacing_error;
-	uint8_t x_current  = 1 + plot->spacing;
-	uint8_t x_previous = 1;
-	uint8_t y_current;
-	uint8_t y_previous = *(plot->plot_buffer + ring_buffer_offset);
-
+	}
+	
+	// the distance from clip to the bottom of the plot area
+	gfx_coord_t plot_bottom = area->size.y - 1; 
+	gfx_coord_t x_error    = plot->spacing_error;
+	gfx_coord_t x_current  = 1 + plot->spacing;
+	gfx_coord_t x_previous = 1;
+	gfx_coord_t y_current;
+	gfx_coord_t y_previous;
+	
+	if (option & WTK_PLOT_INVERT){
+		y_previous = plot_bottom - *(plot->plot_buffer + ring_buffer_offset);
+	} else {
+		y_previous = *(plot->plot_buffer + ring_buffer_offset);
+	}
+	
+	
 	for(uint8_t datapoint = 1; datapoint < (plot->datapoints); datapoint++)
 	{
 		//increment the datapointer around the ring buffer
@@ -405,7 +414,12 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 				ring_buffer_offset = 0;
 			}
 		}
-		y_current = *(plot->plot_buffer + ring_buffer_offset);
+		
+		if (option & WTK_PLOT_INVERT){
+			y_current = plot_bottom - *(plot->plot_buffer + ring_buffer_offset);
+		} else {
+			y_current = *(plot->plot_buffer + ring_buffer_offset);
+		}
 
 		gfx_draw_line(clip->origin.x + x_previous, 
 			clip->origin.y + y_previous,

@@ -355,7 +355,7 @@ void app_widget_launch(struct workqueue_task *task) {
 
 	
 	plot_2 = wtk_plot_create(parent, &area, 100, 11, GFX_COLOR(255, 0, 0),
-			NULL, WTK_PLOT_RIGHT_TO_LEFT);
+			&plot_background, WTK_PLOT_INVERT);
 
 	if (!plot_2) {
 		goto error_widget;
