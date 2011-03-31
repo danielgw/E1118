@@ -395,7 +395,8 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 	gfx_coord_t y_previous;
 	
 	if (option & WTK_PLOT_INVERT){
-		y_previous = plot_bottom - *(plot->plot_buffer + ring_buffer_offset);
+		y_previous = plot_bottom - 
+				*(plot->plot_buffer + ring_buffer_offset);
 	} else {
 		y_previous = *(plot->plot_buffer + ring_buffer_offset);
 	}
@@ -416,7 +417,8 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 		}
 		
 		if (option & WTK_PLOT_INVERT){
-			y_current = plot_bottom - *(plot->plot_buffer + ring_buffer_offset);
+			y_current = plot_bottom - *(plot->plot_buffer +
+					ring_buffer_offset);
 		} else {
 			y_current = *(plot->plot_buffer + ring_buffer_offset);
 		}
