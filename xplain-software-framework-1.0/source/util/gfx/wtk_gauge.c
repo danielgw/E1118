@@ -43,7 +43,7 @@
 #include <gfx/wtk.h>
 #include <gfx/gfx_generic.h>
 #include <progmem.h>
-#include <avr/pgmspace.h> //! To be removed
+#include <trigtable.h>
 
 /**
  * \ingroup gfx_wtk_gauge
@@ -62,24 +62,6 @@
  * these structures are needed externally.
  */
 
-
-/*
- * \Storing trigonometric values in PROGMEM
- * Used to draw the gauge line
- *
- * \TODO: Use the xplain's own progmem functions, then remove include <avr/pgmspace.h>
- */
-uint8_t trigtable[128] PROGMEM = {
-		  0,  3,  6,  9, 13, 16, 19, 22, 25, 28, 31, 34, 37, 41, 44, 47,
-		 50, 53, 56, 59, 62, 65, 68, 71, 74, 77, 80, 83, 86, 89, 92, 95,
-		 98,100,103,106,109,112,115,117,120,123,126,128,131,134,136,139,
-		142,144,147,149,152,154,157,159,162,164,167,169,171,174,176,178,
-		180,183,185,187,189,191,193,195,197,199,201,203,205,207,208,210,
-		212,214,215,217,219,220,222,223,225,226,228,229,231,232,233,234,
-		236,237,238,239,240,241,242,243,244,245,246,247,247,248,249,249,
-		250,251,251,252,252,253,253,253,254,254,254,255,255,255,255,255
-	};
-	
 struct wtk_gauge {
 	//! Container window of gauge.
 	struct win_window		*container;
@@ -107,7 +89,9 @@ struct wtk_gauge {
 	
 	/* Variables for resizeing the gauge variables. */
 
-	//! Rescaled data position value, rescaled to fit accessing trigtable array 128 values
+	/* Rescaled data position value, rescaled to fit accessing trigtable 
+	 * array 128 values
+	 */
 	uint8_t					rescale;
 	
 	//! Inverted trigtable value accessed with rescale
@@ -216,10 +200,12 @@ uint8_t wtk_gauge_get_test(struct wtk_gauge *gauge)
 /**
  * \Trigtable access
  * \temporary test function
+ * \TODO: remove
  */
-uint8_t wtk_gauge_trigtable(uint8_t angle)
+ 
+ uint8_t wtk_gauge_trigtable(uint8_t angle)
 {
-	return pgm_read_byte(&(trigtable[angle]));
+	return progmem_read8(&(trigtable[angle]));
 }
 
 
@@ -307,26 +293,43 @@ static bool wtk_gauge_handler(struct win_window *win,
 		
 	
 	
-	//! Erases the previous gauge line using old x\y values, not enabled at first draw event
+	/* Erases the previous gauge line using old x\y values, 
+	 * not enabled at first draw event
+	 */
  		if (!gauge->start&gauge->solidbg) {
 			//! Middle line
-			gfx_generic_draw_line(clip->origin.x + gauge->xrescale + area->size.x / 7,
-				clip->origin.y + area->size.y - gauge->yrescale - 3,
-				clip->origin.x + area->size.x - 3 - area->size.x / 3 + gauge->x2rescale,
-				clip->origin.y + area->size.y - 3 - gauge->y2rescale,
+			gfx_generic_draw_line(
+				clip->origin.x + gauge->xrescale + 
+					area->size.x / 7,
+				clip->origin.y + area->size.y - 
+					gauge->yrescale - 3,
+				clip->origin.x + area->size.x - 3 - 
+					area->size.x / 3 + gauge->x2rescale,
+				clip->origin.y + area->size.y - 3 - 
+					gauge->y2rescale,
 				gauge->background_color);
 	
 			//! Right line +1 X -1 Y                   
-			gfx_generic_draw_line(clip->origin.x + gauge->xrescale + area->size.x / 7 + 1,
-				clip->origin.y + area->size.y - gauge->yrescale - 3,
-				clip->origin.x + area->size.x - 3 - area->size.x / 3 + gauge->x2rescale + 1,
-				clip->origin.y + area->size.y - 3 - gauge->y2rescale,
+			gfx_generic_draw_line(
+				clip->origin.x + gauge->xrescale + 
+					area->size.x / 7 + 1,
+				clip->origin.y + area->size.y - 
+					gauge->yrescale - 3,
+				clip->origin.x + area->size.x - 3 - 
+					area->size.x / 3 + gauge->x2rescale + 1,
+				clip->origin.y + area->size.y - 3 - 
+					gauge->y2rescale,
 				gauge->background_color);
 			//! Left line -1 X +1 Y
-			gfx_generic_draw_line(clip->origin.x + gauge->xrescale + area->size.x / 7,
-				clip->origin.y + area->size.y - gauge->yrescale - 3 + 1,
-				clip->origin.x + area->size.x - 3 - area->size.x / 3 + gauge->x2rescale,
-				clip->origin.y + area->size.y - 3 - gauge->y2rescale + 1,
+			gfx_generic_draw_line(
+				clip->origin.x + gauge->xrescale + 
+					area->size.x / 7,
+				clip->origin.y + area->size.y - 
+					gauge->yrescale - 3 + 1,
+				clip->origin.x + area->size.x - 3 - 
+					area->size.x / 3 + gauge->x2rescale,
+				clip->origin.y + area->size.y - 3 - 
+					gauge->y2rescale + 1,
 				gauge->background_color);
 		}
 		
@@ -335,8 +338,9 @@ static bool wtk_gauge_handler(struct win_window *win,
 		if (gauge->start&gauge->solidbg) {
 		
 		//! Draw a window border.
-			gfx_draw_rect(clip->origin.x, clip->origin.y, area->size.x,
-				area->size.y, WTK_PROGRESS_BAR_BORDER_COLOR);
+			gfx_draw_rect(clip->origin.x, clip->origin.y, 
+				area->size.x, area->size.y, 
+				WTK_PROGRESS_BAR_BORDER_COLOR);
 				
 			gfx_draw_filled_rect(clip->origin.x,
 				clip->origin.y,
@@ -367,7 +371,10 @@ static bool wtk_gauge_handler(struct win_window *win,
 				area->size.x / 3 - 3,
 				GFX_COLOR(150, 150, 150), GFX_QUADRANT1);
 				
-			//! Sets start to false so the background draw is halted and enables the gauge line erase function for next draw event
+			/* Sets start to false so the background draw is halted 
+			 * and enables the gauge line erase function for next 
+			 * draw event
+			 */
 			gauge->start = false;
 		}
 		
@@ -378,52 +385,85 @@ static bool wtk_gauge_handler(struct win_window *win,
 		
 
 		
-		//! Rescales the position value for accessing data in the trigtable array
-		gauge->rescale = wtk_rescale_value(position, area->size.x - 2, 127);
+		/* Rescales the position value for accessing 
+		 * data in the trigtable array
+		*/
+		
+		gauge->rescale = wtk_rescale_value(position, 
+			area->size.x - 2, 127);
+		
+		
 		
 		//! Reads x trigonometric value from PROGMEM array
-		gauge->xangle = 255 - pgm_read_byte(&(trigtable[127 - gauge->rescale]));
+		gauge->xangle = 255 - progmem_read8(&
+			(trigtable[127 - gauge->rescale]));
+			
 		//! Reads x trigonometric value from PROGMEM array
-		gauge->yangle = pgm_read_byte(&(trigtable[gauge->rescale]));
+		gauge->yangle = progmem_read8(&(trigtable[gauge->rescale]));
+				
+		/* Rescales the first x trigonometric value for 
+		 * usage in the draw function
+		 */
+		gauge->xrescale = wtk_rescale_value(gauge->xangle, 255, 
+			area->size.x - 3 - area->size.x / 7);
 		
-		//! Rescales the first x trigonometric value for usage in the draw function
-		gauge->xrescale = wtk_rescale_value(gauge->xangle, 255, area->size.x - 3 - area->size.x / 7);
-		//! Rescales the first y trigonometric value for usage in the draw function
-		gauge->yrescale = wtk_rescale_value(gauge->yangle, 255, area->size.y - 3 - area->size.x / 7);
-		//! Rescales the second x trigonometric value for usage in the draw function
-		gauge->x2rescale = wtk_rescale_value(gauge->xangle, 255, area->size.x / 3);
-		//! Rescales the second y trigonometric value for usage in the draw function
-		gauge->y2rescale = wtk_rescale_value(gauge->yangle, 255, area->size.y / 3);
+		/* Rescales the first y trigonometric value for usage in the 
+		 * draw function
+		 */
+		gauge->yrescale = wtk_rescale_value(gauge->yangle, 255, 
+			area->size.y - 3 - area->size.x / 7);
+		
+		/* Rescales the second x trigonometric value for usage in the 
+		 * draw function
+		 */
+		gauge->x2rescale = wtk_rescale_value(gauge->xangle, 255, 
+			area->size.x / 3);
+		
+		/* Rescales the second y trigonometric value for usage in the 
+		 * draw function
+		 */
+		gauge->y2rescale = wtk_rescale_value(gauge->yangle, 255, 
+			area->size.y / 3);
 		
 
 		//! Draws the gauge line from the rescaled position value
-		gfx_generic_draw_line(clip->origin.x + gauge->xrescale + area->size.x / 7,
+		gfx_generic_draw_line(clip->origin.x + gauge->xrescale + 
+			area->size.x / 7,
 			clip->origin.y + area->size.y - gauge->yrescale - 3,
-			clip->origin.x + area->size.x - 3 - area->size.x / 3 + gauge->x2rescale,
+			clip->origin.x + area->size.x - 3 - area->size.x / 3 + 
+				gauge->x2rescale,
 			clip->origin.y + area->size.y - 3 - gauge->y2rescale,
 			GFX_COLOR(200, 0, 0));
+		
 		//! Right line +1 X -1 Y
-		gfx_generic_draw_line(clip->origin.x + gauge->xrescale + area->size.x / 7 + 1,
+		gfx_generic_draw_line(clip->origin.x + gauge->xrescale + 
+				area->size.x / 7 + 1,
 			clip->origin.y + area->size.y - gauge->yrescale - 3,
-			clip->origin.x + area->size.x - 3 - area->size.x / 3 + gauge->x2rescale + 1,
+			clip->origin.x + area->size.x - 3 - area->size.x / 3 + 
+				gauge->x2rescale + 1,
 			clip->origin.y + area->size.y - 3 - gauge->y2rescale,
 			gauge->fill_color);
+		
 		//! Left line -1 X +1 Y
-		gfx_generic_draw_line(clip->origin.x + gauge->xrescale + area->size.x / 7,
+		gfx_generic_draw_line(clip->origin.x + gauge->xrescale + 
+				area->size.x / 7,
 			clip->origin.y + area->size.y - gauge->yrescale - 3 + 1,
-			clip->origin.x + area->size.x - 3 - area->size.x / 3 + gauge->x2rescale,
+			clip->origin.x + area->size.x - 3 - area->size.x / 3 + 
+				gauge->x2rescale,
 			clip->origin.y + area->size.y - 3 - gauge->y2rescale + 1,
 			GFX_COLOR(170, 0, 0));
 		
 		
-		//! TESTS PIXEL POSITION IN SUBFRAME - to be removed
-		//gfx_draw_pixel(clip->origin.x + 1, clip->origin.y + area->size.y - 2, GFX_COLOR(255,0,0));
-		
-		//! Positions Xplained!
-		// clip->origin.(x\y)                               -- the frames start position top left cord(0.0) - start pixel
-		// area->size.(x\y)                                 -- the area size aquired from area defined in widget
-		// clip->origin.(x\y) + area.size.(x\y) - 1               -- the frames right bottom corner - end pixel
-		// clip->origin.(x\y) (+ 1)(+ area->size.y - 3)     -- the gauges start position 
+		/* Positions Xplained!
+		 * clip->origin.(x\y)                               
+		 * -- the frames start position top left cord(0.0) - start pixel
+		 * area->size.(x\y)                                 
+		 * -- the area size aquired from area defined in widget
+		 * clip->origin.(x\y) + area.size.(x\y) - 1               
+		 * -- the frames right bottom corner - end pixel
+		 * clip->origin.(x\y) (+ 1)(+ area->size.y - 3)     
+		 * -- the gauges start position 
+		 */
 
 
 		/* Always accept DRAW events, as the return value is ignored
@@ -480,9 +520,10 @@ static bool wtk_gauge_handler(struct win_window *win,
  * \return Pointer to new gauge, if memory allocation was successful.
  */
 struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
-		struct win_area const *area, struct gfx_bitmap *background, uint8_t maximum, uint8_t value,
-		gfx_color_t fill_color, gfx_color_t background_color, gfx_color_t parent_background_color,
-		uint8_t option)
+		struct win_area const *area, struct gfx_bitmap *background, 
+		uint8_t maximum, uint8_t value,	gfx_color_t fill_color, 
+		gfx_color_t background_color, 
+		gfx_color_t parent_background_color, uint8_t option)
 {
 	uint8_t length;
 
