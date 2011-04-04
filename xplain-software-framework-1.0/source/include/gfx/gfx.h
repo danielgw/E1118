@@ -273,6 +273,10 @@ enum gfx_bitmap_type {
 	//! Bitmap stored in hugemem
 	BITMAP_HUGEMEM,
 #endif
+#ifdef CONFIG_GRADIENT
+	//! Gradient bitmap.
+	BITMAP_GRADIENT,
+#endif
 };
 
 /**
@@ -295,6 +299,10 @@ struct gfx_bitmap {
 #ifdef CONFIG_HUGEMEM
 		//! Pointer to pixels for bitmap stored in hugemem
 		hugemem_ptr_t                      hugemem;
+#endif
+#ifdef CONFIG_GRADIENT
+		//! Pointer to gradient data
+		//gfx_gradient       *gradient;
 #endif
 	}                                      data;
 };
