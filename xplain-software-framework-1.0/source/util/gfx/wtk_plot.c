@@ -171,21 +171,21 @@ bool wtk_plot_add_value(struct wtk_plot *plot, uint8_t value)
 
 
 /**
- * \brief Set grid/scale parameters.
+ * \brief Set grid/axis parameters.
  *
- * This function sets the grid and scale options, colors for the plot. 
+ * This function sets the grid and axis options, colors for the plot. 
  * The axis_spacing_y and axis_offset_y parameter is rescaled to fit the plot.
- * Both grid and scale can not be used on the same plot.
+ * Both grid and axis can not be used on the same plot.
  * 
  * Refer to <gfx/wtk.h> for available configuration options.
  *
  * \param plot Pointer to wtk_plot struct to set colors for.
- * \param axis_option Configuration of scale, grid and zero-line behaviour.
- * \param axis_spacing_x Space between x-axis grid/scale lines.
- * \param axis_offset_x Grid/scale offset along the x-axis.
- * \param axis_spacing_y Space between y-axis grid/scale lines.
- * \param axis_offset_y Grid/scale offset along the y-axis.
- * \param axis_color Color for the scale and grid lines.
+ * \param axis_option Configuration of axis, grid and zero-line behaviour.
+ * \param axis_spacing_x Space between x-axis grid lines/tick marks.
+ * \param axis_offset_x Grid/axis offset along the x-axis.
+ * \param axis_spacing_y Space between y-axis grid lines/tick marks.
+ * \param axis_offset_y Grid/axis offset along the y-axis.
+ * \param axis_color Color for the tick marks and grid lines.
  * \param axis_zero_color Color for the zero line.
  */
 
@@ -243,7 +243,7 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
  * \brief Grid draw function.
  * \internal
  *
- * Draws the grid or scale, and zero line based on options.
+ * Draws the grid or axis, and zero line based on options.
  *
  * \param plot Pointer to wtk_plot struct to draw.
  * \param area Pointer to win_area struct with position and size of the plot.
@@ -267,7 +267,7 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 	gfx_coord_t plot_top    = clip->origin.y + 1;
 	gfx_coord_t plot_right  = clip->origin.x + 1;
 
-	//draw lines/notches along the vertical axis:
+	//draw lines/ticks along the vertical axis:
 	if (axis_spacing_y > 0) {
 
 		gfx_coord_t offset = axis_offset_y;
@@ -288,7 +288,7 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 
 				offset += axis_spacing_y;
 			}
-		} else if (axis_option & WTK_PLOT_AXIS_VERTICAL){
+		} else if (axis_option & WTK_PLOT_TICKS_VERTICAL){
 			while(offset < plot_height){
 				gfx_draw_line(plot_right,
 						plot_top + offset,
@@ -308,7 +308,7 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 			}
 		}
 	}
-	//draw lines/notches along the horizontal axis
+	//draw lines/ticks along the horizontal axis
 	if (axis_spacing_x > 0) {
 
 		gfx_coord_t offset = axis_offset_x;
@@ -328,7 +328,7 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 
 				offset += axis_spacing_x;
 			}
-		} else if (axis_option & WTK_PLOT_AXIS_HORIZONTAL){
+		} else if (axis_option & WTK_PLOT_TICKS_HORIZONTAL){
 			while(offset < plot_width){
 				gfx_draw_line(plot_right + offset,
 						plot_top,
