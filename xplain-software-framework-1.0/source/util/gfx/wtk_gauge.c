@@ -187,15 +187,6 @@ uint8_t wtk_gauge_get_value(struct wtk_gauge *gauge)
 	return gauge->value;
 }
 
-/**
- * Returns the gauge struct values for testing
- * temporary test function
- */
-uint8_t wtk_gauge_get_test(struct wtk_gauge *gauge)
-{
-	assert(gauge);
-	return gauge->rescale;
-}
 
 /**
  * Trigtable access

@@ -266,20 +266,6 @@ static void sub_frame_draw_handler_test(struct win_window *win,
 			GFX_COLOR_TRANSPARENT);
 }
 
-static void sub_frame_draw_handler_test2(struct win_window *win,
-		struct win_clip_region const *clip)
-{
-	char buffer[4];
-
-	
-	snprintf(buffer, sizeof(buffer), "%3d", wtk_gauge_get_test(gauge));
-
-	
-	gfx_draw_string(buffer, clip->origin.x + 30, clip->origin.y + 12,
-			&sysfont, GFX_COLOR(0, 0, 0),
-			GFX_COLOR_TRANSPARENT);
-}
-
 /**
  * \brief Setup widget demo
  *
@@ -508,9 +494,6 @@ void app_widget_launch(struct workqueue_task *task) {
 	sub_frame_background.type = BITMAP_SOLID;
 	sub_frame_background.data.color = GFX_COLOR(255, 255, 255);
 
-	sub_frame_test2 = wtk_basic_frame_create(parent, &area,
-			&sub_frame_background, sub_frame_draw_handler_test2,
-			NULL, NULL);
 	if (!sub_frame) {
 		goto error_widget;
 	}
