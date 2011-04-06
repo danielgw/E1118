@@ -296,7 +296,7 @@ static bool wtk_gauge_handler(struct win_window *win,
 	/* Erases the previous gauge line using old x\y values, 
 	 * not enabled at first draw event
 	 */
- 		if (!gauge->redraw_background&gauge->solidbg) {
+ 		if (!gauge->redraw_background && gauge->solidbg) {
 			//! Middle line
 			gfx_draw_line(clip->origin.x + gauge->xrescale + 
 					area->size.x / 7,
@@ -332,7 +332,7 @@ static bool wtk_gauge_handler(struct win_window *win,
 		
 		
 		//! Draw the gauge background elements once
-		if (gauge->redraw_background&gauge->solidbg) {
+		if (gauge->redraw_background && gauge->solidbg) {
 		
 		//! Draw a window border.
 			gfx_draw_rect(clip->origin.x, clip->origin.y, 
