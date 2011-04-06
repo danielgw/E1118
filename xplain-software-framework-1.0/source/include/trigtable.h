@@ -40,7 +40,8 @@
  * \defgroup gfx_wtk_trigtable Trigonometric sine table
  *
  * Contains a table holding trigonometric sine values from zero to ninty
- * degrees. Useful for drawing i.e. circles
+ * degrees. Useful for drawing i.e. circles. 
+ * Best suited for small drawings, as the resolution of the table is quite low
  * @{
  */
 
