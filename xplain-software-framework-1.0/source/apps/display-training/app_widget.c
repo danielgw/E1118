@@ -259,7 +259,7 @@ static void sub_frame_draw_handler_test(struct win_window *win,
 {
 	char buffer[4];
 
-	snprintf(buffer, sizeof(buffer), "%3d", wtk_gauge_trigtable_sin(wtk_rescale_value(wtk_gauge_get_value(gauge), SLIDER_MAX_VALUE, 127)));
+	snprintf(buffer, sizeof(buffer), "%3d", wtk_trigtable_sin(wtk_rescale_value(wtk_gauge_get_value(gauge), SLIDER_MAX_VALUE, 127)));
 	
 	gfx_draw_string(buffer, clip->origin.x + 30, clip->origin.y + 12,
 			&sysfont, GFX_COLOR(0, 0, 0),

@@ -64,12 +64,12 @@ DEFINE_PROGMEM (uint8_t, trigtable[TRIG_TABLE_LENGTH]) = {
 		250,251,251,252,252,253,253,253,254,254,254,255,255,255,255,255
 	};
 	
-uint8_t wtk_gauge_trigtable_sin(uint8_t angle)
+uint8_t wtk_trigtable_sin(uint8_t angle)
 {
 	return progmem_read8(&(trigtable[angle]));
 }
 
-uint8_t wtk_gauge_trigtable_cos(uint8_t angle)
+uint8_t wtk_trigtable_cos(uint8_t angle)
 {
 	return progmem_read8(&(trigtable[(TRIG_TABLE_LENGTH - 1) - angle]));
 }

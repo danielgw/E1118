@@ -203,7 +203,7 @@ uint8_t wtk_gauge_get_test(struct wtk_gauge *gauge)
  * \todo remove
  */
  
-/*uint8_t wtk_gauge_trigtable_sin(uint8_t angle)
+/*uint8_t wtk_trigtable_sin(uint8_t angle)
 {
 	return progmem_read8(&(trigtable[angle]));
 }*/
@@ -373,8 +373,6 @@ static bool wtk_gauge_handler(struct win_window *win,
 
 		}
 		
-
-		
 		/* Rescales the position value for accessing 
 		 * data in the trigtable array
 		*/
@@ -385,11 +383,10 @@ static bool wtk_gauge_handler(struct win_window *win,
 		
 		
 		//! Reads x trigonometric value from PROGMEM array
-		gauge->xangle = 255 - wtk_gauge_trigtable_cos(gauge->rescale);
+		gauge->xangle = 255 - wtk_trigtable_cos(gauge->rescale);
 			
 		//! Reads y trigonometric value from PROGMEM array
-		gauge->yangle = wtk_gauge_trigtable_sin(gauge->rescale);
-		//progmem_read8(&(trigtable[gauge->rescale]));
+		gauge->yangle = wtk_trigtable_sin(gauge->rescale);
 				
 		/* Rescales the first x trigonometric value for 
 		 * usage in the draw function

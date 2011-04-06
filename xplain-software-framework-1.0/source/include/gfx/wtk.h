@@ -375,8 +375,8 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 		uint8_t option);
 struct win_window *wtk_gauge_as_child(struct wtk_gauge *gauge);
 uint8_t wtk_gauge_get_value(struct wtk_gauge *gauge);
-uint8_t wtk_gauge_trigtable_sin(uint8_t angle);
-uint8_t wtk_gauge_trigtable_cos(uint8_t angle);
+uint8_t wtk_trigtable_sin(uint8_t angle);
+uint8_t wtk_trigtable_cos(uint8_t angle);
 uint8_t wtk_gauge_get_test(struct wtk_gauge *gauge);
 bool wtk_gauge_set_value(struct wtk_gauge *gauge, uint8_t value);
 void wtk_gauge_set_colors(struct wtk_gauge *gauge,
