@@ -388,7 +388,8 @@ static bool wtk_gauge_handler(struct win_window *win,
 		gauge->xangle = 255 - wtk_gauge_trigtable_cos(gauge->rescale);
 			
 		//! Reads y trigonometric value from PROGMEM array
-		gauge->yangle = progmem_read8(&(trigtable[gauge->rescale]));
+		gauge->yangle = wtk_gauge_trigtable_sin(gauge->rescale);
+		//progmem_read8(&(trigtable[gauge->rescale]));
 				
 		/* Rescales the first x trigonometric value for 
 		 * usage in the draw function
