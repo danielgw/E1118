@@ -41,7 +41,8 @@
 #include <membag.h>
 #include <string.h>
 #include <gfx/wtk.h>
-#include <gfx/gfx_generic.h>
+//#include <gfx/gfx_generic.h>
+#include <gfx/gfx.h>
 #include <progmem.h>
 #include <trigtable.h>
 
@@ -298,7 +299,8 @@ static bool wtk_gauge_handler(struct win_window *win,
 	 */
  		if (!gauge->start&gauge->solidbg) {
 			//! Middle line
-			gfx_generic_draw_line(
+			//gfx_generic_draw_line(
+			gfx_draw_line(
 				clip->origin.x + gauge->xrescale + 
 					area->size.x / 7,
 				clip->origin.y + area->size.y - 
@@ -310,7 +312,8 @@ static bool wtk_gauge_handler(struct win_window *win,
 				gauge->background_color);
 	
 			//! Right line +1 X -1 Y                   
-			gfx_generic_draw_line(
+			//gfx_generic_draw_line(
+			gfx_draw_line(
 				clip->origin.x + gauge->xrescale + 
 					area->size.x / 7 + 1,
 				clip->origin.y + area->size.y - 
@@ -321,7 +324,8 @@ static bool wtk_gauge_handler(struct win_window *win,
 					gauge->y2rescale,
 				gauge->background_color);
 			//! Left line -1 X +1 Y
-			gfx_generic_draw_line(
+			//gfx_generic_draw_line(
+			gfx_draw_line(
 				clip->origin.x + gauge->xrescale + 
 					area->size.x / 7,
 				clip->origin.y + area->size.y - 
@@ -427,7 +431,8 @@ static bool wtk_gauge_handler(struct win_window *win,
 		
 
 		//! Draws the gauge line from the rescaled position value
-		gfx_generic_draw_line(clip->origin.x + gauge->xrescale + 
+		//gfx_generic_draw_line(clip->origin.x + gauge->xrescale + 
+		gfx_draw_line(clip->origin.x + gauge->xrescale + 
 			area->size.x / 7,
 			clip->origin.y + area->size.y - gauge->yrescale - 3,
 			clip->origin.x + area->size.x - 3 - area->size.x / 3 + 
@@ -436,7 +441,8 @@ static bool wtk_gauge_handler(struct win_window *win,
 			GFX_COLOR(200, 0, 0));
 		
 		//! Right line +1 X -1 Y
-		gfx_generic_draw_line(clip->origin.x + gauge->xrescale + 
+		//gfx_generic_draw_line(clip->origin.x + gauge->xrescale + 
+		gfx_draw_line(clip->origin.x + gauge->xrescale + 
 				area->size.x / 7 + 1,
 			clip->origin.y + area->size.y - gauge->yrescale - 3,
 			clip->origin.x + area->size.x - 3 - area->size.x / 3 + 
@@ -445,7 +451,8 @@ static bool wtk_gauge_handler(struct win_window *win,
 			gauge->fill_color);
 		
 		//! Left line -1 X +1 Y
-		gfx_generic_draw_line(clip->origin.x + gauge->xrescale + 
+		//gfx_generic_draw_line(clip->origin.x + gauge->xrescale + 
+		gfx_draw_line(clip->origin.x + gauge->xrescale + 
 				area->size.x / 7,
 			clip->origin.y + area->size.y - gauge->yrescale - 3 + 1,
 			clip->origin.x + area->size.x - 3 - area->size.x / 3 + 

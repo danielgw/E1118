@@ -59,6 +59,7 @@
  * - \ref gfx_wtk_slider
  * - \ref gfx_wtk_label
  * - \ref gfx_wtk_gauge
+ * - \ref gfx_wtk_trigtable
  * @{
  */
 
@@ -350,6 +351,7 @@ void wtk_progress_bar_set_colors(struct wtk_progress_bar *bar,
  *
  * Gauge widget provides a gauge. Size and position can be configured.
  * Can take input from userdefinable input.
+ * Best suited for small draws, as the resolution of the points is quite large
  * @{
  */
 

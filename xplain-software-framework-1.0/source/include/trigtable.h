@@ -37,17 +37,11 @@
  */
  
  /**
- * \ingroup gfx_wtk_gauge
- * @{
- */
-
-/**
- * \brief Trigonometric sine table
- * \internal
+ * \defgroup gfx_wtk_trigtable Trigonometric sine table
  *
  * Contains a table holding trigonometric sine values from zero to ninty
  * degrees. Useful for drawing i.e. circles
- *
+ * @{
  */
 
 #include <stdint.h>
