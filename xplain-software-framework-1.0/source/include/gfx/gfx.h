@@ -279,6 +279,25 @@ enum gfx_bitmap_type {
 #endif
 };
 
+#ifdef CONFIG_GRADIENT
+/**
+ * \brief Storage structure for gradient data and metadata
+ */
+ struct gfx_gradient {
+	uint8_t start_r;
+	uint8_t start_g;
+	uint8_t start_b;
+	
+	uint8_t delta_r;
+	uint8_t delta_g;
+	uint8_t delta_b;
+	
+	uint8_t option;
+	
+
+ };
+ 
+ #endif
 /**
  * \brief Storage structure for bitmap pixel data and metadata
  */
@@ -302,7 +321,7 @@ struct gfx_bitmap {
 #endif
 #ifdef CONFIG_GRADIENT
 		//! Pointer to gradient data
-		//gfx_gradient       *gradient;
+		struct gfx_gradient               *gradient;
 #endif
 	}                                      data;
 };

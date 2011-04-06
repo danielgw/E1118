@@ -225,8 +225,8 @@ void app_widget_launch(struct workqueue_task *task) {
 	// Application frame
 
 	// Create a background bitmap using a solid color.
-	frame_background.type = BITMAP_SOLID;
-	frame_background.data.color = APP_BACKGROUND_COLOR;
+	frame_background.type = BITMAP_GRADIENT;
+	//frame_background.data.color = APP_BACKGROUND_COLOR;
 
 	// Set the area to fill the entire screen
 	area.pos.x = 0;

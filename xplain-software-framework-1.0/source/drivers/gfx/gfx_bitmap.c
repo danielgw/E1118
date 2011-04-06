@@ -190,6 +190,10 @@ void gfx_put_bitmap(const struct gfx_bitmap *bmp,
 	hugemem_ptr_t hugemem_pixmap;
 #endif
 
+#ifdef CONFIG_GRADIENT
+	struct gfx_gradient *gradient_data;
+#endif
+
 	// Nothing to do if width or height is zero.
 	if ((width == 0) || (height == 0))
 		return;
@@ -358,6 +362,13 @@ void gfx_put_bitmap(const struct gfx_bitmap *bmp,
 				--lines_left;
 			}
 		}
+		break;
+#endif
+
+#ifdef CONFIG_GRADIENT
+	case BITMAP_GRADIENT:
+		gradient_data = bmp->data.gradient;
+		gfx_draw_filled_rect(x, y, x2 - x, y2 - y, bmp->data.color);
 		break;
 #endif
 	}
