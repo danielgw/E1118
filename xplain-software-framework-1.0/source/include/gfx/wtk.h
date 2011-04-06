@@ -351,7 +351,6 @@ void wtk_progress_bar_set_colors(struct wtk_progress_bar *bar,
  *
  * Gauge widget provides a gauge. Size and position can be configured.
  * Can take input from userdefinable input.
- * Best suited for small draws, as the resolution of the points is quite large
  * @{
  */
 
@@ -365,7 +364,8 @@ void wtk_progress_bar_set_colors(struct wtk_progress_bar *bar,
 
 #define WTK_GAUGE_CIRCLE       (1 << 2)
 
-
+//! Enables the use of thick indicator lines, comment out for thinner line.
+#define CONFIG_WTK_GAUGE_USE_THICK_LINE
 
 struct wtk_gauge;
 

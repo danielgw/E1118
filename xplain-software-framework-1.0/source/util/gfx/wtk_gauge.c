@@ -395,7 +395,7 @@ static bool wtk_gauge_handler(struct win_window *win,
 		gauge->xangle = 255 - progmem_read8(&
 			(trigtable[127 - gauge->rescale]));
 			
-		//! Reads x trigonometric value from PROGMEM array
+		//! Reads y trigonometric value from PROGMEM array
 		gauge->yangle = progmem_read8(&(trigtable[gauge->rescale]));
 				
 		/* Rescales the first x trigonometric value for 
@@ -432,12 +432,13 @@ static bool wtk_gauge_handler(struct win_window *win,
 			clip->origin.y + area->size.y - 3 - gauge->y2rescale,
 			GFX_COLOR(200, 0, 0));
 		
+		#ifdef CONFIG_WTK_GAUGE_USE_THICK_LINE
 		//! Right line +1 X -1 Y
 		gfx_draw_line(clip->origin.x + gauge->xrescale + 
 				area->size.x / 7 + 1,
 			clip->origin.y + area->size.y - gauge->yrescale - 3,
 			clip->origin.x + area->size.x - 3 - area->size.x / 3 + 
-				gauge->x2rescale + 1,
+				gauge->x2rescale+ 1,
 			clip->origin.y + area->size.y - 3 - gauge->y2rescale,
 			gauge->fill_color);
 		
@@ -449,6 +450,9 @@ static bool wtk_gauge_handler(struct win_window *win,
 				gauge->x2rescale,
 			clip->origin.y + area->size.y - 3 - gauge->y2rescale + 1,
 			GFX_COLOR(170, 0, 0));
+		#endif
+		
+		
 		
 		
 		/* Positions Xplained!
