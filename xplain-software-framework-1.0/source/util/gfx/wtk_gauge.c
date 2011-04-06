@@ -82,7 +82,7 @@ struct wtk_gauge {
 	gfx_color_t				parent_background_color;
 	
 	//! Boolean for drawing gauge background once.
-	bool					start;
+	bool					redraw_background;
 	
 	//! Boolean for drawing after transparent background redraw parent.
 	bool					solidbg;
@@ -187,6 +187,16 @@ uint8_t wtk_gauge_get_value(struct wtk_gauge *gauge)
 	return gauge->value;
 }
 
+/**
+ * Returns the gauge struct values for testing
+ * temporary test function
+ *
+uint8_t wtk_gauge_get_test(struct wtk_gauge *gauge)
+{
+	assert(gauge);
+	return gauge->rescale;
+}
+*/
 
 /**
  * Trigtable access
@@ -203,8 +213,7 @@ uint8_t wtk_gauge_get_value(struct wtk_gauge *gauge)
 /**
  * \brief Set new gauge colors.
  *
- * This sets new fill and background colors for the gauge. If the gauge is
- * inverted, the two colors are switched.
+ * This sets new fill and background colors for the gauge. 
  *
  * \param gauge Pointer to wtk_gauge struct to set colors for.
  * \param fill_color Fill color to set for gauge.
@@ -287,7 +296,7 @@ static bool wtk_gauge_handler(struct win_window *win,
 	/* Erases the previous gauge line using old x\y values, 
 	 * not enabled at first draw event
 	 */
- 		if (!gauge->start&gauge->solidbg) {
+ 		if (!gauge->redraw_background&gauge->solidbg) {
 			//! Middle line
 			gfx_draw_line(clip->origin.x + gauge->xrescale + 
 					area->size.x / 7,
@@ -323,7 +332,7 @@ static bool wtk_gauge_handler(struct win_window *win,
 		
 		
 		//! Draw the gauge background elements once
-		if (gauge->start&gauge->solidbg) {
+		if (gauge->redraw_background&gauge->solidbg) {
 		
 		//! Draw a window border.
 			gfx_draw_rect(clip->origin.x, clip->origin.y, 
@@ -359,11 +368,11 @@ static bool wtk_gauge_handler(struct win_window *win,
 				area->size.x / 3 - 3,
 				GFX_COLOR(150, 150, 150), GFX_QUADRANT1);
 				
-			/* Sets start to false so the background draw is halted 
+			/* Sets redraw_background to false so the background draw is halted 
 			 * and enables the gauge line erase function for next 
 			 * draw event
 			 */
-			gauge->start = false;
+			gauge->redraw_background = false;
 		}
 		
 		//! For draw functions with transparent background
@@ -444,13 +453,13 @@ static bool wtk_gauge_handler(struct win_window *win,
 		
 		/* Positions Xplained!
 		 * clip->origin.(x\y)                               
-		 * -- the frames start position top left cord(0.0) - start pixel
+		 * -- the frames redraw_background position top left cord(0.0) - redraw_background pixel
 		 * area->size.(x\y)                                 
 		 * -- the area size aquired from area defined in widget
 		 * clip->origin.(x\y) + area.size.(x\y) - 1               
 		 * -- the frames right bottom corner - end pixel
 		 * clip->origin.(x\y) (+ 1)(+ area->size.y - 3)     
-		 * -- the gauges start position 
+		 * -- the gauges redraw_background position 
 		 */
 
 
@@ -535,7 +544,7 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 	gauge->maximum = maximum;
 	gauge->value = value;
 	gauge->option = option;
-	gauge->start = true;
+	gauge->redraw_background = true;
 
 	/* Set the gauge's colors
 	 * 
