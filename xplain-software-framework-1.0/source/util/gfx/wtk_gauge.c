@@ -89,9 +89,8 @@ struct wtk_gauge {
 	
 	/* Variables for resizeing the gauge variables. */
 
-	/* Rescaled data position value, rescaled to fit accessing trigtable 
-	 * array 128 values
-	 */
+	//! Rescaled data position value, rescaled to match trigtable array
+	// !TODO finne på noe lurt her..
 	uint8_t					rescale;
 	
 	//! Inverted trigtable value accessed with rescale
@@ -204,10 +203,11 @@ uint8_t wtk_gauge_get_test(struct wtk_gauge *gauge)
  * \todo remove
  */
  
- uint8_t wtk_gauge_trigtable(uint8_t angle)
+/*uint8_t wtk_gauge_trigtable_sin(uint8_t angle)
 {
 	return progmem_read8(&(trigtable[angle]));
-}
+}*/
+
 
 
 /**
@@ -485,8 +485,10 @@ static bool wtk_gauge_handler(struct win_window *win,
  * \brief Create a new gauge widget.
  *
  * Allocates the necessary memory and intializes the window and data for
- * progress gauge widgets. If there is not enough memory, the function returns
- * NULL.\n To destroy a gauge widget and all its contents, and free its
+ * gauge widgets. If there is not enough memory, the function returns
+ * NULL.
+ * 
+ * To destroy a gauge widget and all its contents, and free its
  * memory, call \ref win_destroy() on the gauge's child reference, given
  * by \ref wtk_gauge_as_child(), like this:
  * "win_destroy(wtk_gauge_as_child(my_gauge_ptr));".\par
@@ -572,7 +574,8 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 	assert(attr.area.size.y > 3);
 
 
-	assert(attr.area.size.x < (uint8_t) ~ 0);
+	assert(attr.ares.size.x < (uint8_t) < 255);
+	//assert(attr.area.size.x < (uint8_t) ~ 0);
 	length = attr.area.size.x;
 
 

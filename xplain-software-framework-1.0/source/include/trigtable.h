@@ -48,7 +48,9 @@
 #include <stdint.h>
 #include <progmem.h>
 
-DEFINE_PROGMEM (uint8_t, trigtable[128]) = {
+#define TRIG_TABLE_LENGTH 128
+
+DEFINE_PROGMEM (uint8_t, trigtable[TRIG_TABLE_LENGTH]) = {
 		  0,  3,  6,  9, 13, 16, 19, 22, 25, 28, 31, 34, 37, 41, 44, 47,
 		 50, 53, 56, 59, 62, 65, 68, 71, 74, 77, 80, 83, 86, 89, 92, 95,
 		 98,100,103,106,109,112,115,117,120,123,126,128,131,134,136,139,
@@ -58,5 +60,15 @@ DEFINE_PROGMEM (uint8_t, trigtable[128]) = {
 		236,237,238,239,240,241,242,243,244,245,246,247,247,248,249,249,
 		250,251,251,252,252,253,253,253,254,254,254,255,255,255,255,255
 	};
+	
+uint8_t wtk_gauge_trigtable_sin(uint8_t angle)
+{
+	return progmem_read8(&(trigtable[angle]));
+	
+uint8_t wtk_gauge_trigtable_cos(uint8_t angle)
+{
+	return progmem_read8(&(trigtable[angle + TRIG_TABLE_LENGTH/2]));
+}
+}
 	
 //! @}
