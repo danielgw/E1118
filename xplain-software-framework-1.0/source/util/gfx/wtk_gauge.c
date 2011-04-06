@@ -285,14 +285,7 @@ static bool wtk_gauge_handler(struct win_window *win,
 	/* New gauge bit option, for drawing different gauges
 	 * Yet to be implemented!
 	 */
-	if (option & WTK_GAUGE_CIRCLE) {
-	
-	}
-		
-	else {
-		
-	
-	
+	 
 	/* Erases the previous gauge line using old x\y values, 
 	 * not enabled at first draw event
 	 */
@@ -452,25 +445,9 @@ static bool wtk_gauge_handler(struct win_window *win,
 			GFX_COLOR(170, 0, 0));
 		#endif
 		
-		
-		
-		
-		/* Positions Xplained!
-		 * clip->origin.(x\y)                               
-		 * -- the frames redraw_background position top left cord(0.0) - redraw_background pixel
-		 * area->size.(x\y)                                 
-		 * -- the area size aquired from area defined in widget
-		 * clip->origin.(x\y) + area.size.(x\y) - 1               
-		 * -- the frames right bottom corner - end pixel
-		 * clip->origin.(x\y) (+ 1)(+ area->size.y - 3)     
-		 * -- the gauges redraw_background position 
-		 */
-
-
 		/* Always accept DRAW events, as the return value is ignored
 		 * anyway for that event type.
 		 */
-		 }
 		return true;
 
 	case WIN_EVENT_DESTROY:
