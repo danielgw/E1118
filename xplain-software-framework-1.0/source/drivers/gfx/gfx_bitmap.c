@@ -367,9 +367,32 @@ void gfx_put_bitmap(const struct gfx_bitmap *bmp,
 
 #ifdef CONFIG_GRADIENT
 	case BITMAP_GRADIENT:
-		//gradient = bmp->data.gradient;
-		gfx_draw_filled_rect(x, y, x2 - x, y2 - y,GFX_COLOR(50,50,50));// bmp->data.color);
-		break;
+		gradient = bmp->data.gradient;
+		
+		uint16_t color_r= (((uint16_t)(gradient->start_r)) << 8);
+		uint16_t color_g= (((uint16_t)(gradient->start_g)) << 8);
+		uint16_t color_b= (((uint16_t)(gradient->start_b)) << 8);
+		
+		uint16_t delta_r= (((uint16_t)(gradient->delta_r)) << (8-GFX_GRADIENT_FRACTION));
+		uint16_t delta_g= (((uint16_t)(gradient->delta_g)) << (8-GFX_GRADIENT_FRACTION));
+		uint16_t delta_b= (((uint16_t)(gradient->delta_b)) << (8-GFX_GRADIENT_FRACTION));
+		
+		if ((gradient->option)&(GFX_GRADIENT_VERTICAL)){
+			//dowhop
+		} else {
+			for(gfx_coord_t index_y=y ; index_y<y2 ; index_y++){
+				color_r+=delta_r;
+				color_g+=delta_g;
+				color_b+=delta_b;
+				
+				gfx_draw_horizontal_line(x,index_y,x2-x,
+						GFX_COLOR(
+						(uint8_t)(color_r >> 8),
+						(uint8_t)(color_g >> 8),
+						(uint8_t)(color_b >> 8)));
+			}
+		}
+	break;
 #endif
 	}
 }

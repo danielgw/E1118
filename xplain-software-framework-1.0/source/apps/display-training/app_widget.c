@@ -147,6 +147,8 @@ static struct wtk_slider            *slider;
 static struct wtk_progress_bar      *progress_bar;
 //! Frame background bitmap
 static struct gfx_bitmap            frame_background;
+//! frame background gradient
+static struct gfx_gradient          frame_gradient;
 //! Counter for button
 static uint8_t                      counter;
 //! Pointer to the sub-frame
@@ -225,9 +227,12 @@ void app_widget_launch(struct workqueue_task *task) {
 	// Application frame
 
 	// Create a background bitmap using a solid color.
+	frame_gradient.delta_r = (3);
+	
 	frame_background.type = BITMAP_GRADIENT;
 	frame_background.width = 320;
 	frame_background.height = 240;
+	frame_background.data.gradient=&frame_gradient;
 	//frame_background.data.color = APP_BACKGROUND_COLOR;
 
 	// Set the area to fill the entire screen

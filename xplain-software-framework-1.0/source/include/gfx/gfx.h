@@ -177,6 +177,18 @@
 #define GFX_SWITCH_XY 4
 //@}
 
+
+#ifdef CONFIG_GRADIENT
+//! \name Flags for gradients
+//@{
+//! Bitmask for horizontal gradients.
+#define GFX_GRADIENT_HORIZONTAL (0<<0)
+//! Bitmask for vertical gradients.
+#define GFX_GRADIENT_VERTICAL (1<<0)
+//@}
+
+#endif
+
 /**
  * \name Screen geometry and clipping variables
  * \internal
@@ -280,6 +292,14 @@ enum gfx_bitmap_type {
 };
 
 #ifdef CONFIG_GRADIENT
+
+
+/**
+ * \brief Number of fractional bits for delta_color fixed point math
+ */
+
+ #define GFX_GRADIENT_FRACTION 2
+ 
 /**
  * \brief Storage structure for gradient data and metadata
  */
@@ -296,7 +316,7 @@ enum gfx_bitmap_type {
 	
 
  };
- 
+
  #endif
 /**
  * \brief Storage structure for bitmap pixel data and metadata
