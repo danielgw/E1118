@@ -263,7 +263,8 @@ static bool wtk_gauge_handler(struct win_window *win,
 					gauge->y2rescale,
 				gauge->background_color);
 	
-			//! Right line +1 X -1 Y                   
+			//! Right line
+			//+1 X -1 Y                   
 			gfx_draw_line(clip->origin.x + gauge->xrescale + 
 					area->size.x / 7 + 1,
 				clip->origin.y + area->size.y - 
@@ -273,7 +274,8 @@ static bool wtk_gauge_handler(struct win_window *win,
 				clip->origin.y + area->size.y - 3 - 
 					gauge->y2rescale,
 				gauge->background_color);
-			//! Left line -1 X +1 Y
+			//! Left line
+			//-1 X +1 Y
 			gfx_draw_line(clip->origin.x + gauge->xrescale + 
 					area->size.x / 7,
 				clip->origin.y + area->size.y - 
@@ -376,7 +378,7 @@ static bool wtk_gauge_handler(struct win_window *win,
 		
 
 		//! Draws the gauge line from the rescaled position value
-		gfx_draw_line(clip->origin.x + gauge->xrescale + 
+		gfx_draw_line(clip->origin.xm + gauge->xrescale + 
 			area->size.x / 7,
 			clip->origin.y + area->size.y - gauge->yrescale - 3,
 			clip->origin.x + area->size.x - 3 - area->size.x / 3 + 
@@ -488,7 +490,7 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 	gauge->option = option;
 	gauge->redraw_background = true;
 
-	/* Set the gauge's colors
+	/** Set the gauge's colors
 	 * 
 	 */
 	 

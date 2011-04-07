@@ -46,6 +46,7 @@
 
 #define WTK_TRIG_TABLE_LENGTH 128
 
+//! The trigtable values that are loaded into progmem
 DEFINE_PROGMEM (uint8_t, trigtable[WTK_TRIG_TABLE_LENGTH]) = {
 		  0,  3,  6,  9, 13, 16, 19, 22, 25, 28, 31, 34, 37, 41, 44, 47,
 		 50, 53, 56, 59, 62, 65, 68, 71, 74, 77, 80, 83, 86, 89, 92, 95,
