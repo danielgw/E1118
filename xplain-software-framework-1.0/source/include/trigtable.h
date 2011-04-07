@@ -57,12 +57,14 @@ DEFINE_PROGMEM (uint8_t, trigtable[WTK_TRIG_TABLE_LENGTH]) = {
 		250,251,251,252,252,253,253,253,254,254,254,255,255,255,255,255
 	};
 	
+//! Returns the sine value of the given angle
 uint8_t wtk_trigtable_sin(uint8_t angle)
 {
+	
 	return progmem_read8(&(trigtable[angle]));
 }
 
-//! @}
+//! Returns the cosine value of the given angle
 uint8_t wtk_trigtable_cos(uint8_t angle)
 {
 	return progmem_read8(&(trigtable[(WTK_TRIG_TABLE_LENGTH - 1) - angle]));
