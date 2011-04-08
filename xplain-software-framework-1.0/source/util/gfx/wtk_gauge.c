@@ -209,7 +209,7 @@ void wtk_gauge_set_colors(struct wtk_gauge *gauge,
 }
 
 /**
- * \brief Gauge draw line function
+ * \brief Gauge draw functions
  *
  */
 static void wtk_gauge_draw(uint8_t option, struct win_clip_region const *clip,
@@ -217,7 +217,7 @@ static void wtk_gauge_draw(uint8_t option, struct win_clip_region const *clip,
 {	
 	switch(option) 
 	{
-		case 0:
+		case 0: // Erase gauge line
 		{
 			//! Gauge middle line
 			gfx_draw_line(clip->origin.x + gauge->xrescale + 
@@ -257,7 +257,7 @@ static void wtk_gauge_draw(uint8_t option, struct win_clip_region const *clip,
 			#endif
 			break;
 		};
-		case 1:
+		case 1: // Draw gauge background
 		{
 			//! Draw a window border.
 			gfx_draw_rect(clip->origin.x, clip->origin.y, 
@@ -294,10 +294,8 @@ static void wtk_gauge_draw(uint8_t option, struct win_clip_region const *clip,
 				GFX_COLOR(0, 0, 0), GFX_QUADRANT1);
 			break;
 		};
-		case 2:
+		case 2: // Draws gauge line
 		{
-			
-			
 			//! Draws the gauge middle line from the rescaled position value
 			gfx_draw_line(clip->origin.x + gauge->xrescale + 
 					gauge->g_outer_pos,
