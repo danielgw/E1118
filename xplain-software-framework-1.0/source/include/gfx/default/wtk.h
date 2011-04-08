@@ -365,6 +365,18 @@ typedef uint8_t wtk_radio_group_size_t;
 
 //! @}
 
+/**
+ * \ingroup gfx_wtk_trigtable
+ * @{
+ */
+
+#ifndef WTK_TRIG_TABLE_LENGTH
+//! Trigtable length.
+# define WTK_TRIG_TABLE_LENGTH        128
+#endif
+
+//! @}
+
 //! @}
 
 #endif /* DEFAULT_WTK_H_INCLUDED */

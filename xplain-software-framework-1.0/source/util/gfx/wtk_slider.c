@@ -355,10 +355,9 @@ static bool wtk_slider_handler(struct win_window *win, enum win_event_type type,
 							length,
 							slider->maximum);
 				}
-				
+
 				// Update slider only if this is a new value.
-				// Quick temporary slider update value fix - old if: slider->value != value
-				if (slider->value > value + 3 || slider->value < value - 3) {
+				if (slider->value != value) {
 					slider->value = value;
 
 					/* Compute knob position from value to
@@ -383,61 +382,9 @@ static bool wtk_slider_handler(struct win_window *win, enum win_event_type type,
 			 * The slider's value is not updated. Hence, a pointer
 			 * press directly followed by a release will leave the
 			 * slider value unchanged.
-			 * Might consider adding a value update here
 			 */
 			if (slider->state == WTK_SLIDER_MOVING) {
-				
-				/* Get the position of the pointer relative to
-				 * slider knob's origin, and the length of the
-				 * slider itself.
-				 */
-				if (option & WTK_SLIDER_VERTICAL) {
-					position = event->pos.y - origin.y;
-					length = area->size.y;
-				} else {
-					position = event->pos.x - origin.x;
-					length = area->size.x;
-				}
-
-				// Subtract offsets due to slider knob size.
-				position -= WTK_SLIDER_KNOB_WIDTH / 2;
-				length -= WTK_SLIDER_KNOB_WIDTH;
-
-				/* Bound the value if pointer is outside window.
-				 * Otherwise, compute the slider value from the
-				 * knob position.
-				 */
-				if (position < 0) {
-					value = 0;
-				} else if (position > length) {
-					value = slider->maximum;
-				} else {
-					value = wtk_rescale_value(position,
-							length,
-							slider->maximum);
-				}
-				
-				// Update slider only if this is a new value.
-				// Quick temporary slider update value fix - old if: slider->value != value
-				if (slider->value != value) {
-					slider->value = value;
-
-					/* Compute knob position from value to
-					 * get correct positioning.
-					 */
-					slider->position =
-							wtk_rescale_value(value,
-							slider->maximum,
-							length);
-
-					if (option & WTK_SLIDER_CMD_MOVE) {
-						send_command = true;
-					}
-				}
-				
-				// Original
-				
-                slider->state = WTK_SLIDER_NORMAL;
+				slider->state = WTK_SLIDER_NORMAL;
 				win_grab_pointer(NULL);
 				win_redraw(win);
 
@@ -522,7 +469,7 @@ struct wtk_slider *wtk_slider_create(struct win_window *parent,
 {
 	struct win_attributes   attr;
 	struct wtk_slider       *slider;
-	uint16_t                 length;
+	uint8_t                 length;
 
 	// Do sanity check on parameters.
 	assert(maximum > 0);
