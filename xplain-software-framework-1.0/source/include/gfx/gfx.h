@@ -320,10 +320,10 @@ enum gfx_bitmap_type {
 	uint8_t delta_b;
 	
 	uint8_t option;
-	
-
  };
 
+ void gfx_gradient_draw(struct gfx_gradient *gradient, gfx_coord_t x,
+		gfx_coord_t y,gfx_coord_t width,gfx_coord_t height);
  #endif
 /**
  * \brief Storage structure for bitmap pixel data and metadata
