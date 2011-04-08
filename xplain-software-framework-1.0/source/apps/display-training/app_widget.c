@@ -134,6 +134,14 @@ enum app_widget_ids {
 //! Gaugetwo size on display
 #define GTWO_SIZE				  100
 
+//! Gauge line distance modifier (0-100%)
+#define G_OUTER_POS				   10
+#define G_INNER_POS				   90
+
+//! Second gauge line distance modifier (0-100%)
+#define GTWO_OUTER_POS			   90
+#define GTWO_INNER_POS		       10
+
 
 //! Gauge line height start position
 #define TRAVEL						0
@@ -407,8 +415,8 @@ void app_widget_launch(struct workqueue_task *task) {
 	gauge_background.data.color = GFX_COLOR(255, 255, 255);
 
 	gauge = wtk_gauge_create(parent, &area, &gauge_background, SLIDER_MAX_VALUE + TRAVEL,
-			(SLIDER_MAX_VALUE + TRAVEL) / 2, GFX_COLOR(255, 0, 0),
-			GFX_COLOR(100, 100, 100), APP_BACKGROUND_COLOR, WTK_GAUGE_HORIZONTAL);
+			(SLIDER_MAX_VALUE + TRAVEL) / 2, G_OUTER_POS, G_INNER_POS,
+			GFX_COLOR(255, 0, 0), GFX_COLOR(100, 100, 100), APP_BACKGROUND_COLOR, WTK_GAUGE_HORIZONTAL);
 	if (!gauge) {
 		goto error_widget;
 	}
@@ -429,8 +437,8 @@ void app_widget_launch(struct workqueue_task *task) {
 	 * occured while creating the gauge.
 	 */
 	gaugetwo = wtk_gauge_create(parent, &area, NULL, SLIDERTWO_MAX_VALUE + TRAVEL,
-			(SLIDERTWO_MAX_VALUE + TRAVEL) / 2, GFX_COLOR(255, 0, 0),
-			GFX_COLOR(100, 100, 100), APP_BACKGROUND_COLOR, WTK_GAUGE_INVERT|WTK_GAUGE_HORIZONTAL);
+			(SLIDERTWO_MAX_VALUE + TRAVEL) / 2, GTWO_OUTER_POS, GTWO_INNER_POS,
+			GFX_COLOR(255, 0, 0), GFX_COLOR(100, 100, 100), APP_BACKGROUND_COLOR, WTK_GAUGE_INVERT|WTK_GAUGE_HORIZONTAL);
 	if (!gaugetwo) {
 		goto error_widget;
 	}
