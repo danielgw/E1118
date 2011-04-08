@@ -230,7 +230,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	frame_gradient.delta_r = (3);
 	frame_gradient.delta_b = (3);
 	
-	frame_gradient.option = GFX_GRADIENT_VERTICAL;
+	frame_gradient.option = GFX_GRADIENT_VERTICAL|GFX_GRADIENT_INVERT;
 	
 	frame_background.type = BITMAP_GRADIENT;
 	frame_background.width = 320;

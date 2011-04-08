@@ -149,6 +149,80 @@ void gfx_draw_bitmap_tiled(const struct gfx_bitmap *bmp, gfx_coord_t x1,
 	}
 }
 
+
+
+#ifdef CONFIG_GRADIENT
+
+//todo: kommenter/flytt til egen fil?
+
+static void gfx_gradient_draw(struct gfx_gradient *gradient, gfx_coord_t x,
+		gfx_coord_t y,gfx_coord_t width,gfx_coord_t height){
+	uint16_t color_r= (((uint16_t)(gradient->start_r)) << 8);
+	uint16_t color_g= (((uint16_t)(gradient->start_g)) << 8);
+	uint16_t color_b= (((uint16_t)(gradient->start_b)) << 8);
+
+	uint16_t delta_r= (((uint16_t)(gradient->delta_r)) << (8-GFX_GRADIENT_FRACTION));
+	uint16_t delta_g= (((uint16_t)(gradient->delta_g)) << (8-GFX_GRADIENT_FRACTION));
+	uint16_t delta_b= (((uint16_t)(gradient->delta_b)) << (8-GFX_GRADIENT_FRACTION));
+	
+	if ((gradient->option)&(GFX_GRADIENT_HORIZONTAL)){
+		if ((gradient->option)&(GFX_GRADIENT_INVERT)){
+			color_r+=(delta_r*(width-1));
+			color_g+=(delta_g*(width-1));
+			color_b+=(delta_b*(width-1));
+		
+			delta_r=-delta_r;
+			delta_g=-delta_g;
+			delta_b=-delta_b;
+		}
+		
+		gfx_coord_t x2= x+width;
+		for(gfx_coord_t index_x=x; index_x<x2 ; index_x++){
+
+			
+			gfx_draw_vertical_line(index_x,y,height,
+					GFX_COLOR(
+					(uint8_t)(color_r >> 8),
+					(uint8_t)(color_g >> 8),
+					(uint8_t)(color_b >> 8)));
+			
+			color_r+=delta_r;
+			color_g+=delta_g;
+			color_b+=delta_b;
+		}
+	} else {
+	
+		if ((gradient->option)&(GFX_GRADIENT_INVERT)){
+			color_r+=(delta_r*(height-1));
+			color_g+=(delta_g*(height-1));
+			color_b+=(delta_b*(height-1));
+		
+			delta_r=-delta_r;
+			delta_g=-delta_g;
+			delta_b=-delta_b;
+		}
+		
+		gfx_coord_t y2= y+width;
+		for(gfx_coord_t index_y=y ; index_y<y2 ; index_y++){
+
+			
+			gfx_draw_horizontal_line(x,index_y,width,
+					GFX_COLOR(
+					(uint8_t)(color_r >> 8),
+					(uint8_t)(color_g >> 8),
+					(uint8_t)(color_b >> 8)));
+			
+			color_r+=delta_r;
+			color_g+=delta_g;
+			color_b+=delta_b;
+		}
+	}
+
+
+
+
+}
+#endif
 /**
  * \brief Write a rectangular block of pixels from a bitmap to
  * the screen.
@@ -190,9 +264,7 @@ void gfx_put_bitmap(const struct gfx_bitmap *bmp,
 	hugemem_ptr_t hugemem_pixmap;
 #endif
 
-#ifdef CONFIG_GRADIENT
-	struct gfx_gradient *gradient;
-#endif
+
 
 	// Nothing to do if width or height is zero.
 	if ((width == 0) || (height == 0))
@@ -367,42 +439,9 @@ void gfx_put_bitmap(const struct gfx_bitmap *bmp,
 
 #ifdef CONFIG_GRADIENT
 	case BITMAP_GRADIENT:
-		gradient = bmp->data.gradient;
-		
-		uint16_t color_r= (((uint16_t)(gradient->start_r)) << 8);
-		uint16_t color_g= (((uint16_t)(gradient->start_g)) << 8);
-		uint16_t color_b= (((uint16_t)(gradient->start_b)) << 8);
-		
-		uint16_t delta_r= (((uint16_t)(gradient->delta_r)) << (8-GFX_GRADIENT_FRACTION));
-		uint16_t delta_g= (((uint16_t)(gradient->delta_g)) << (8-GFX_GRADIENT_FRACTION));
-		uint16_t delta_b= (((uint16_t)(gradient->delta_b)) << (8-GFX_GRADIENT_FRACTION));
-		
-		if ((gradient->option)&(GFX_GRADIENT_VERTICAL)){
-			for(gfx_coord_t index_x=x; index_x<x2 ; index_x++){
-				color_r+=delta_r;
-				color_g+=delta_g;
-				color_b+=delta_b;
-				
-				gfx_draw_vertical_line(index_x,y,y2-y,
-						GFX_COLOR(
-						(uint8_t)(color_r >> 8),
-						(uint8_t)(color_g >> 8),
-						(uint8_t)(color_b >> 8)));
-			}
-		} else {
-			for(gfx_coord_t index_y=y ; index_y<y2 ; index_y++){
-				color_r+=delta_r;
-				color_g+=delta_g;
-				color_b+=delta_b;
-				
-				gfx_draw_horizontal_line(x,index_y,x2-x,
-						GFX_COLOR(
-						(uint8_t)(color_r >> 8),
-						(uint8_t)(color_g >> 8),
-						(uint8_t)(color_b >> 8)));
-			}
-		}
+		gfx_gradient_draw(bmp->data.gradient,x,y,width,height);
 		break;
 #endif
 	}
 }
+

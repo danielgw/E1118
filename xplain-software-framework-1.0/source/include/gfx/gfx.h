@@ -182,9 +182,14 @@
 //! \name Flags for gradients
 //@{
 //! Bitmask for horizontal gradients.
-#define GFX_GRADIENT_HORIZONTAL (0<<0)
+#define GFX_GRADIENT_VERTICAL (0<<0)
 //! Bitmask for vertical gradients.
-#define GFX_GRADIENT_VERTICAL (1<<0)
+#define GFX_GRADIENT_HORIZONTAL (1<<0)
+//! Bitmask for inverted gradients
+#define GFX_GRADIENT_INVERT (1<<1)
+
+
+
 //@}
 
 #endif
