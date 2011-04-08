@@ -92,19 +92,19 @@ struct wtk_gauge {
 	//! Rescaled data position value, rescaled to match trigtable array
 	uint8_t					rescale;
 	
-	//! Inverted trigtable value accessed with rescale
+	//! Trigtable cos value accessed with rescale
 	uint8_t					xangle;
-	//! Trigtable value accessed with rescale
+	//! Trigtable sine value accessed with rescale
     uint8_t					yangle;
 	
-	//! Rescaled xangle for drawing the first gauge line position correctly
+	//! Rescaled xangle for drawing the outer gauge line position correctly
 	uint8_t					xrescale;
-	//! Rescaled yangle for drawing the first gauge line position correctly
+	//! Rescaled yangle for drawing the outer gauge line position correctly
 	uint8_t					yrescale;
 	
-	//! Rescaled xangle for drawing the second gauge line position correctly
+	//! Rescaled xangle for drawing the inner gauge line position correctly
 	uint8_t					x2rescale;
-	//! Rescaled yangle for drawing the second gauge line position correctly
+	//! Rescaled yangle for drawing the inner gauge line position correctly
 	uint8_t					y2rescale;
 	
 	//! Rescaled percent value for gauge outer line length
@@ -267,7 +267,7 @@ static bool wtk_gauge_handler(struct win_window *win,
 	 * not enabled at first draw event
 	 */
  		if (!gauge->redraw_background && gauge->solidbg) {
-			//! Middle line
+			//! Gauge middle line
 			gfx_draw_line(clip->origin.x + gauge->xrescale + 
 					gauge->g_outer_pos,
 				clip->origin.y + area->size.y - 
@@ -279,8 +279,8 @@ static bool wtk_gauge_handler(struct win_window *win,
 					gauge->y2rescale,
 				gauge->background_color);
 	
-			//! Right line
-			//+1 X -1 Y                   
+			#ifdef CONFIG_WTK_GAUGE_USE_THICK_LINE
+			//! Right line +1 X -1 Y                   
 			gfx_draw_line(clip->origin.x + gauge->xrescale + 1 + 
 					gauge->g_outer_pos,
 				clip->origin.y + area->size.y - 
@@ -291,8 +291,7 @@ static bool wtk_gauge_handler(struct win_window *win,
 				clip->origin.y + area->size.y - 3 - 
 					gauge->y2rescale,
 				gauge->background_color);
-			//! Left line
-			//-1 X +1 Y
+			//! Left line -1 X +1 Y
 			gfx_draw_line(clip->origin.x + gauge->xrescale + 
 					gauge->g_outer_pos,
 				clip->origin.y + area->size.y + 1 - 
@@ -303,6 +302,7 @@ static bool wtk_gauge_handler(struct win_window *win,
 				clip->origin.y + area->size.y - 3 - 
 					gauge->y2rescale + 1,
 				gauge->background_color);
+			#endif
 		}
 		
 		
@@ -357,7 +357,7 @@ static bool wtk_gauge_handler(struct win_window *win,
 		
 		/** Rescales the position value for accessing 
 		 * data in the trigtable array
-		*/
+		 */
 		
 		gauge->rescale = wtk_rescale_value(position, 
 			area->size.x - 2, 127);
@@ -395,7 +395,7 @@ static bool wtk_gauge_handler(struct win_window *win,
 			gauge->g_inner_pos);
 		
 
-		//! Draws the gauge line from the rescaled position value
+		//! Draws the gauge middle line from the rescaled position value
 		gfx_draw_line(clip->origin.x + gauge->xrescale + 
 			gauge->g_outer_pos,
 			clip->origin.y + area->size.y - gauge->yrescale - 3,
