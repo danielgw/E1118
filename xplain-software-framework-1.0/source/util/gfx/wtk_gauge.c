@@ -157,10 +157,8 @@ bool wtk_gauge_set_value(struct wtk_gauge *gauge, uint8_t value)
 		maximum = gauge->maximum;
 		area = win_get_area(gauge->container);
 
-		
 		length = area->size.x;
 		
-
 		length -= 2;
 
 		if (option & WTK_GAUGE_INVERT) {
@@ -211,62 +209,16 @@ void wtk_gauge_set_colors(struct wtk_gauge *gauge,
 }
 
 /**
- * \brief Gauge event handler.
+ * \brief Gauge draw line function
  *
- * This is the window event handler for gauge widgets. It handles the two
- * relevant event types sent to a gauge's container window, i.e., drawing,
- * and destroy events.
- *
- * \param win Window receiving the event.
- * \param type The event type.
- * \param data Custom data, depending on event type.
- *
- * \return True if the event was recognized and accepted.
  */
-static bool wtk_gauge_handler(struct win_window *win,
-		enum win_event_type type, void const *data)
-{
-	struct win_clip_region const    *clip;
-	struct win_area const           *area;
-	struct wtk_gauge                *gauge;
-	uint8_t                         position;
-	uint8_t                         option;
-
-
-	/* 
-	 * oooooo     oooo   oooooooo 
-	 *  `888.     .8'   dP        
-	 *   `888.   .8'   d88888b.   
-	 *    `888. .8'        `Y88b  
-	 *     `888.8'           ]88  
-	 *      `888'      o.   .88P  
-	 *       `8'       `8bd88P'   
-	 *                            
-	 *               Gauge Dev    
-	 */
-
-	 gauge = (struct wtk_gauge *)win_get_custom_data(win);
-
-	// Window receiving the event should be the widget's containing window.
-	assert(win == gauge->container);
-
-	switch (type) {
-	case WIN_EVENT_DRAW:
-		/* For DRAW events, the data parameter points to the clipping
-		 * region. The window area parameter is needed because it
-		 * contains the size of the widget.
-		 */
-		clip = (struct win_clip_region const *)data;
-		area = win_get_area(win);
-
-		position = gauge->position;
-		option = gauge->option;
-
-	 
-	/** Erases the previous gauge line using old x\y values, 
-	 * not enabled at first draw event
-	 */
- 		if (!gauge->redraw_background && gauge->solidbg) {
+static void wtk_gauge_draw(uint8_t option, struct win_clip_region const *clip,
+		struct win_area const *area, struct wtk_gauge *gauge)
+{	
+	switch(option) 
+	{
+		case 0:
+		{
 			//! Gauge middle line
 			gfx_draw_line(clip->origin.x + gauge->xrescale + 
 					gauge->g_outer_pos,
@@ -280,7 +232,7 @@ static bool wtk_gauge_handler(struct win_window *win,
 				gauge->background_color);
 	
 			#ifdef CONFIG_WTK_GAUGE_USE_THICK_LINE
-			//! Right line +1 X -1 Y                   
+			//! Right line +1 X -1 Y
 			gfx_draw_line(clip->origin.x + gauge->xrescale + 1 + 
 					gauge->g_outer_pos,
 				clip->origin.y + area->size.y - 
@@ -303,13 +255,11 @@ static bool wtk_gauge_handler(struct win_window *win,
 					gauge->y2rescale + 1,
 				gauge->background_color);
 			#endif
-		}
-		
-		
-		//! Draw the gauge background elements once
-		if (gauge->redraw_background && gauge->solidbg) {
-		
-		//! Draw a window border.
+			break;
+		};
+		case 1:
+		{
+			//! Draw a window border.
 			gfx_draw_rect(clip->origin.x, clip->origin.y, 
 				area->size.x, area->size.y, 
 				WTK_PROGRESS_BAR_BORDER_COLOR);
@@ -342,7 +292,101 @@ static bool wtk_gauge_handler(struct win_window *win,
 				clip->origin.y + area->size.y - 2,
 				gauge->g_inner_pos - 2,
 				GFX_COLOR(0, 0, 0), GFX_QUADRANT1);
-				
+			break;
+		};
+		case 2:
+		{
+			
+			
+			//! Draws the gauge middle line from the rescaled position value
+			gfx_draw_line(clip->origin.x + gauge->xrescale + 
+					gauge->g_outer_pos,
+				clip->origin.y + area->size.y - gauge->yrescale - 3,
+				clip->origin.x + area->size.x - 3 - gauge->g_inner_pos + 
+					gauge->x2rescale,
+				clip->origin.y + area->size.y - 3 - gauge->y2rescale,
+				GFX_COLOR(200, 0, 0));
+		
+			#ifdef CONFIG_WTK_GAUGE_USE_THICK_LINE
+			//! Right line +1 X -1 Y
+			gfx_draw_line(clip->origin.x + gauge->xrescale + 1 +
+					gauge->g_outer_pos,
+				clip->origin.y + area->size.y - gauge->yrescale - 3,
+				clip->origin.x + area->size.x - 3 - gauge->g_inner_pos + 
+					gauge->x2rescale + 1,
+				clip->origin.y + area->size.y - 3 - gauge->y2rescale,
+				gauge->fill_color);
+		
+			//! Left line -1 X +1 Y
+			gfx_draw_line(clip->origin.x + gauge->xrescale + 
+					gauge->g_outer_pos,
+				clip->origin.y + area->size.y - gauge->yrescale - 3 + 1,
+				clip->origin.x + area->size.x - 3 - gauge->g_inner_pos + 
+					gauge->x2rescale,
+				clip->origin.y + area->size.y - 3 - gauge->y2rescale + 1,
+				GFX_COLOR(170, 0, 0));
+			#endif
+			break;
+		};
+	}
+}
+
+/**
+ * \brief Gauge event handler.
+ *
+ * This is the window event handler for gauge widgets. It handles the two
+ * relevant event types sent to a gauge's container window, i.e., drawing,
+ * and destroy events.
+ *
+ * \param win Window receiving the event.
+ * \param type The event type.
+ * \param data Custom data, depending on event type.
+ *
+ * \return True if the event was recognized and accepted.
+ */
+static bool wtk_gauge_handler(struct win_window *win,
+		enum win_event_type type, void const *data)
+{
+	struct win_clip_region const    *clip;
+	struct win_area const           *area;
+	struct wtk_gauge                *gauge;
+	uint8_t                         position;
+	uint8_t                         option;
+
+
+	 gauge = (struct wtk_gauge *)win_get_custom_data(win);
+
+	// Window receiving the event should be the widget's containing window.
+	assert(win == gauge->container);
+
+	switch (type) {
+	case WIN_EVENT_DRAW:
+		/* For DRAW events, the data parameter points to the clipping
+		 * region. The window area parameter is needed because it
+		 * contains the size of the widget.
+		 */
+		clip = (struct win_clip_region const *)data;
+		area = win_get_area(win);
+
+		position = gauge->position;
+		option = gauge->option;
+
+	 
+	/** Erases the previous gauge line using old x\y values, 
+	 * not enabled at first draw event
+	 */
+ 		if (!gauge->redraw_background && gauge->solidbg) {
+			//! Erases gauge line
+			wtk_gauge_draw(0, clip, area, gauge);
+		}
+		
+		
+		//! Draw the gauge background elements once
+		if (gauge->redraw_background && gauge->solidbg) {
+			
+			//! Draws background
+			wtk_gauge_draw(1, clip, area, gauge);
+		
 			/** Sets redraw_background to false so the background draw is halted 
 			 * and enables the gauge line erase function for next 
 			 * draw event
@@ -351,18 +395,11 @@ static bool wtk_gauge_handler(struct win_window *win,
 		}
 		
 		//! For draw functions with transparent background
-		if(!gauge->solidbg) {
-
-		}
+		if(!gauge->solidbg) {}
 		
-		/** Rescales the position value for accessing 
-		 * data in the trigtable array
-		 */
-		
+		//! Rescales the position value for accessing data in the trigtable array
 		gauge->rescale = wtk_rescale_value(position, 
 			area->size.x - 2, 127);
-		
-		
 		
 		//! Reads x trigonometric value from PROGMEM array
 		gauge->xangle = 255 - wtk_trigtable_cos(gauge->rescale);
@@ -393,36 +430,9 @@ static bool wtk_gauge_handler(struct win_window *win,
 		 */
 		gauge->y2rescale = wtk_rescale_value(gauge->yangle, 255, 
 			gauge->g_inner_pos);
-		
-
-		//! Draws the gauge middle line from the rescaled position value
-		gfx_draw_line(clip->origin.x + gauge->xrescale + 
-			gauge->g_outer_pos,
-			clip->origin.y + area->size.y - gauge->yrescale - 3,
-			clip->origin.x + area->size.x - 3 - gauge->g_inner_pos + 
-				gauge->x2rescale,
-			clip->origin.y + area->size.y - 3 - gauge->y2rescale,
-			GFX_COLOR(200, 0, 0));
-		
-		#ifdef CONFIG_WTK_GAUGE_USE_THICK_LINE
-		//! Right line +1 X -1 Y
-		gfx_draw_line(clip->origin.x + gauge->xrescale + 1 +
-				gauge->g_outer_pos,
-			clip->origin.y + area->size.y - gauge->yrescale - 3,
-			clip->origin.x + area->size.x - 3 - gauge->g_inner_pos + 
-				gauge->x2rescale + 1,
-			clip->origin.y + area->size.y - 3 - gauge->y2rescale,
-			gauge->fill_color);
-		
-		//! Left line -1 X +1 Y
-		gfx_draw_line(clip->origin.x + gauge->xrescale + 
-				/**/ gauge->g_outer_pos,
-			clip->origin.y + area->size.y - gauge->yrescale - 3 + 1,
-			clip->origin.x + area->size.x - 3 - gauge->g_inner_pos + 
-				gauge->x2rescale,
-			clip->origin.y + area->size.y - 3 - gauge->y2rescale + 1,
-			GFX_COLOR(170, 0, 0));
-		#endif
+			
+		//! Draws gauge line
+		wtk_gauge_draw(2, clip, area, gauge);
 		
 		/* Always accept DRAW events, as the return value is ignored
 		 * anyway for that event type.
