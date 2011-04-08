@@ -134,13 +134,13 @@ enum app_widget_ids {
 //! Gaugetwo size on display
 #define GTWO_SIZE				  100
 
-//! Gauge line distance modifier (0-100%)
-#define G_OUTER_POS				   10
-#define G_INNER_POS				   90
+//! Gauge line distance modifier (0-100%) (OUTER>INNER)
+#define G_OUTER_POS				   90
+#define G_INNER_POS				   30
 
 //! Second gauge line distance modifier (0-100%)
-#define GTWO_OUTER_POS			   90
-#define GTWO_INNER_POS		       10
+#define GTWO_OUTER_POS			  100
+#define GTWO_INNER_POS		        0
 
 
 //! Gauge line height start position

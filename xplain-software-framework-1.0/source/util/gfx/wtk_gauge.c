@@ -87,10 +87,9 @@ struct wtk_gauge {
 	//! Boolean for drawing after transparent background redraw parent.
 	bool					solidbg;
 	
-	//! Variables for resizeing the gauge variables.
+	//! Variables for resize of the gauge variables.
 
 	//! Rescaled data position value, rescaled to match trigtable array
-	// !TODO finne på noe lurt her..
 	uint8_t					rescale;
 	
 	//! Inverted trigtable value accessed with rescale
@@ -108,8 +107,9 @@ struct wtk_gauge {
 	//! Rescaled yangle for drawing the second gauge line position correctly
 	uint8_t					y2rescale;
 	
-	//! Rescaled percent value for gauge line length
+	//! Rescaled percent value for gauge outer line length
 	uint8_t					g_outer_pos;
+	//! Rescaled percent value for gauge inner line length
 	uint8_t					g_inner_pos;
 
 };
@@ -269,11 +269,11 @@ static bool wtk_gauge_handler(struct win_window *win,
  		if (!gauge->redraw_background && gauge->solidbg) {
 			//! Middle line
 			gfx_draw_line(clip->origin.x + gauge->xrescale + 
-					/**/area->size.x / 7,
+					gauge->g_outer_pos,
 				clip->origin.y + area->size.y - 
 					gauge->yrescale - 3,
 				clip->origin.x + area->size.x - 3 - 
-					/**/area->size.x / 3 
+					gauge->g_inner_pos 
 					+ gauge->x2rescale,
 				clip->origin.y + area->size.y - 3 - 
 					gauge->y2rescale,
@@ -282,11 +282,11 @@ static bool wtk_gauge_handler(struct win_window *win,
 			//! Right line
 			//+1 X -1 Y                   
 			gfx_draw_line(clip->origin.x + gauge->xrescale + 1 + 
-					/**/area->size.x / 7,
+					gauge->g_outer_pos,
 				clip->origin.y + area->size.y - 
 					gauge->yrescale - 3,
 				clip->origin.x + area->size.x - 3 - 
-					/**/area->size.x / 3 
+					gauge->g_inner_pos
 					+ gauge->x2rescale + 1,
 				clip->origin.y + area->size.y - 3 - 
 					gauge->y2rescale,
@@ -294,11 +294,11 @@ static bool wtk_gauge_handler(struct win_window *win,
 			//! Left line
 			//-1 X +1 Y
 			gfx_draw_line(clip->origin.x + gauge->xrescale + 
-					/**/area->size.x / 7,
+					gauge->g_outer_pos,
 				clip->origin.y + area->size.y + 1 - 
 					gauge->yrescale - 3,
 				clip->origin.x + area->size.x - 3 - 
-					/**/area->size.x / 3 
+					gauge->g_inner_pos
 					+ gauge->x2rescale,
 				clip->origin.y + area->size.y - 3 - 
 					gauge->y2rescale + 1,
@@ -332,16 +332,16 @@ static bool wtk_gauge_handler(struct win_window *win,
 				clip->origin.y + area->size.y - 2,
 				area->size.x - 3,
 				gauge->background_color, GFX_QUADRANT1);
-			//! Inner circle black line
-			gfx_draw_circle(clip->origin.x + area->size.x - 2,
-				clip->origin.y + area->size.y - 2,
-				/**/area->size.x / 3 - 2,
-				GFX_COLOR(0, 0, 0), GFX_QUADRANT1);
 			//! Inner filled circle
 			gfx_draw_filled_circle(clip->origin.x + area->size.x - 2,
 				clip->origin.y + area->size.y - 2,
-				/**/area->size.x / 3 - 3,
+				gauge->g_inner_pos - 2,
 				GFX_COLOR(150, 150, 150), GFX_QUADRANT1);
+			//! Inner circle black line
+			gfx_draw_circle(clip->origin.x + area->size.x - 2,
+				clip->origin.y + area->size.y - 2,
+				gauge->g_inner_pos - 2,
+				GFX_COLOR(0, 0, 0), GFX_QUADRANT1);
 				
 			/** Sets redraw_background to false so the background draw is halted 
 			 * and enables the gauge line erase function for next 
@@ -374,51 +374,51 @@ static bool wtk_gauge_handler(struct win_window *win,
 		 * usage in the draw function
 		 */
 		gauge->xrescale = wtk_rescale_value(gauge->xangle, 255, 
-			area->size.x - 3 - /**/ area->size.x / 7);
+			area->size.x - 3 - gauge->g_outer_pos);
 		
 		/** Rescales the first y trigonometric value for usage in the 
 		 * draw function
 		 */
 		gauge->yrescale = wtk_rescale_value(gauge->yangle, 255, 
-			area->size.y - 3 - /**/ area->size.x / 7);
+			area->size.y - 3 - gauge->g_outer_pos);
 		
 		/** Rescales the second x trigonometric value for usage in the 
 		 * draw function
 		 */
 		gauge->x2rescale = wtk_rescale_value(gauge->xangle, 255, 
-			/**/ area->size.x / 3);
+			gauge->g_inner_pos);
 		
 		/** Rescales the second y trigonometric value for usage in the 
 		 * draw function
 		 */
 		gauge->y2rescale = wtk_rescale_value(gauge->yangle, 255, 
-			/**/ area->size.y / 3);
+			gauge->g_inner_pos);
 		
 
 		//! Draws the gauge line from the rescaled position value
 		gfx_draw_line(clip->origin.x + gauge->xrescale + 
-			/**/ area->size.x / 7,
+			gauge->g_outer_pos,
 			clip->origin.y + area->size.y - gauge->yrescale - 3,
-			clip->origin.x + area->size.x - 3 - /**/ area->size.x / 3 + 
+			clip->origin.x + area->size.x - 3 - gauge->g_inner_pos + 
 				gauge->x2rescale,
 			clip->origin.y + area->size.y - 3 - gauge->y2rescale,
 			GFX_COLOR(200, 0, 0));
 		
 		#ifdef CONFIG_WTK_GAUGE_USE_THICK_LINE
 		//! Right line +1 X -1 Y
-		gfx_draw_line(clip->origin.x + gauge->xrescale + 
-				/**/ area->size.x / 7 + 1,
+		gfx_draw_line(clip->origin.x + gauge->xrescale + 1 +
+				gauge->g_outer_pos,
 			clip->origin.y + area->size.y - gauge->yrescale - 3,
-			clip->origin.x + area->size.x - 3 - /**/ area->size.x / 3 + 
+			clip->origin.x + area->size.x - 3 - gauge->g_inner_pos + 
 				gauge->x2rescale + 1,
 			clip->origin.y + area->size.y - 3 - gauge->y2rescale,
 			gauge->fill_color);
 		
 		//! Left line -1 X +1 Y
 		gfx_draw_line(clip->origin.x + gauge->xrescale + 
-				/**/ area->size.x / 7,
+				/**/ gauge->g_outer_pos,
 			clip->origin.y + area->size.y - gauge->yrescale - 3 + 1,
-			clip->origin.x + area->size.x - 3 - /**/ area->size.x / 3 + 
+			clip->origin.x + area->size.x - 3 - gauge->g_inner_pos + 
 				gauge->x2rescale,
 			clip->origin.y + area->size.y - 3 - gauge->y2rescale + 1,
 			GFX_COLOR(170, 0, 0));
@@ -541,10 +541,13 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 
 	length -= 2;
 	
-	// gauge->g_outer_pos = g_outer_pos;
-	// gauge->g_inner_pos = g_inner_pos;
+	// Checks if line pos is an accepted value, else set to max
+	if(g_outer_pos < 0 || g_outer_pos > 100){g_outer_pos = 100;};
+	if(g_inner_pos < 0 || g_inner_pos > 100){g_inner_pos = 100;};
+	
+	// Rescales 0-100% into approptiate gauge length size
 	gauge->g_outer_pos = wtk_rescale_value(100 - g_outer_pos, 100, area->size.x - 2);
-	gauge->g_inner_pos = wtk_rescale_value(100 - g_inner_pos, 100, area->size.x - 2);
+	gauge->g_inner_pos = wtk_rescale_value(g_inner_pos, 100, area->size.x - 2);
 
 	// Set the gauge's end position.
 	gauge->position = wtk_rescale_value(value, maximum, length);
