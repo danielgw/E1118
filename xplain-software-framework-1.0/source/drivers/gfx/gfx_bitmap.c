@@ -214,7 +214,7 @@ static void gfx_gradient_draw(struct gfx_gradient *gradient, gfx_coord_t x,
 			
 		} else {
 		
-			for(gfx_coord_t index_y = 0 ; index_y<=y3 ; index_y++){
+			for(gfx_coord_t index_y = 0 ; index_y <= y3; index_y++){
 
 				
 				gfx_draw_horizontal_line(x, y + index_y, width,
@@ -236,11 +236,11 @@ static void gfx_gradient_draw(struct gfx_gradient *gradient, gfx_coord_t x,
 
 	} else {
 
-		if ((gradient->option)&(GFX_GRADIENT_HORIZONTAL)){
+		if ((gradient->option) & (GFX_GRADIENT_HORIZONTAL)){
 
 			for(gfx_coord_t index_x = x; index_x <= x2 ; index_x++){
 
-				gfx_draw_vertical_line(index_x,y,height,
+				gfx_draw_vertical_line(index_x, y, height,
 						GFX_COLOR(
 						(uint8_t)(color_r >> 8),
 						(uint8_t)(color_g >> 8),
@@ -254,7 +254,7 @@ static void gfx_gradient_draw(struct gfx_gradient *gradient, gfx_coord_t x,
 			for(gfx_coord_t index_y = y; index_y <= y2 ; index_y++){
 
 				
-				gfx_draw_horizontal_line(x,index_y,width,
+				gfx_draw_horizontal_line(x, index_y, width,
 						GFX_COLOR(
 						(uint8_t)(color_r >> 8),
 						(uint8_t)(color_g >> 8),
@@ -483,7 +483,7 @@ void gfx_put_bitmap(const struct gfx_bitmap *bmp,
 
 #ifdef CONFIG_GRADIENT
 	case BITMAP_GRADIENT:
-		gfx_gradient_draw(bmp->data.gradient,x,y,width,height);
+		gfx_gradient_draw(bmp->data.gradient, x, y, width, height);
 		break;
 #endif
 	}
