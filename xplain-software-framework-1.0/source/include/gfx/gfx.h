@@ -187,6 +187,8 @@
 #define GFX_GRADIENT_HORIZONTAL (1<<0)
 //! Bitmask for inverted gradients
 #define GFX_GRADIENT_INVERT (1<<1)
+//! Bitmask for mirrored gradients
+#define GFX_GRADIENT_MIRROR (1<<2)
 
 
 
