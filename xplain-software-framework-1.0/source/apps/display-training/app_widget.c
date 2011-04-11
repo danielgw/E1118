@@ -74,7 +74,7 @@ enum app_widget_ids {
 	//! Event command ID for the slider.
 	SLIDER_ID = 1,
 	//! Event command ID for the second slider.
-	SLIDERTWO_ID = 2,
+	SLIDER_TWO_ID = 2,
 	//! Event command ID for the button.
 	BUTTON_ID,
 };
@@ -102,49 +102,49 @@ enum app_widget_ids {
 #define LABEL_POS_Y                 6
 
 //! Slider position
-#define SLIDER_POS_X               10
+#define SLIDER_POS_X                10
 //! Slider position
-#define SLIDER_POS_Y               40
+#define SLIDER_POS_Y                40
 //! Slider size on display
-#define SLIDER_SIZE_X              20
+#define SLIDER_SIZE_X               20
 //! Slider size on display
-#define SLIDER_SIZE_Y             170
+#define SLIDER_SIZE_Y               170
 
 //! Gauge position
-#define G_POS_X					   50
+#define GAUGE_POS_X                 50
 //! Gauge position
-#define G_POS_Y					   40
+#define GAUGE_POS_Y                 40
 //! Gauge size on display
-#define G_SIZE				      150
+#define GAUGE_SIZE                  150
 
 
 //! Slidertwo position
-#define SLIDERTWO_POS_X            50
+#define SLIDER_TWO_POS_X            50
 //! Slidertwo position
-#define SLIDERTWO_POS_Y           210
+#define SLIDER_TWO_POS_Y            210
 //! Slidertwo size on display
-#define SLIDERTWO_SIZE_X          255
+#define SLIDER_TWO_SIZE_X           255
 //! Slidertwo size on display
-#define SLIDERTWO_SIZE_Y           20
+#define SLIDER_TWO_SIZE_Y           20
 
 //! Gaugetwo position
-#define GTWO_POS_X			      210
+#define GAUGE_TWO_POS_X             210
 //! Gaugetwo position
-#define GTWO_POS_Y				   80
+#define GAUGE_TWO_POS_Y             80
 //! Gaugetwo size on display
-#define GTWO_SIZE				  100
+#define GAUGE_TWO_SIZE              100
 
 //! Gauge line distance modifier (0-100%) (OUTER>INNER)
-#define G_OUTER_POS				   90
-#define G_INNER_POS				   30
+#define GAUGE_OUTER_POS             90
+#define GAUGE_INNER_POS             30
 
 //! Second gauge line distance modifier (0-100%)
-#define GTWO_OUTER_POS			  100
-#define GTWO_INNER_POS		        0
+#define GAUGE_TWO_OUTER_POS         100
+#define GAUGE_TWO_INNER_POS         0
 
 
 //! Gauge line height start position
-#define TRAVEL						0
+#define GAUGE_START_DISPLACEMENT    0
 
 
 //! @}
@@ -158,7 +158,7 @@ enum app_widget_ids {
 //! Max value for slider
 #define SLIDER_MAX_VALUE            240
 //! Max value for slidertwo
-#define SLIDERTWO_MAX_VALUE         240
+#define SLIDER_TWO_MAX_VALUE        240
 
 
 //! @}
@@ -197,15 +197,15 @@ static struct wtk_basic_frame       *sub_frame, *sub_frame_test, *sub_frame_test
 static struct gfx_bitmap            sub_frame_background;
 
 //! Gauge background bitmap
-static struct gfx_bitmap			gauge_background;
+static struct gfx_bitmap            gauge_background;
 
 //! Pointer to gauge
-static struct wtk_gauge      		*gauge;
+static struct wtk_gauge             *gauge;
 //! Pointer to gaugetwo
-static struct wtk_gauge      		*gaugetwo;
+static struct wtk_gauge             *gauge_two;
 
 //! Application font in use
-static struct font sysfont1x;
+static struct font                  sysfont1x;
 
 //! @}
 
@@ -229,7 +229,7 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 		win_redraw(wtk_basic_frame_as_child(sub_frame_test2));
 		break;
 
-	case SLIDERTWO_ID:
+	case SLIDER_TWO_ID:
 		wtk_gauge_set_value(gaugetwo,
 		wtk_slider_get_value(slidertwo));
 		break;
@@ -267,7 +267,9 @@ static void sub_frame_draw_handler_test(struct win_window *win,
 {
 	char buffer[4];
 
-	snprintf(buffer, sizeof(buffer), "%3d", wtk_trigtable_sin(wtk_rescale_value(wtk_gauge_get_value(gauge), SLIDER_MAX_VALUE, 127)));
+	snprintf(buffer, sizeof(buffer), "%3d", 
+		wtk_trigtable_sin(wtk_rescale_value(wtk_gauge_get_value(gauge),
+		SLIDER_MAX_VALUE, 127)));
 	
 	gfx_draw_string(buffer, clip->origin.x + 30, clip->origin.y + 12,
 			&sysfont, GFX_COLOR(0, 0, 0),
@@ -275,9 +277,9 @@ static void sub_frame_draw_handler_test(struct win_window *win,
 }
 
 /**
- * \brief Setup widget demo
+ * \brief Setup gauge demo
  *
- * This function launches the widget demo.
+ * This function launches the gauge demo.
  *
  * \param task Workqueue task used to start the application.
  */
@@ -288,11 +290,6 @@ void app_widget_launch(struct workqueue_task *task) {
 	struct win_area         area;
 	struct wtk_label        *lbl;
 	struct wtk_button       *btn;
-
-
-	//int byte = pgm_read_byte(&(trigtable[15])); //! Get byte function for PROGMEM
-	//pgm_read_byte(&(trigtable[wtk_slider_get_value(slider)]))
-
 
 	// Use normal sysfont for this app
 	sysfont1x.scale = 1;
@@ -351,11 +348,6 @@ void app_widget_launch(struct workqueue_task *task) {
 	// Draw the label by showing the label widget's window.
 	win_show(wtk_label_as_child(lbl));
 
-	/*
-	 * Testing label for extra values
-	 */
-
-
 	// Application slider
 	area.pos.x = SLIDER_POS_X;
 	area.pos.y = SLIDER_POS_Y;
@@ -367,29 +359,29 @@ void app_widget_launch(struct workqueue_task *task) {
 	 * while creating the slider.
 	 */
 	slider = wtk_slider_create(parent, &area, SLIDER_MAX_VALUE,
-			SLIDER_MAX_VALUE / 2, WTK_SLIDER_VERTICAL|WTK_SLIDER_CMD_RELEASE,
+			SLIDER_MAX_VALUE / 2, 
+			WTK_SLIDER_VERTICAL|WTK_SLIDER_CMD_RELEASE,
 			(win_command_t)SLIDER_ID);
 	if (!slider) {
 		goto error_widget;
 	}
 
-
 	// Draw the slider by showing the slider widget's window.
 	win_show(wtk_slider_as_child(slider));
 
 	// Application slidertwo
-	area.pos.x = SLIDERTWO_POS_X;
-	area.pos.y = SLIDERTWO_POS_Y;
-	area.size.x = SLIDERTWO_SIZE_X;
-	area.size.y = SLIDERTWO_SIZE_Y;
+	area.pos.x = SLIDER_TWO_POS_X;
+	area.pos.y = SLIDER_TWO_POS_Y;
+	area.size.x = SLIDER_TWO_SIZE_X;
+	area.size.y = SLIDER_TWO_SIZE_Y;
 
 	/*
 	 * Create the slidertwo and check the return value if an error occured
 	 * while creating the slidertwo.
 	 */
-	slidertwo = wtk_slider_create(parent, &area, SLIDERTWO_MAX_VALUE,
-			SLIDERTWO_MAX_VALUE / 2, WTK_SLIDER_CMD_RELEASE,
-			(win_command_t)SLIDERTWO_ID);
+	slidertwo = wtk_slider_create(parent, &area, SLIDER_TWO_MAX_VALUE,
+			SLIDER_TWO_MAX_VALUE / 2, WTK_SLIDER_CMD_RELEASE,
+			(win_command_t)SLIDER_TWO_ID);
 	if (!slidertwo) {
 		goto error_widget;
 	}
@@ -400,10 +392,10 @@ void app_widget_launch(struct workqueue_task *task) {
 	win_show(wtk_slider_as_child(slidertwo));
 
 	// Application gauge.
-	area.pos.x = G_POS_X;
-	area.pos.y = G_POS_Y;
-	area.size.x = G_SIZE;
-	area.size.y = G_SIZE;
+	area.pos.x = GAUGE_POS_X;
+	area.pos.y = GAUGE_POS_Y;
+	area.size.x = GAUGE_SIZE;
+	area.size.y = GAUGE_SIZE;
 
 
 	/*
@@ -414,9 +406,12 @@ void app_widget_launch(struct workqueue_task *task) {
 	gauge_background.type = BITMAP_SOLID;
 	gauge_background.data.color = GFX_COLOR(255, 255, 255);
 
-	gauge = wtk_gauge_create(parent, &area, &gauge_background, SLIDER_MAX_VALUE + TRAVEL,
-			(SLIDER_MAX_VALUE + TRAVEL) / 2, G_OUTER_POS, G_INNER_POS,
-			GFX_COLOR(255, 0, 0), GFX_COLOR(100, 100, 100), APP_BACKGROUND_COLOR, WTK_GAUGE_INVERT|WTK_GAUGE_NORMAL);
+	gauge = wtk_gauge_create(parent, &area, &gauge_background, 
+		SLIDER_MAX_VALUE + GAUGE_START_DISPLACEMENT,
+			(SLIDER_MAX_VALUE + GAUGE_START_DISPLACEMENT) / 2, 
+			GAUGE_OUTER_POS, GAUGE_INNER_POS, GFX_COLOR(255, 0, 0),
+			GFX_COLOR(100, 100, 100), APP_BACKGROUND_COLOR, 
+			WTK_GAUGE_INVERT|WTK_GAUGE_NORMAL);
 	if (!gauge) {
 		goto error_widget;
 	}
@@ -426,19 +421,22 @@ void app_widget_launch(struct workqueue_task *task) {
 
 
 	// Application gaugetwo.
-	area.pos.x = GTWO_POS_X;
-	area.pos.y = GTWO_POS_Y;
-	area.size.x = GTWO_SIZE;
-	area.size.y = GTWO_SIZE;
+	area.pos.x = GAUGE_TWO_POS_X;
+	area.pos.y = GAUGE_TWO_POS_Y;
+	area.size.x = GAUGE_TWO_SIZE;
+	area.size.y = GAUGE_TWO_SIZE;
 
 
 	/*
 	 * Create the second gauge and check the return value if an error
 	 * occured while creating the gauge.
 	 */
-	gaugetwo = wtk_gauge_create(parent, &area, NULL, SLIDERTWO_MAX_VALUE + TRAVEL,
-			(SLIDERTWO_MAX_VALUE + TRAVEL) / 2, GTWO_OUTER_POS, GTWO_INNER_POS,
-			GFX_COLOR(255, 0, 0), GFX_COLOR(100, 100, 100), APP_BACKGROUND_COLOR, WTK_GAUGE_NORMAL);
+	gaugetwo = wtk_gauge_create(parent, &area, NULL, 
+		SLIDER_TWO_MAX_VALUE + GAUGE_START_DISPLACEMENT,
+		(SLIDER_TWO_MAX_VALUE + GAUGE_START_DISPLACEMENT) / 2, 
+		GAUGE_TWO_OUTER_POS, GAUGE_TWO_INNER_POS, GFX_COLOR(255, 0, 0),
+		GFX_COLOR(100, 100, 100), 
+		APP_BACKGROUND_COLOR, WTK_GAUGE_NORMAL);
 	if (!gaugetwo) {
 		goto error_widget;
 	}

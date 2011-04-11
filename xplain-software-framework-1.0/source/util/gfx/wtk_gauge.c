@@ -257,7 +257,7 @@ static void wtk_gauge_draw(uint8_t option, struct win_clip_region const *clip,
 			#endif
 			break;
 		};
-		case 1: // Draw gauge background
+		case 1: //! Draw gauge background
 		{
 			//! Draw a window border.
 			gfx_draw_rect(clip->origin.x, clip->origin.y, 
@@ -294,7 +294,7 @@ static void wtk_gauge_draw(uint8_t option, struct win_clip_region const *clip,
 				GFX_COLOR(0, 0, 0), GFX_QUADRANT1);
 			break;
 		};
-		case 2: // Draws gauge line
+		case 2: //! Draws gauge line
 		{
 			//! Draws the gauge middle line from the rescaled position value
 			gfx_draw_line(clip->origin.x + gauge->xrescale + 
@@ -354,7 +354,7 @@ static bool wtk_gauge_handler(struct win_window *win,
 
 	 gauge = (struct wtk_gauge *)win_get_custom_data(win);
 
-	// Window receiving the event should be the widget's containing window.
+	//! Window receiving the event should be the widget's containing window.
 	assert(win == gauge->container);
 
 	switch (type) {
@@ -432,13 +432,13 @@ static bool wtk_gauge_handler(struct win_window *win,
 		//! Draws gauge line
 		wtk_gauge_draw(2, clip, area, gauge);
 		
-		/* Always accept DRAW events, as the return value is ignored
+		/** Always accept DRAW events, as the return value is ignored
 		 * anyway for that event type.
 		 */
 		return true;
 
 	case WIN_EVENT_DESTROY:
-		/* Free up all memory allocated by widget.
+		/** Free up all memory allocated by widget.
 		 * The window is freed by the window system
 		 */
 		membag_free(gauge);
@@ -494,31 +494,30 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 {
 	uint8_t length;
 
-	// Do sanity check on parameters.
+	//! Do sanity check on parameters.
 	assert(maximum > 0);
 	assert(value <= maximum);
 	assert(area);
 	assert(parent);
 
-	// Attributes scratchpad.
+	//! Attributes scratchpad.
 	struct win_attributes attr;
 
-	// Allocate memory for the control data.
+	//! Allocate memory for the control data.
 	struct wtk_gauge *gauge =
 			membag_alloc(sizeof(struct wtk_gauge));
 	if (!gauge) {
 		goto outofmem_gauge;
 	}
 
-	// Initialize the gauge data.
+	//! Initialize the gauge data.
 	gauge->maximum = maximum;
 	gauge->value = value;
 	gauge->option = option;
 	gauge->redraw_background = true;
 
-	/** Set the gauge's colors
-	 * 
-	 */
+	//! Set the gauge's colors
+	 
 	 
 	gauge->fill_color = fill_color;
 		
@@ -530,11 +529,11 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 		value = maximum - value;
 	}
 
-	// Set up handling information.
+	//! Set up handling information.
 	attr.event_handler = wtk_gauge_handler;
 	attr.custom = gauge;
 
-	/* Do sanity check of specified window area parameters
+	/** Do sanity check of specified window area parameters
 	 * according to the orientation of the gauge.
 	 */
 	attr.area = *area;
@@ -543,37 +542,36 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 
 
 	assert(attr.ares.size.x < (uint8_t) < 255);
-	//assert(attr.area.size.x < (uint8_t) ~ 0);
 	length = attr.area.size.x;
 
 
 	length -= 2;
 	
-	// Checks if line pos is an accepted value, else set to max
+	//! Checks if line pos is an accepted value, else set to max
 	if(g_outer_pos < 0 || g_outer_pos > 100){g_outer_pos = 100;};
 	if(g_inner_pos < 0 || g_inner_pos > 100){g_inner_pos = 100;};
 	
-	// Rescales 0-100% into approptiate gauge length size
+	//! Rescales 0-100% into approptiate gauge length size
 	gauge->g_outer_pos = wtk_rescale_value(100 - g_outer_pos, 100, area->size.x - 2);
 	gauge->g_inner_pos = wtk_rescale_value(g_inner_pos, 100, area->size.x - 2);
 
-	// Set the gauge's end position.
+	//! Set the gauge's end position.
 	gauge->position = wtk_rescale_value(value, maximum, length);
 
-	// Set background for gauge window
+	//! Set background for gauge window
 	if (background) {
-		// solid background bitmap
+		//! solid background bitmap
 		attr.background = NULL;
 		attr.behavior = 0;
 		gauge->solidbg = true;
 	} else {
-		// transparent, redraw parent
+		//! transparent, redraw parent
 		attr.background = NULL;
 		attr.behavior = WIN_BEHAVIOR_REDRAW_PARENT;
 		gauge->solidbg = false;
 	}
 
-	// Create a new window for the gauge.
+	//! Create a new window for the gauge.
 	gauge->container = win_create(parent, &attr);
 	if (!gauge->container) {
 		goto outofmem_container;
