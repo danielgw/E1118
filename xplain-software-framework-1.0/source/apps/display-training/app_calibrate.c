@@ -61,15 +61,15 @@
  */
 
 //! Offset from the display edges to calibration circles
-#define CAL_OFFSET      40
+#define CAL_OFFSET      50
 //! Radius of calibration circles
-#define CAL_RADIUS      14
+#define CAL_RADIUS      5
 //! Threshold for unintended touches on display
 #define CAL_TRESHOLD    500
 //! Background color for the application
-#define CAL_BG_COLOR    GFX_COLOR(0, 32, 128)
+#define CAL_BG_COLOR    GFX_COLOR(0, 0, 255)
 //! Foreground color for the application
-#define CAL_FG_COLOR    GFX_COLOR(0, 255, 0)
+#define CAL_FG_COLOR    GFX_COLOR(255, 255, 255)
 
 //! @}
 
@@ -98,7 +98,7 @@ struct touch_calibrate_context {
 static struct touch_calibrate_context *calibrate_context;
 
 //! Application font in use
-static struct font sysfont1x;
+static struct font sysfont2x;
 
 /**
  * \brief Calibration guide text
@@ -106,7 +106,7 @@ static struct font sysfont1x;
  * \note Stored in PROGMEM to reduce memory usage.
  */
 static DEFINE_PROGMEM(char, calibrate_help_text[]) =
-		"Engage calibration!\n\n\nTouch the dots now!";
+		"Touch screen calibration.\n\nTouch inside the circles.";
 
 /**
  * \brief Touch event handler
@@ -181,10 +181,6 @@ static void touch_calibrate_task_handler(struct workqueue_task *task)
 				cal_ctx->cal_points[cal_ctx->state].panel_y,
 				CAL_RADIUS, CAL_BG_COLOR, GFX_WHOLE);
 
-		gfx_draw_filled_circle(cal_ctx->cal_points[cal_ctx->state].panel_x,
-				cal_ctx->cal_points[cal_ctx->state].panel_y,
-				CAL_RADIUS / 4, CAL_BG_COLOR, GFX_WHOLE);
-
 		// Move to next point
 		cal_ctx->state++;
 
@@ -196,9 +192,6 @@ static void touch_calibrate_task_handler(struct workqueue_task *task)
 		gfx_draw_circle(cal_ctx->cal_points[cal_ctx->state].panel_x,
 				cal_ctx->cal_points[cal_ctx->state].panel_y,
 				CAL_RADIUS, CAL_FG_COLOR, GFX_WHOLE);
-		gfx_draw_filled_circle(cal_ctx->cal_points[cal_ctx->state].panel_x,
-				cal_ctx->cal_points[cal_ctx->state].panel_y,
-				CAL_RADIUS / 4, CAL_FG_COLOR, GFX_WHOLE);
 		break;
 
 	case 3:
@@ -208,9 +201,6 @@ static void touch_calibrate_task_handler(struct workqueue_task *task)
 		gfx_draw_circle(cal_ctx->cal_points[2].panel_x,
 				cal_ctx->cal_points[2].panel_y,
 				CAL_RADIUS, CAL_BG_COLOR, GFX_WHOLE);
-		gfx_draw_filled_circle(cal_ctx->cal_points[2].panel_x,
-				cal_ctx->cal_points[2].panel_y,
-				CAL_RADIUS / 4, CAL_BG_COLOR, GFX_WHOLE);
 
 		// Compute and assign the calibration matrix to the driver.
 		touch_compute_calibration_matrix(cal_ctx->cal_points,
@@ -249,9 +239,9 @@ void app_touch_calibrate_setup(struct workqueue_task *completed_task)
 			membag_alloc(sizeof(struct touch_calibrate_context));
 	assert(calibrate_context);
 
-	// Use small font for this application.
-	memcpy(&sysfont1x, &sysfont, sizeof(sysfont));
-	sysfont1x.scale = 1;
+	// Use twice as large font for this application.
+	memcpy(&sysfont2x, &sysfont, sizeof(sysfont));
+	sysfont2x.scale = 2;
 
 	// Temporarily replace touch event handler.
 	calibrate_context->old_handler = touch_get_event_handler();
@@ -263,7 +253,7 @@ void app_touch_calibrate_setup(struct workqueue_task *completed_task)
 			CAL_BG_COLOR);
 
 	gfx_draw_progmem_string((const char __progmem_arg *)
-			&calibrate_help_text, 90, 100, &sysfont1x, CAL_FG_COLOR,
+			&calibrate_help_text, 10, 80, &sysfont2x, CAL_FG_COLOR,
 			GFX_COLOR_TRANSPARENT);
 
 	// Set panel coordinates for all calibration points.
@@ -281,9 +271,6 @@ void app_touch_calibrate_setup(struct workqueue_task *completed_task)
 	gfx_draw_circle(calibrate_context->cal_points[0].panel_x,
 			calibrate_context->cal_points[0].panel_y,
 			CAL_RADIUS, CAL_FG_COLOR, GFX_WHOLE);
-	gfx_draw_filled_circle(calibrate_context->cal_points[0].panel_x,
-			calibrate_context->cal_points[0].panel_y,
-			CAL_RADIUS / 4, CAL_FG_COLOR, GFX_WHOLE);
 
 	// Initialize the calibration state and tasks before scheduling it.
 	calibrate_context->state = 0;
