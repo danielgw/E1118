@@ -253,7 +253,7 @@ void app_touch_calibrate_setup(struct workqueue_task *completed_task)
 			CAL_BG_COLOR);
 
 	gfx_draw_progmem_string((const char __progmem_arg *)
-			&calibrate_help_text, 10, 10, &sysfont2x, CAL_FG_COLOR,
+			&calibrate_help_text, 10, 80, &sysfont2x, CAL_FG_COLOR,
 			GFX_COLOR_TRANSPARENT);
 
 	// Set panel coordinates for all calibration points.
