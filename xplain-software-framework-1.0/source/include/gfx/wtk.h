@@ -354,15 +354,13 @@ void wtk_progress_bar_set_colors(struct wtk_progress_bar *bar,
  * @{
  */
 
-#define WTK_GAUGE_HORIZONTAL    (0 << 0)
 
-#define WTK_GAUGE_VERTICAL      (1 << 0)
-
+//! Inverts the gauge traveling direction
 #define WTK_GAUGE_INVERT        (1 << 1)
-
+//! Unused: for drawing a normal 90deg gauge
 #define WTK_GAUGE_NORMAL        (0 << 2)
-
-#define WTK_GAUGE_CIRCLE       (1 << 2)
+//! Unused: for drawing a 360deg gauge
+#define WTK_GAUGE_CIRCLE        (1 << 2)
 
 //! Enables the use of thick indicator lines, comment out for thinner line.
 #define CONFIG_WTK_GAUGE_USE_THICK_LINE

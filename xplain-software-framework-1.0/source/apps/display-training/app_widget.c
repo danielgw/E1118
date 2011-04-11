@@ -416,7 +416,7 @@ void app_widget_launch(struct workqueue_task *task) {
 
 	gauge = wtk_gauge_create(parent, &area, &gauge_background, SLIDER_MAX_VALUE + TRAVEL,
 			(SLIDER_MAX_VALUE + TRAVEL) / 2, G_OUTER_POS, G_INNER_POS,
-			GFX_COLOR(255, 0, 0), GFX_COLOR(100, 100, 100), APP_BACKGROUND_COLOR, WTK_GAUGE_HORIZONTAL);
+			GFX_COLOR(255, 0, 0), GFX_COLOR(100, 100, 100), APP_BACKGROUND_COLOR, WTK_GAUGE_INVERT|WTK_GAUGE_NORMAL);
 	if (!gauge) {
 		goto error_widget;
 	}
@@ -438,7 +438,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	 */
 	gaugetwo = wtk_gauge_create(parent, &area, NULL, SLIDERTWO_MAX_VALUE + TRAVEL,
 			(SLIDERTWO_MAX_VALUE + TRAVEL) / 2, GTWO_OUTER_POS, GTWO_INNER_POS,
-			GFX_COLOR(255, 0, 0), GFX_COLOR(100, 100, 100), APP_BACKGROUND_COLOR, WTK_GAUGE_INVERT|WTK_GAUGE_HORIZONTAL);
+			GFX_COLOR(255, 0, 0), GFX_COLOR(100, 100, 100), APP_BACKGROUND_COLOR, WTK_GAUGE_NORMAL);
 	if (!gaugetwo) {
 		goto error_widget;
 	}
