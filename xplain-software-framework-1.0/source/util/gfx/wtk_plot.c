@@ -96,11 +96,11 @@ struct wtk_plot {
 
 };
 
-static void wtk_plot_draw(struct wtk_plot *plot,struct win_area const *area, 
-		struct win_clip_region const *clip);
+//static void wtk_plot_draw(struct wtk_plot *plot,struct win_area const *area, 
+//		struct win_clip_region const *clip);
 
-static void wtk_plot_grid_draw(struct wtk_plot *plot,struct win_area const *area, 
-		struct win_clip_region const *clip);
+//static void wtk_plot_grid_draw(struct wtk_plot *plot,struct win_area const *area, 
+//		struct win_clip_region const *clip);
 
 
 /**
@@ -252,7 +252,7 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
  * Called by the event handler to draw the grid.
  */
 
- void wtk_plot_grid_draw(struct wtk_plot *plot,struct win_area const *area, 
+static void wtk_plot_grid_draw(struct wtk_plot *plot,struct win_area const *area, 
 		struct win_clip_region const *clip)
 {
 	uint8_t axis_option    = plot->axis_option;
@@ -373,7 +373,7 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
  * Called by the event handler to draw the plot.
  */
 
- void wtk_plot_draw(struct wtk_plot *plot,struct win_area const *area, 
+static void wtk_plot_draw(struct wtk_plot *plot,struct win_area const *area, 
 		struct win_clip_region const *clip)
 {
 	uint8_t option = plot->option;;
@@ -385,7 +385,7 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 			ring_buffer_offset--;
 		}
 	}
-	
+
 	// the distance from clip to the bottom of the plot area
 	gfx_coord_t plot_bottom = area->size.y - 1; 
 	gfx_coord_t x_error    = plot->spacing_error;
@@ -393,18 +393,20 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 	gfx_coord_t x_previous = 1;
 	gfx_coord_t y_current;
 	gfx_coord_t y_previous;
-	
+
 	if (option & WTK_PLOT_INVERT){
 		y_previous = plot_bottom - 
 				*(plot->plot_buffer + ring_buffer_offset);
 	} else {
 		y_previous = *(plot->plot_buffer + ring_buffer_offset);
 	}
-	
-	
+
+	/* the for loop's variable datapoint's initial value is 1 because the
+	 * loop draws a line from the previous point to the current point.
+	 */
 	for(uint8_t datapoint = 1; datapoint < (plot->datapoints); datapoint++)
 	{
-		//increment the datapointer around the ring buffer
+		// increment the datapointer around the ring buffer
 		if ( option & WTK_PLOT_RIGHT_TO_LEFT){
 			if (ring_buffer_offset == 0){
 				ring_buffer_offset = plot->datapoints - 1;
@@ -415,7 +417,7 @@ void wtk_plot_set_colors(struct wtk_plot *plot,
 				ring_buffer_offset = 0;
 			}
 		}
-		
+
 		if (option & WTK_PLOT_INVERT){
 			y_current = plot_bottom - *(plot->plot_buffer +
 					ring_buffer_offset);
