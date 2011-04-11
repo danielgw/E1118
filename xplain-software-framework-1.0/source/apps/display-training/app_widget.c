@@ -227,10 +227,12 @@ void app_widget_launch(struct workqueue_task *task) {
 	// Application frame
 
 	// Create a background bitmap using a solid color.
-	frame_gradient.delta_r = (3);
-	frame_gradient.delta_b = (3);
+	frame_gradient.length = 320;
+	frame_gradient.start_r = 0;
+	frame_gradient.delta_r = ((255UL * 256UL) / 320UL) - 1;
+	frame_gradient.delta_b = ((255UL * 256UL) / 320UL) - 1;
 	
-	frame_gradient.option = GFX_GRADIENT_HORIZONTAL|GFX_GRADIENT_MIRROR;
+	frame_gradient.option = GFX_GRADIENT_HORIZONTAL;//|GFX_GRADIENT_MIRROR;
 	
 	frame_background.type = BITMAP_GRADIENT;
 	frame_background.width = 320;

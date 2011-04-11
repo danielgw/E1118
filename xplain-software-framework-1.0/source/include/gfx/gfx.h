@@ -299,13 +299,6 @@ enum gfx_bitmap_type {
 };
 
 #ifdef CONFIG_GRADIENT
-
-
-/**
- * \brief Number of fractional bits for delta_color fixed point math
- */
-
- #define GFX_GRADIENT_FRACTION 2
  
 /**
  * \brief Storage structure for gradient data and metadata
@@ -315,15 +308,18 @@ enum gfx_bitmap_type {
 	uint8_t start_g;
 	uint8_t start_b;
 	
-	uint8_t delta_r;
-	uint8_t delta_g;
-	uint8_t delta_b;
+	uint16_t delta_r;
+	uint16_t delta_g;
+	uint16_t delta_b;
 	
 	uint8_t option;
+	
+	gfx_coord_t length;
  };
 
- void gfx_gradient_draw(struct gfx_gradient *gradient, gfx_coord_t x,
-		gfx_coord_t y,gfx_coord_t width,gfx_coord_t height);
+ void gfx_gradient_draw(struct gfx_gradient *gradient, gfx_coord_t map_x,
+		gfx_coord_t map_y,gfx_coord_t x, gfx_coord_t y,
+		gfx_coord_t width,gfx_coord_t height);
  #endif
 /**
  * \brief Storage structure for bitmap pixel data and metadata
