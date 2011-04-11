@@ -41,6 +41,8 @@
 #include <app/wtk.h>
 #include <gfx/win.h>
 #include <gfx/sysfont.h>
+#include <mainloop.h>
+
 
 /**
  * \ingroup gfx
@@ -352,5 +354,12 @@ void wtk_copy_string(char *dest, char const *source);
 void wtk_shade_pixel(gfx_color_t *pixel, uint8_t alpha);
 
 //! @}
+
+//! Dialogue box struct
+struct workqueue_task dialogue;
+//! Dialogue box launch task
+void dialogue_box_launch(struct workqueue_task *task);
+
+
 
 #endif /* WTK_H_INCLUDED */

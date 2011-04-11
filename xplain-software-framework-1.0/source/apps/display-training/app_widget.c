@@ -157,6 +157,8 @@ static struct wtk_basic_frame       *sub_frame;
 //! Sub-frame background bitmap
 static struct gfx_bitmap            sub_frame_background;
 
+
+
 //! @}
 
 /**
@@ -180,6 +182,11 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 	case BUTTON_ID:
 		//! \todo Add code here to handle button press.
 		counter++;
+		
+		//wtk_dialogue_box_launch("Vil du lukke?");
+		
+		dialogue_box_launch(&dialogue);
+
 		win_redraw(wtk_basic_frame_as_child(sub_frame));
 		break;
 	}
