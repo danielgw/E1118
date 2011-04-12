@@ -50,11 +50,13 @@
  *
  * Draw a bitmap to the screen on the given display coordinates.
  *
- * \param gradient Pointer to bitmap
- * \param x       Display X coordinate
- * \param y       Display y coordinate
- * \param width   Display width
- * \param height  Display height
+ * \param gradient  Pointer to gradient.
+ * \param map_x     X coordinate inside gradient.
+ * \param map_y     Y coordinate inside gradient.
+ * \param x         X coordinate on screen.
+ * \param y         Y coordinate on screen.
+ * \param width     Width of gradient to draw.
+ * \param height    Height of gradient to draw.
  */
 
  void gfx_gradient_draw(struct gfx_gradient *gradient, 
@@ -70,64 +72,71 @@
 	uint16_t delta_g= gradient->delta_g;
 	uint16_t delta_b= gradient->delta_b;
 
-	gfx_coord_t x2= x+width;
-	gfx_coord_t y2= y+width;
+	gfx_coord_t x2 = x + width;
+	gfx_coord_t y2 = y + width;
 
 	if ((gradient->option)&(GFX_GRADIENT_INVERT)){
 		color_r += (delta_r * (gradient->length - 1));
 		color_g += (delta_g * (gradient->length - 1));
 		color_b += (delta_b * (gradient->length - 1));
-		
+
 		delta_r = -delta_r;
 		delta_g = -delta_g;
 		delta_b = -delta_b;
 	}
 
-	if ((gradient->option)&(GFX_GRADIENT_MIRROR)){
-		gfx_coord_t x3 = (gradient->length / 2);
-		gfx_coord_t y3 = (gradient->length / 2);
+	if (((gradient->option)&(GFX_GRADIENT_MIRROR))&& 
+			((gradient->option)&(GFX_GRADIENT_HORIZONTAL))){
 
-		if ((gradient->option)&(GFX_GRADIENT_HORIZONTAL)){
-			
-			for(gfx_coord_t index_x = map_x; index_x <= x3; index_x++){
-
+			gfx_coord_t x3 = (gradient->length / 2);
+		x -= map_x;
+		x2 = x + gradient->length;
+		gfx_coord_t x4 = gradient->length - (width + map_x); 
+		
+		for(gfx_coord_t index_x = 0; index_x <= x3; index_x++){
+			if (index_x >= map_x){
 				gfx_draw_vertical_line(x + index_x, y, height,
 						GFX_COLOR(
 						(uint8_t)(color_r >> 8),
 						(uint8_t)(color_g >> 8),
 						(uint8_t)(color_b >> 8)));
-
+			}
+			if (index_x>=x4){
 				gfx_draw_vertical_line(x2 - index_x, y, height,
 						GFX_COLOR(
 						(uint8_t)(color_r >> 8),
 						(uint8_t)(color_g >> 8),
 						(uint8_t)(color_b >> 8)));
-
-				color_r += delta_r;
-				color_g += delta_g;
-				color_b += delta_b;
 			}
+			
+			color_r += delta_r;
+			color_g += delta_g;
+			color_b += delta_b;
+		}
 
-		} else {
+	} else 	if (((gradient->option)&(GFX_GRADIENT_MIRROR))&& 
+			((gradient->option)&(GFX_GRADIENT_VERTICAL))){
 
-			for(gfx_coord_t index_y = 0 ; index_y <= y3; index_y++){
+		gfx_coord_t y3 = (gradient->length / 2);
+		y -= map_y;
+
+		for(gfx_coord_t index_y = 0 ; index_y <= y3; index_y++){
 
 
-				gfx_draw_horizontal_line(x, y + index_y, width,
-						GFX_COLOR(
-						(uint8_t)(color_r >> 8),
-						(uint8_t)(color_g >> 8),
-						(uint8_t)(color_b >> 8)));
+			gfx_draw_horizontal_line(x, y + index_y, width,
+					GFX_COLOR(
+					(uint8_t)(color_r >> 8),
+					(uint8_t)(color_g >> 8),
+					(uint8_t)(color_b >> 8)));
 
-				gfx_draw_horizontal_line(x, y - index_y, width,
-						GFX_COLOR(
-						(uint8_t)(color_r >> 8),
-						(uint8_t)(color_g >> 8),
-						(uint8_t)(color_b >> 8)));
-				color_r += delta_r;
-				color_g += delta_g;
-				color_b += delta_b;
-			}
+			gfx_draw_horizontal_line(x, y - index_y, width,
+					GFX_COLOR(
+					(uint8_t)(color_r >> 8),
+					(uint8_t)(color_g >> 8),
+					(uint8_t)(color_b >> 8)));
+			color_r += delta_r;
+			color_g += delta_g;
+			color_b += delta_b;
 		}
 
 	} else {

@@ -129,7 +129,7 @@ enum app_widget_ids {
  */
 
 //! Description for label
-const static char                   *demo_string = "Demonstrating widgets";
+const static char                   *demo_string = "Demonstrating gradients";
 
 //! @}
 
@@ -148,7 +148,7 @@ static struct wtk_progress_bar      *progress_bar;
 //! Frame background bitmap
 static struct gfx_bitmap            frame_background;
 //! frame background gradient
-static struct gfx_gradient          frame_gradient;
+static struct gfx_gradient          frame_gradient[3];
 //! Counter for button
 static uint8_t                      counter;
 //! Pointer to the sub-frame
@@ -172,12 +172,18 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 
 	switch (command) {
 	case SLIDER_ID:
-		wtk_progress_bar_set_value(progress_bar,
-				wtk_slider_get_value(slider));
+		//wtk_progress_bar_set_value(progress_bar,
+				//wtk_slider_get_value(slider));
+				
 		break;
 
 	case BUTTON_ID:
-		//! \todo Add code here to handle button press.
+		counter++;
+		if (counter>2) {counter = 0;}
+		
+		frame_background.data.gradient=&frame_gradient[counter];
+		
+		win_redraw(wtk_basic_frame_as_child(frame));
 		break;
 	}
 
@@ -227,17 +233,25 @@ void app_widget_launch(struct workqueue_task *task) {
 	// Application frame
 
 	// Create a background bitmap using a solid color.
-	frame_gradient.length = 320;
-	frame_gradient.start_r = 0;
-	frame_gradient.delta_r = ((255UL * 256UL) / 320UL) - 1;
-	frame_gradient.delta_b = ((255UL * 256UL) / 320UL) - 1;
+	frame_gradient[0].length = 320;
+	frame_gradient[1].length = 320;
+	frame_gradient[2].length = 320;
 	
-	frame_gradient.option = GFX_GRADIENT_HORIZONTAL;//|GFX_GRADIENT_MIRROR;
+	
+	frame_gradient[0].delta_r = ((255UL * 256UL) / 160UL) - 1;
+	frame_gradient[0].delta_b = ((255UL * 256UL) / 160UL) - 1;
+	frame_gradient[0].option = GFX_GRADIENT_HORIZONTAL|GFX_GRADIENT_MIRROR;
+
+	frame_gradient[1].delta_g = ((255UL * 256UL) / 320UL) - 1;
+	frame_gradient[1].option = GFX_GRADIENT_HORIZONTAL;
+
+	frame_gradient[2].delta_b = ((255UL * 256UL) / 320UL) - 1;
+	frame_gradient[2].option = GFX_GRADIENT_VERTICAL;
 	
 	frame_background.type = BITMAP_GRADIENT;
 	frame_background.width = 320;
 	frame_background.height = 240;
-	frame_background.data.gradient=&frame_gradient;
+	frame_background.data.gradient=&frame_gradient[0];
 	//frame_background.data.color = APP_BACKGROUND_COLOR;
 
 	// Set the area to fill the entire screen
@@ -303,7 +317,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	}
 
 	// Draw the slider by showing the slider widget's window.
-	win_show(wtk_slider_as_child(slider));
+	//win_show(wtk_slider_as_child(slider));
 
 	// Application progress bar, placed right of the slider.
 	area.pos.x += area.size.x + SLIDER_PB_SPACING_X;
@@ -322,10 +336,20 @@ void app_widget_launch(struct workqueue_task *task) {
 	}
 
 	// Draw the progress bar by showing the progress bar widget's window.
-	win_show(wtk_progress_bar_as_child(progress_bar));
+	//win_show(wtk_progress_bar_as_child(progress_bar));
 
+	
 	//! \todo Add code to set up button here.
-
+	area.pos.x = 10;
+	area.pos.y = 180;
+	area.size.x = 90;
+	area.size.y = 40;
+	btn = wtk_button_create(parent, &area, "Click",
+	(win_command_t)BUTTON_ID);
+	if (!btn) {
+		goto error_widget;
+	}
+	win_show(wtk_button_as_child(btn));
 	//! \todo Add code to set up basic frame here.
 
 	return;
