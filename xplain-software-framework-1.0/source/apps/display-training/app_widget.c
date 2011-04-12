@@ -176,11 +176,10 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 	switch (command) {
 	case SLIDER_ID:
 		wtk_progress_bar_set_value(progress_bar,
-				wtk_slider_get_value(slider));
+		wtk_slider_get_value(slider));
 		break;
 
 	case BUTTON_ID:
-		//! \todo Add code here to handle button press.
 		counter++;
 		
 		//wtk_dialogue_box_launch("Vil du lukke?");
@@ -284,8 +283,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	win_show(wtk_frame_as_child(frametest));
 
 
-
-
+	
 
 	// Application label
 	area.pos.x = LABEL_POS_X;

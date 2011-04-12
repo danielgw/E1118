@@ -74,7 +74,7 @@
  */
 
 //! Padding in pixels from screen border to frame.
-#define FRAME_PADDING           40
+#define FRAME_PADDING           50
 //! Height of frame.
 #define FRAME_HEIGHT            (gfx_get_height() - (2 * FRAME_PADDING))
 //! Width of frame.
@@ -180,6 +180,7 @@ static bool app_clock_frame_command_handler(struct wtk_basic_frame *frame,
 
 	switch (command) {
 	case BUTTON_EXIT_ID:
+    win_grab_pointer(NULL);
 		memcpy(&sysfont, &the_clock_app->prev_sysfont,
 				sizeof(struct font));
 		//win_destroy(the_clock_app->frame);
@@ -220,7 +221,12 @@ void dialogue_box_launch(struct workqueue_task *task)
 	the_clock_app->background.type       = BITMAP_SOLID;
 	the_clock_app->background.data.color = COLOR_BACKGROUND;
 
+	
 	win_root = win_get_root();
+	//win_root = win_get_parent();
+	//win_root = win_get_parent(frame->container);
+	//win_grab_pointer(the_clock_app->container);
+	
 
 	/*
 	 * Create a transparent basic frame with height and width equal to half
@@ -238,9 +244,13 @@ void dialogue_box_launch(struct workqueue_task *task)
 			app_clock_frame_command_handler, &the_clock_app);
 	if (!the_clock_app->frame)
 		goto error_text_frame;
+		
+	
 
 	parent = wtk_basic_frame_as_child(the_clock_app->frame);
 	win_show(parent);
+	
+	
 
 	/* Create an exit button in the lower right corner of the frame. */
 	area.size.x = 20;
