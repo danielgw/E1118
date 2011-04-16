@@ -85,10 +85,11 @@
 		delta_b = -delta_b;
 	}
 
-	if (((gradient->option)&(GFX_GRADIENT_MIRROR))&& 
-			((gradient->option)&(GFX_GRADIENT_HORIZONTAL))){
-
-			gfx_coord_t x3 = (gradient->length / 2);
+	if (((gradient->option)&
+			(GFX_GRADIENT_MIRROR|GFX_GRADIENT_HORIZONTAL)) == 
+			(GFX_GRADIENT_MIRROR|GFX_GRADIENT_HORIZONTAL)){
+			
+		gfx_coord_t x3 = (gradient->length / 2);
 		x -= map_x;
 		x2 = x + gradient->length;
 		gfx_coord_t x4 = gradient->length - (width + map_x); 
@@ -114,26 +115,32 @@
 			color_b += delta_b;
 		}
 
-	} else 	if (((gradient->option)&(GFX_GRADIENT_MIRROR))&& 
-			((gradient->option)&(GFX_GRADIENT_VERTICAL))){
+	} else 	if (((gradient->option)&
+			(GFX_GRADIENT_MIRROR|GFX_GRADIENT_VERTICAL)) == 
+			(GFX_GRADIENT_MIRROR|GFX_GRADIENT_VERTICAL)){
 
 		gfx_coord_t y3 = (gradient->length / 2);
 		y -= map_y;
-
+		y2 = y + gradient->length;
+		gfx_coord_t y4 = gradient->length - (height + map_y); 
+		
 		for(gfx_coord_t index_y = 0 ; index_y <= y3; index_y++){
 
-
-			gfx_draw_horizontal_line(x, y + index_y, width,
-					GFX_COLOR(
-					(uint8_t)(color_r >> 8),
-					(uint8_t)(color_g >> 8),
-					(uint8_t)(color_b >> 8)));
-
-			gfx_draw_horizontal_line(x, y - index_y, width,
-					GFX_COLOR(
-					(uint8_t)(color_r >> 8),
-					(uint8_t)(color_g >> 8),
-					(uint8_t)(color_b >> 8)));
+			if (index_y >= map_y){
+				gfx_draw_horizontal_line(x, y + index_y, width,
+						GFX_COLOR(
+						(uint8_t)(color_r >> 8),
+						(uint8_t)(color_g >> 8),
+						(uint8_t)(color_b >> 8)));
+			}
+			if (index_y >= y4){
+				gfx_draw_horizontal_line(x, y2 - index_y, width,
+						GFX_COLOR(
+						(uint8_t)(color_r >> 8),
+						(uint8_t)(color_g >> 8),
+						(uint8_t)(color_b >> 8)));
+			}
+			
 			color_r += delta_r;
 			color_g += delta_g;
 			color_b += delta_b;

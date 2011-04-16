@@ -148,7 +148,7 @@ static struct wtk_progress_bar      *progress_bar;
 //! Frame background bitmap
 static struct gfx_bitmap            frame_background;
 //! frame background gradient
-static struct gfx_gradient          frame_gradient[3];
+static struct gfx_gradient          frame_gradient[4];
 //! Counter for button
 static uint8_t                      counter;
 //! Pointer to the sub-frame
@@ -179,7 +179,7 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 
 	case BUTTON_ID:
 		counter++;
-		if (counter>2) {counter = 0;}
+		if (counter>3) {counter = 0;}
 		
 		frame_background.data.gradient=&frame_gradient[counter];
 		
@@ -235,7 +235,8 @@ void app_widget_launch(struct workqueue_task *task) {
 	// Create a background bitmap using a solid color.
 	frame_gradient[0].length = 320;
 	frame_gradient[1].length = 320;
-	frame_gradient[2].length = 320;
+	frame_gradient[2].length = 240;
+	frame_gradient[3].length = 240;
 	
 	
 	frame_gradient[0].delta_r = ((255UL * 256UL) / 160UL) - 1;
@@ -247,7 +248,11 @@ void app_widget_launch(struct workqueue_task *task) {
 
 	frame_gradient[2].delta_b = ((255UL * 256UL) / 320UL) - 1;
 	frame_gradient[2].option = GFX_GRADIENT_VERTICAL;
-	
+
+	frame_gradient[3].delta_g = ((255UL * 256UL) / (120UL)) - 1;
+	frame_gradient[3].delta_b = ((255UL * 256UL) / (120UL)) - 1;
+	frame_gradient[3].option = GFX_GRADIENT_VERTICAL|GFX_GRADIENT_MIRROR;
+
 	frame_background.type = BITMAP_GRADIENT;
 	frame_background.width = 320;
 	frame_background.height = 240;
