@@ -63,7 +63,8 @@
 		gfx_coord_t map_x, gfx_coord_t map_y,
 		gfx_coord_t x, gfx_coord_t y,
 		gfx_coord_t width,gfx_coord_t height){
-
+	
+	// load and reformat colors
 	uint16_t color_r= (((uint16_t)(gradient->start_r)) << 8);
 	uint16_t color_g= (((uint16_t)(gradient->start_g)) << 8);
 	uint16_t color_b= (((uint16_t)(gradient->start_b)) << 8);
@@ -72,9 +73,8 @@
 	uint16_t delta_g= gradient->delta_g;
 	uint16_t delta_b= gradient->delta_b;
 
-	gfx_coord_t x2 = x + width;
-	gfx_coord_t y2 = y + width;
-
+	/* if gradient is inverted set start color to calculated end color,
+	 * and invert delta color */
 	if ((gradient->option)&(GFX_GRADIENT_INVERT)){
 		color_r += (delta_r * (gradient->length - 1));
 		color_g += (delta_g * (gradient->length - 1));
@@ -85,16 +85,18 @@
 		delta_b = -delta_b;
 	}
 
+	
 	if (((gradient->option)&
 			(GFX_GRADIENT_MIRROR|GFX_GRADIENT_HORIZONTAL)) == 
 			(GFX_GRADIENT_MIRROR|GFX_GRADIENT_HORIZONTAL)){
-			
-		gfx_coord_t x3 = (gradient->length / 2);
+
 		x -= map_x;
-		x2 = x + gradient->length;
-		gfx_coord_t x4 = gradient->length - (width + map_x); 
-		
-		for(gfx_coord_t index_x = 0; index_x <= x3; index_x++){
+
+		gfx_coord_t x_middle = (gradient->length / 2);
+		gfx_coord_t x_end = x + gradient->length;
+		gfx_coord_t x_end_mirrored = gradient->length - (width + map_x); 
+
+		for(gfx_coord_t index_x = 0; index_x <= x_middle; index_x++){
 			if (index_x >= map_x){
 				gfx_draw_vertical_line(x + index_x, y, height,
 						GFX_COLOR(
@@ -102,8 +104,8 @@
 						(uint8_t)(color_g >> 8),
 						(uint8_t)(color_b >> 8)));
 			}
-			if (index_x>=x4){
-				gfx_draw_vertical_line(x2 - index_x, y, height,
+			if (index_x>=x_end_mirrored){
+				gfx_draw_vertical_line(x_end - index_x, y, height,
 						GFX_COLOR(
 						(uint8_t)(color_r >> 8),
 						(uint8_t)(color_g >> 8),
@@ -119,12 +121,13 @@
 			(GFX_GRADIENT_MIRROR|GFX_GRADIENT_VERTICAL)) == 
 			(GFX_GRADIENT_MIRROR|GFX_GRADIENT_VERTICAL)){
 
-		gfx_coord_t y3 = (gradient->length / 2);
 		y -= map_y;
-		y2 = y + gradient->length;
-		gfx_coord_t y4 = gradient->length - (height + map_y); 
+
+		gfx_coord_t y_middle = (gradient->length / 2);
+		gfx_coord_t y_end = y + gradient->length;
+		gfx_coord_t y_end_mirrored = gradient->length - (height + map_y); 
 		
-		for(gfx_coord_t index_y = 0 ; index_y <= y3; index_y++){
+		for(gfx_coord_t index_y = 0 ; index_y <= y_middle; index_y++){
 
 			if (index_y >= map_y){
 				gfx_draw_horizontal_line(x, y + index_y, width,
@@ -133,8 +136,8 @@
 						(uint8_t)(color_g >> 8),
 						(uint8_t)(color_b >> 8)));
 			}
-			if (index_y >= y4){
-				gfx_draw_horizontal_line(x, y2 - index_y, width,
+			if (index_y >= y_end_mirrored){
+				gfx_draw_horizontal_line(x, y_end - index_y, width,
 						GFX_COLOR(
 						(uint8_t)(color_r >> 8),
 						(uint8_t)(color_g >> 8),
@@ -149,13 +152,15 @@
 	} else {
 
 		if ((gradient->option) & (GFX_GRADIENT_HORIZONTAL)){
+
+			gfx_coord_t x_end = x + width;
 			if (map_x  > 0){
 				color_r += (delta_r * map_x);
 				color_g += (delta_g * map_x);
 				color_b += (delta_b * map_x);
 			}
 
-			for(gfx_coord_t index_x = x; index_x <= x2 ; index_x++){
+			for(gfx_coord_t index_x = x; index_x <= x_end ; index_x++){
 
 				gfx_draw_vertical_line(index_x, y, height,
 						GFX_COLOR(
@@ -167,13 +172,14 @@
 				color_b += delta_b;
 			}
 		} else {
-			
+
+			gfx_coord_t y_end = y + width;
 			if (map_y  > 0){
 				color_r += (delta_r * map_y);
 				color_g += (delta_g * map_y);
 				color_b += (delta_b * map_y);
 			}
-			for(gfx_coord_t index_y = y; index_y <= y2 ; index_y++){
+			for(gfx_coord_t index_y = y; index_y <= y_end ; index_y++){
 
 				gfx_draw_horizontal_line(x, index_y, width,
 						GFX_COLOR(

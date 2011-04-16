@@ -89,9 +89,9 @@ enum app_widget_ids {
  */
 
 //! Label position on top of display
-#define LABEL_POS_X                 10
+#define LABEL_POS_X                 100
 //! Label position on top of display
-#define LABEL_POS_Y                 10
+#define LABEL_POS_Y                 200
 
 //! Slider position
 #define SLIDER_POS_X                10
