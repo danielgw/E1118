@@ -308,16 +308,21 @@ enum gfx_bitmap_type {
 	uint8_t start_g;
 	uint8_t start_b;
 	
-	uint16_t delta_r;
-	uint16_t delta_g;
-	uint16_t delta_b;
+	int16_t delta_r;
+	int16_t delta_g;
+	int16_t delta_b;
 	
 	uint8_t option;
 	
 	gfx_coord_t length;
  };
+ 
+void gfx_gradient_set_values(struct gfx_gradient *gradient,
+		uint8_t red_from, uint8_t green_from, uint8_t blue_from,
+		uint8_t red_to,   uint8_t green_to,   uint8_t blue_to,
+		gfx_coord_t length, uint8_t option);
 
- void gfx_gradient_draw(struct gfx_gradient *gradient, gfx_coord_t map_x,
+void gfx_gradient_draw(struct gfx_gradient *gradient, gfx_coord_t map_x,
 		gfx_coord_t map_y,gfx_coord_t x, gfx_coord_t y,
 		gfx_coord_t width,gfx_coord_t height);
  #endif

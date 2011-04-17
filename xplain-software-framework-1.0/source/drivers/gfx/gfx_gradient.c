@@ -46,6 +46,79 @@
 #ifdef CONFIG_GRADIENT
 
 /**
+ * \brief Generate gradient values
+ *
+ * Generate gradient values from two colors and the length.
+ *
+ * \param gradient    Pointer to gradient.
+ * \param red_from    RGB red value.
+ * \param green_from  RGB red value.
+ * \param blue_from   RGB red value.
+ * \param red_to      RGB red value.
+ * \param green_to    RGB red value.
+ * \param blue_to     RGB red value.
+ * \param length      Length of gradient to draw.
+ * \param option      Gradient options.
+ */
+
+void gfx_gradient_set_values(struct gfx_gradient *gradient,
+		uint8_t red_from, uint8_t green_from, uint8_t blue_from,
+		uint8_t red_to,   uint8_t green_to,   uint8_t blue_to,
+		gfx_coord_t length, uint8_t option){
+
+	assert(length); // sanity check
+	
+	
+	
+	gradient->start_r = red_from;
+	gradient->start_g = green_from;
+	gradient->start_b = blue_from;
+	gradient->length  = length;
+	gradient->option  = option;
+	
+	
+	if (red_from == red_to){
+		gradient->delta_r = 0;
+		
+	} else if (red_to > red_from){
+		gradient->delta_r = ((((uint16_t)(red_to - red_from)) 
+				<< 8 ) / length);
+				
+	} else {
+		gradient->delta_r = - ((((uint16_t)(red_from - red_to)) 
+				<< 8 ) / length);
+				
+	}
+	
+	if (green_from == green_to){
+		gradient->delta_g = 0;
+		
+	} else if (green_to > green_from){
+		gradient->delta_g = ((((uint16_t)(green_to - green_from)) 
+				<< 8 ) / length);
+				
+	} else {
+		gradient->delta_g = - ((((uint16_t)(green_from - green_to)) 
+				<< 8 ) / length);
+				
+	}	
+	
+	if (blue_from == blue_to){
+		gradient->delta_b = 0;
+		
+	} else if (blue_to > blue_from){
+		gradient->delta_b = ((((uint16_t)(blue_to - blue_from)) 
+				<< 8 ) / length);
+				
+	} else {
+		gradient->delta_b = - ((((uint16_t)(blue_from - blue_to)) 
+				<< 8 ) / (uint16_t)length);
+				
+	}
+
+}
+
+/**
  * \brief Draw a gradient
  *
  * Draw a bitmap to the screen on the given display coordinates.
@@ -69,9 +142,9 @@
 	uint16_t color_g= (((uint16_t)(gradient->start_g)) << 8);
 	uint16_t color_b= (((uint16_t)(gradient->start_b)) << 8);
 
-	uint16_t delta_r= gradient->delta_r;
-	uint16_t delta_g= gradient->delta_g;
-	uint16_t delta_b= gradient->delta_b;
+	int16_t delta_r= gradient->delta_r;
+	int16_t delta_g= gradient->delta_g;
+	int16_t delta_b= gradient->delta_b;
 
 	/* if gradient is inverted set start color to calculated end color,
 	 * and invert delta color */
@@ -92,6 +165,10 @@
 
 		x -= map_x;
 
+		delta_r *= 2;
+		delta_g *= 2;
+		delta_b *= 2;
+		
 		gfx_coord_t x_middle = (gradient->length / 2);
 		gfx_coord_t x_end = x + gradient->length;
 		gfx_coord_t x_end_mirrored = gradient->length - (width + map_x); 
@@ -122,7 +199,12 @@
 			(GFX_GRADIENT_MIRROR|GFX_GRADIENT_VERTICAL)){
 
 		y -= map_y;
-
+		
+		delta_r *= 2;
+		delta_g *= 2;
+		delta_b *= 2;
+	
+	
 		gfx_coord_t y_middle = (gradient->length / 2);
 		gfx_coord_t y_end = y + gradient->length;
 		gfx_coord_t y_end_mirrored = gradient->length - (height + map_y); 
@@ -143,7 +225,7 @@
 						(uint8_t)(color_g >> 8),
 						(uint8_t)(color_b >> 8)));
 			}
-			
+
 			color_r += delta_r;
 			color_g += delta_g;
 			color_b += delta_b;

@@ -89,9 +89,9 @@ enum app_widget_ids {
  */
 
 //! Label position on top of display
-#define LABEL_POS_X                 100
+#define LABEL_POS_X                 10
 //! Label position on top of display
-#define LABEL_POS_Y                 200
+#define LABEL_POS_Y                 150
 
 //! Slider position
 #define SLIDER_POS_X                10
@@ -233,25 +233,14 @@ void app_widget_launch(struct workqueue_task *task) {
 	// Application frame
 
 	// Create a background bitmap using a solid color.
-	frame_gradient[0].length = 320;
-	frame_gradient[1].length = 320;
-	frame_gradient[2].length = 240;
-	frame_gradient[3].length = 240;
-	
-	
-	frame_gradient[0].delta_r = ((255UL * 256UL) / 160UL) - 1;
-	frame_gradient[0].delta_b = ((255UL * 256UL) / 160UL) - 1;
-	frame_gradient[0].option = GFX_GRADIENT_HORIZONTAL|GFX_GRADIENT_MIRROR;
-
-	frame_gradient[1].delta_g = ((255UL * 256UL) / 320UL) - 1;
-	frame_gradient[1].option = GFX_GRADIENT_HORIZONTAL;
-
-	frame_gradient[2].delta_b = ((255UL * 256UL) / 320UL) - 1;
-	frame_gradient[2].option = GFX_GRADIENT_VERTICAL;
-
-	frame_gradient[3].delta_g = ((255UL * 256UL) / (120UL)) - 1;
-	frame_gradient[3].delta_b = ((255UL * 256UL) / (120UL)) - 1;
-	frame_gradient[3].option = GFX_GRADIENT_VERTICAL|GFX_GRADIENT_MIRROR;
+	gfx_gradient_set_values(&frame_gradient[0], 0,0,0, 255,0,255,
+			320, GFX_GRADIENT_HORIZONTAL | GFX_GRADIENT_MIRROR);
+	gfx_gradient_set_values(&frame_gradient[1], 255,0,0, 0,255,0,
+			240, GFX_GRADIENT_VERTICAL | GFX_GRADIENT_MIRROR);
+	gfx_gradient_set_values(&frame_gradient[2], 255,0,0, 0,0,0,
+			320, GFX_GRADIENT_HORIZONTAL);
+	gfx_gradient_set_values(&frame_gradient[3], 250,0,0, 0, 0, 250,
+			240, GFX_GRADIENT_VERTICAL);
 
 	frame_background.type = BITMAP_GRADIENT;
 	frame_background.width = 320;
