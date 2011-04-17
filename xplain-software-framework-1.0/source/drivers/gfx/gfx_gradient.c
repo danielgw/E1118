@@ -64,8 +64,9 @@
 void gfx_gradient_set_values(struct gfx_gradient *gradient,
 		uint8_t red_from, uint8_t green_from, uint8_t blue_from,
 		uint8_t red_to,   uint8_t green_to,   uint8_t blue_to,
-		gfx_coord_t length, uint8_t option){
-
+		gfx_coord_t length, uint8_t option)
+{
+	assert(gradient);
 	assert(length); // sanity check
 	
 	
@@ -118,6 +119,23 @@ void gfx_gradient_set_values(struct gfx_gradient *gradient,
 
 }
 
+
+/**
+ * \brief Set gradient options
+ *
+ * Set gradient options. faster than full reset.
+ *
+ * \param gradient    Pointer to gradient.
+
+ * \param option      Gradient options.
+ */
+
+void gfx_gradient_set_options(struct gfx_gradient *gradient, uint8_t option)
+{
+	assert(gradient);
+	gradient->option = option;
+}
+
 /**
  * \brief Draw a gradient
  *
@@ -135,8 +153,13 @@ void gfx_gradient_set_values(struct gfx_gradient *gradient,
  void gfx_gradient_draw(struct gfx_gradient *gradient, 
 		gfx_coord_t map_x, gfx_coord_t map_y,
 		gfx_coord_t x, gfx_coord_t y,
-		gfx_coord_t width,gfx_coord_t height){
-	
+		gfx_coord_t width,gfx_coord_t height)
+{
+
+	assert(gradient);
+	assert(width);
+	assert(height);
+
 	// load and reformat colors
 	uint16_t color_r= (((uint16_t)(gradient->start_r)) << 8);
 	uint16_t color_g= (((uint16_t)(gradient->start_g)) << 8);

@@ -317,6 +317,8 @@ enum gfx_bitmap_type {
 	gfx_coord_t length;
  };
  
+void gfx_gradient_set_options(struct gfx_gradient *gradient, uint8_t option);
+
 void gfx_gradient_set_values(struct gfx_gradient *gradient,
 		uint8_t red_from, uint8_t green_from, uint8_t blue_from,
 		uint8_t red_to,   uint8_t green_to,   uint8_t blue_to,
