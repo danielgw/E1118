@@ -78,6 +78,8 @@ void gfx_gradient_set_values(struct gfx_gradient *gradient,
 	gradient->length  = length;
 	gradient->option  = option;
 	
+	/*calculate the 16-bit signed differential per pixel line in 8-bit 
+	fixed point math for the three colors*/
 	
 	if (red_from == red_to){
 		gradient->delta_r = 0;
