@@ -167,7 +167,7 @@ void gfx_gradient_set_options(struct gfx_gradient *gradient, uint8_t option)
 	}
 
 	
-	if (((gradient->option)&
+	if (((gradient->option) &
 			(GFX_GRADIENT_MIRROR|GFX_GRADIENT_HORIZONTAL)) == 
 			(GFX_GRADIENT_MIRROR|GFX_GRADIENT_HORIZONTAL)){
 
@@ -202,7 +202,7 @@ void gfx_gradient_set_options(struct gfx_gradient *gradient, uint8_t option)
 			color_b += delta_b;
 		}
 
-	} else 	if (((gradient->option)&
+	} else 	if (((gradient->option) &
 			(GFX_GRADIENT_MIRROR|GFX_GRADIENT_VERTICAL)) == 
 			(GFX_GRADIENT_MIRROR|GFX_GRADIENT_VERTICAL)){
 
@@ -244,7 +244,7 @@ void gfx_gradient_set_options(struct gfx_gradient *gradient, uint8_t option)
 		if ((gradient->option) & (GFX_GRADIENT_HORIZONTAL)){
 
 			gfx_coord_t x_end = x + width;
-			if (map_x  > 0){
+			if (map_x > 0){
 				color_r += (delta_r * map_x);
 				color_g += (delta_g * map_x);
 				color_b += (delta_b * map_x);

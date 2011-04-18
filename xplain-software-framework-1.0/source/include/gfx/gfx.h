@@ -304,16 +304,21 @@ enum gfx_bitmap_type {
  * \brief Storage structure for gradient data and metadata
  */
  struct gfx_gradient {
+	//! Starting RGB red value
 	uint8_t start_r;
+	//! Starting RGB green value
 	uint8_t start_g;
+	//! Starting RGB blue value
 	uint8_t start_b;
-	
+	//! Change in RGB red value per line.
 	int16_t delta_r;
+	//! Change in RGB green value per line.
 	int16_t delta_g;
+	//! Change in RGB blue value per line.
 	int16_t delta_b;
-	
+	//! Configuration of orientation and behavior.
 	uint8_t option;
-	
+	//! Length in pixels along the gradient.
 	gfx_coord_t length;
  };
  
