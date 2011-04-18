@@ -235,10 +235,13 @@ void app_widget_launch(struct workqueue_task *task) {
 	// Create a background bitmap using a solid color.
 	gfx_gradient_set_values(&frame_gradient[0], 0,0,0, 255,0,255,
 			320, GFX_GRADIENT_HORIZONTAL | GFX_GRADIENT_MIRROR);
+
 	gfx_gradient_set_values(&frame_gradient[1], 255,0,0, 0,255,0,
 			240, GFX_GRADIENT_VERTICAL | GFX_GRADIENT_MIRROR);
+
 	gfx_gradient_set_values(&frame_gradient[2], 255,0,0, 0,0,0,
 			320, GFX_GRADIENT_HORIZONTAL);
+
 	gfx_gradient_set_values(&frame_gradient[3], 250,0,0, 0, 0, 250,
 			240, GFX_GRADIENT_VERTICAL);
 

@@ -52,11 +52,11 @@
  *
  * \param gradient    Pointer to gradient.
  * \param red_from    RGB red value.
- * \param green_from  RGB red value.
- * \param blue_from   RGB red value.
+ * \param green_from  RGB green value.
+ * \param blue_from   RGB blue value.
  * \param red_to      RGB red value.
- * \param green_to    RGB red value.
- * \param blue_to     RGB red value.
+ * \param green_to    RGB green value.
+ * \param blue_to     RGB blue value.
  * \param length      Length of gradient to draw.
  * \param option      Gradient options.
  */
@@ -66,8 +66,9 @@ void gfx_gradient_set_values(struct gfx_gradient *gradient,
 		uint8_t red_to,   uint8_t green_to,   uint8_t blue_to,
 		gfx_coord_t length, uint8_t option)
 {
+	// sanity check
 	assert(gradient);
-	assert(length); // sanity check
+	assert(length); 
 	
 	
 	
@@ -80,41 +81,23 @@ void gfx_gradient_set_values(struct gfx_gradient *gradient,
 	
 	if (red_from == red_to){
 		gradient->delta_r = 0;
-		
-	} else if (red_to > red_from){
-		gradient->delta_r = ((((uint16_t)(red_to - red_from)) 
-				<< 8 ) / length);
-				
 	} else {
-		gradient->delta_r = - ((((uint16_t)(red_from - red_to)) 
-				<< 8 ) / length);
-				
+		gradient->delta_r =((((int16_t)(red_to - red_from)) << 7 )
+				/ length) << 1;
 	}
 	
 	if (green_from == green_to){
 		gradient->delta_g = 0;
-		
-	} else if (green_to > green_from){
-		gradient->delta_g = ((((uint16_t)(green_to - green_from)) 
-				<< 8 ) / length);
-				
 	} else {
-		gradient->delta_g = - ((((uint16_t)(green_from - green_to)) 
-				<< 8 ) / length);
-				
-	}	
+		gradient->delta_g =((((int16_t)(green_to - green_from)) << 7 ) 
+				/ length) << 1;
+	}
 	
 	if (blue_from == blue_to){
 		gradient->delta_b = 0;
-		
-	} else if (blue_to > blue_from){
-		gradient->delta_b = ((((uint16_t)(blue_to - blue_from)) 
-				<< 8 ) / length);
-				
 	} else {
-		gradient->delta_b = - ((((uint16_t)(blue_from - blue_to)) 
-				<< 8 ) / (uint16_t)length);
-				
+		gradient->delta_b =((((int16_t)(blue_to - blue_from)) << 7 )
+				/ length) << 1;
 	}
 
 }
