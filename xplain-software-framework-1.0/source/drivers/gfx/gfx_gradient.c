@@ -79,7 +79,8 @@ void gfx_gradient_set_values(struct gfx_gradient *gradient,
 	gradient->option  = option;
 	
 	/*calculate the 16-bit signed differential per pixel line in 8-bit 
-	fixed point math for the three colors*/
+	fixed point math for the three colors, taking care to avoid sign 
+	bit overflow*/
 	
 	if (red_from == red_to){
 		gradient->delta_r = 0;
@@ -145,7 +146,7 @@ void gfx_gradient_set_options(struct gfx_gradient *gradient, uint8_t option)
 	assert(width);
 	assert(height);
 
-	// load and reformat colors
+	// load and reformat colors to 8-bit fixed point.
 	uint16_t color_r= (((uint16_t)(gradient->start_r)) << 8);
 	uint16_t color_g= (((uint16_t)(gradient->start_g)) << 8);
 	uint16_t color_b= (((uint16_t)(gradient->start_b)) << 8);
