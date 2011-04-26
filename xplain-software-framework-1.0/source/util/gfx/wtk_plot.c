@@ -261,7 +261,16 @@ static void wtk_plot_grid_draw(struct wtk_plot *plot,struct win_area const *area
 	gfx_coord_t plot_top    = clip->origin.y + 1;
 	gfx_coord_t plot_right  = clip->origin.x + 1;
 
-	//draw lines/ticks along the vertical axis:
+	// Draw zero line
+	if (axis_option & WTK_PLOT_ZERO){
+		gfx_draw_line(plot_right,
+				plot_top + plot->axis_offset_y,
+				plot_right +  plot_width,
+				plot_top + plot->axis_offset_y,
+				plot->axis_zero_color);
+	}
+
+	// Draw lines/ticks along the vertical axis
 	if (axis_spacing_y > 0) {
 
 		gfx_coord_t offset = axis_offset_y;
@@ -302,7 +311,7 @@ static void wtk_plot_grid_draw(struct wtk_plot *plot,struct win_area const *area
 			}
 		}
 	}
-	//draw lines/ticks along the horizontal axis
+	// Draw lines/ticks along the horizontal axis
 	if (axis_spacing_x > 0) {
 
 		gfx_coord_t offset = axis_offset_x;
@@ -342,14 +351,6 @@ static void wtk_plot_grid_draw(struct wtk_plot *plot,struct win_area const *area
 			}
 		}
 	}
-
-	if (axis_option & WTK_PLOT_ZERO){
-		gfx_draw_line(plot_right,
-				plot_top + plot->axis_offset_y,
-				plot_right +  plot_width,
-				plot_top + plot->axis_offset_y,
-				plot->axis_zero_color);
-	} 
 }
 
 

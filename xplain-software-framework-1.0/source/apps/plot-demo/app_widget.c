@@ -300,7 +300,7 @@ void app_widget_launch(struct workqueue_task *task) {
 
 	// Set grid/axis options to the plot.
 	wtk_plot_set_grid(plot, WTK_PLOT_TICKS_HORIZONTAL |
-			WTK_PLOT_TICKS_VERTICAL | WTK_PLOT_ZERO, 20, 0, 20, 50,
+			WTK_PLOT_TICKS_VERTICAL | WTK_PLOT_ZERO, 40, 0, 20, 50,
 			GFX_COLOR(90, 255, 90), GFX_COLOR(0, 0, 100));
 
 	// Draw the plot and by showing the plot widget's window.
