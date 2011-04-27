@@ -59,11 +59,11 @@
  */
 
 //! Color on text strings.
-#define COLOR_TEXT              GFX_COLOR(255, 255, 255)
+#define COLOR_TEXT              GFX_COLOR(0, 0, 0)
 //! Background color.
-#define COLOR_BACKGROUND        GFX_COLOR(0, 0, 0)
+#define COLOR_BACKGROUND        GFX_COLOR(200, 200, 200)
 //! Color on frame border.
-#define COLOR_BORDER            GFX_COLOR(150, 150, 150)
+#define COLOR_BORDER            GFX_COLOR(255, 255, 255)
 
 //! @}
 
@@ -93,9 +93,9 @@
  */
 
 //! Number of pixels to indent a string.
-#define TEXT_INDENT             15
+#define TEXT_INDENT             10
 //! Number of pixels to pad after a string newline.
-#define TEXT_PADDING_NEWLINE    4
+#define TEXT_PADDING_NEWLINE     4
 
 //! @}
 
@@ -110,14 +110,16 @@ enum app_clock_button_ids {
 /**
  * \brief Context for the clock application.
  */
-struct app_clock {
-	//! Pointer to the main frame of the application.
-	struct wtk_basic_frame  *frame;
+struct wtk_dialogue_box{
+  struct win_window                 *win;
+
 	//! Background bitmap for application.
 	struct gfx_bitmap       background;
 	//! Font used to store a copy of the system font while running.
 	struct font             prev_sysfont;
 };
+
+
 
 /**
  * \brief Pointer to the clock application context.
@@ -143,7 +145,7 @@ static void app_clock_frame_draw_handler(struct win_window *win,
 	gfx_draw_rect(FRAME_POS_X, FRAME_POS_Y, FRAME_WIDTH, FRAME_HEIGHT,
 			COLOR_BORDER);
 
-	gfx_draw_string("Dialogue box test:",
+	gfx_draw_string("Dialogue box test",
 			FRAME_POS_X + TEXT_INDENT, y, &sysfont, COLOR_TEXT,
 			GFX_COLOR_TRANSPARENT);
 
@@ -162,6 +164,19 @@ static void app_clock_frame_draw_handler(struct win_window *win,
 			GFX_COLOR_TRANSPARENT);
 
 }
+
+struct win_window *wtk_dialogue_box_as_child(struct wtk_dialogue_box *dialogue_box)
+{
+	assert(dialogue_box);
+	return dialogue_box->win;
+}
+
+/*
+void wtk_dialogue_box_draw()
+{
+  
+  
+}*/
 
 /**
  * \brief Frame command handler handling the button events.
@@ -196,18 +211,22 @@ static bool app_clock_frame_command_handler(struct wtk_basic_frame *frame,
 }
 
 
-
 /**
- * \brief Launcher for the clock application.
+ * \brief Dialogue box application.
  *
  * \param task Workqueue task to use for the application's worker functions.
  */
-void dialogue_box_launch(struct workqueue_task *task)
+
+struct wtk_dialogue_box *wtk_dialogue_box_launch(struct win_window *parent,
+		const struct win_area *area, struct workqueue_task *task)
 {
-	struct win_window       *win_root;
-	struct win_window       *parent;
-	struct win_area         area;
-	struct wtk_button       *button;
+	struct wtk_dialogue_box  *dialogue_box;
+
+	
+	assert(parent);
+	assert(area);
+	
+	
 
 	the_clock_app = membag_alloc(sizeof(struct app_clock));
 	if (!the_clock_app)
@@ -221,11 +240,11 @@ void dialogue_box_launch(struct workqueue_task *task)
 	the_clock_app->background.type       = BITMAP_SOLID;
 	the_clock_app->background.data.color = COLOR_BACKGROUND;
 
-	
-	win_root = win_get_root();
+	//win_root = win_get_parent(parent->container);
+	//win_root = win_get_root();
 	//win_root = win_get_parent();
 	//win_root = win_get_parent(frame->container);
-	//win_grab_pointer(the_clock_app->container);
+	//win_grab_pointer(parent->container);
 	
 
 	/*
@@ -238,7 +257,7 @@ void dialogue_box_launch(struct workqueue_task *task)
 	area.size.x = FRAME_WIDTH;
 	area.size.y = FRAME_HEIGHT;
 
-	the_clock_app->frame = wtk_basic_frame_create(win_root, &area,
+	the_clock_app->frame = wtk_basic_frame_create(parent, &area,
 			&the_clock_app->background,
 			app_clock_frame_draw_handler,
 			app_clock_frame_command_handler, &the_clock_app);

@@ -142,6 +142,8 @@ const static char                   *demo_string = "Demonstrating widgets";
 
 static struct wtk_frame             *frametest;
 
+static struct wtk_dialogue_box		*dialogue_box;
+
 //! Pointer to frame for application
 static struct wtk_basic_frame       *frame;
 //! Pointer to slider
@@ -157,6 +159,11 @@ static struct wtk_basic_frame       *sub_frame;
 //! Sub-frame background bitmap
 static struct gfx_bitmap            sub_frame_background;
 
+static void finished_task()
+{
+	counter++;
+	win_redraw(wtk_basic_frame_as_child(sub_frame));
+}
 
 
 //! @}
@@ -180,13 +187,12 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 		break;
 
 	case BUTTON_ID:
-		counter++;
-		
+				
 		//wtk_dialogue_box_launch("Vil du lukke?");
 		
-		dialogue_box_launch(&dialogue);
+		//wtk_dialogue_box_draw();
 
-		win_redraw(wtk_basic_frame_as_child(sub_frame));
+		
 		break;
 	}
 
@@ -214,6 +220,8 @@ static void sub_frame_draw_handler(struct win_window *win,
 			&sysfont, GFX_COLOR(255, 255, 255),
 			GFX_COLOR_TRANSPARENT);
 }
+
+
 
 /**
  * \brief Setup widget demo
@@ -269,7 +277,17 @@ void app_widget_launch(struct workqueue_task *task) {
 	 * widget/window is shown.
 	 */
 	win_show(parent);
-	
+
+
+	area.pos.x = 0;
+	area.pos.y = 0;
+	area.size.x = gfx_get_width();
+	area.size.y = gfx_get_height();
+
+	dialogue_box = wtk_dialog_box_create(parent, &area, finished_task);
+
+	win_show(wtk_dialogue_box_as_child(dialogue_box));
+
 	area.pos.x = gfx_get_width() / 2;
 	area.pos.y = gfx_get_height() / 2;
 	area.size.x = gfx_get_width() / 4;

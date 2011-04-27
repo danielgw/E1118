@@ -355,10 +355,20 @@ void wtk_shade_pixel(gfx_color_t *pixel, uint8_t alpha);
 
 //! @}
 
-//! Dialogue box struct
-struct workqueue_task dialogue;
+
 //! Dialogue box launch task
-void dialogue_box_launch(struct workqueue_task *task);
+struct wtk_dialogue_box;
+
+// void wtk_dialogue_box_draw();
+
+struct win_window *wtk_dialogue_box_as_child(struct wtk_dialogue_box *dialogue_box);
+		
+struct wtk_dialogue_box *wtk_dialogue_box_launch(struct win_window *parent,
+		const struct win_area *area, struct workqueue_task *task);
+		
+struct win_window *wtk_basic_frame_as_child(
+		struct wtk_basic_frame *basic_frame);
+
 
 
 
