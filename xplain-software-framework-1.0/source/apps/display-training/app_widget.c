@@ -379,7 +379,7 @@ void app_widget_launch(struct workqueue_task *task) {
 
 
 	//! Create the dialogue_box
-	dialogue_box = wtk_dialogue_box_create(parent, &area, NULL, NULL, finished_task);
+	dialogue_box = wtk_dialogue_box_create(parent, &area, NULL, &finished_task);
 	if (!sub_frame) {
 		goto error_widget;
 	}

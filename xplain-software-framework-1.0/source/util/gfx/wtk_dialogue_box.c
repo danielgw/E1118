@@ -296,11 +296,13 @@ static bool wtk_dialogue_box_handler(struct win_window *win,
  * \return Pointer to basic frame, or NULL if failed.
  */
 struct wtk_dialogue_box *wtk_dialogue_box_create(struct win_window *parent,
-		const struct win_area *area,
-		wtk_dialogue_box_command_handler_t frame_handler, void *custom_data, struct workqueue_task *task)
+		const struct win_area *area, void *custom_data, struct workqueue_task *task)
 {
-	struct win_attributes   attr;
-	struct wtk_dialogue_box  *dialogue_box;
+	struct win_attributes		attr;
+	struct wtk_dialogue_box		*dialogue_box;
+	struct wtk_button			*button_ok;
+	
+	
 
 	assert(area);
 	assert(parent);
@@ -312,7 +314,7 @@ struct wtk_dialogue_box *wtk_dialogue_box_create(struct win_window *parent,
 	}
 
 	// Set window attributes
-	dialogue_box->frame_handler = frame_handler;
+	dialogue_box->frame_handler = dialogue_box_command_handler;
 	dialogue_box->custom_data = custom_data;
 	dialogue_box->task = task;
 
@@ -342,9 +344,25 @@ struct wtk_dialogue_box *wtk_dialogue_box_create(struct win_window *parent,
 	if (!dialogue_box->win) {
 		goto outofmem_win;
 	}
+	
+	// Create the button
+	attr.area.pos.x = gfx_get_width()/3;
+	attr.area.pos.y = gfx_get_height()/3;
+	attr.area.size.x = gfx_get_width()/3;
+	attr.area.size.y = gfx_get_height()/3;
+
+	button_ok = wtk_button_create(parent, &attr.area, "OK",
+			(win_command_t)BUTTON_OK_ID);
+	if (!button_ok) {
+		goto error_widget;
+	}
+	
 
 	return dialogue_box;
 
+error_widget:
+	win_destroy(wtk_dialogue_box_as_child(dialogue_box));	
+	
 outofmem_win:
 	membag_free(dialogue_box);
 

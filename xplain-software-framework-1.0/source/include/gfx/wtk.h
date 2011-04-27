@@ -365,8 +365,7 @@ typedef void(*wtk_dialogue_box_draw_handler_t) (
 		struct win_window *win, struct win_clip_region const *clip);
 
 struct wtk_dialogue_box *wtk_dialogue_box_create(struct win_window *parent,
-		const struct win_area *area,
-		wtk_dialogue_box_command_handler_t frame_handler, void *custom_data, struct workqueue_task *task);
+		const struct win_area *area, void *custom_data, struct workqueue_task *task);
 struct win_window *wtk_dialogue_box_as_child(
 		struct wtk_dialogue_box *dialogue_box);
 void *wtk_dialogue_box_get_custom_data(
