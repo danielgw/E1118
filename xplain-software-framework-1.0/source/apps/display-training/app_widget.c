@@ -140,6 +140,9 @@ const static char                   *demo_string = "Demonstrating widgets";
  * @{
  */
 
+//! Pointer to frame for dialogue_box
+static struct wtk_dialogue_box       *dialogue_box;
+
 static struct wtk_frame             *frametest;
 
 //! Pointer to frame for application
@@ -158,6 +161,12 @@ static struct wtk_basic_frame       *sub_frame;
 static struct gfx_bitmap            sub_frame_background;
 
 
+//! Finished task that runs after finishing dialogue box
+static void finished_task(struct workqueue_task *task)
+{
+	counter++;
+	win_redraw(wtk_basic_frame_as_child(sub_frame));
+}
 
 //! @}
 
@@ -182,9 +191,7 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 	case BUTTON_ID:
 		counter++;
 		
-		//wtk_dialogue_box_launch("Vil du lukke?");
-		
-		dialogue_box_launch(&dialogue);
+		win_show(wtk_dialogue_box_as_child(dialogue_box));
 
 		win_redraw(wtk_basic_frame_as_child(sub_frame));
 		break;
@@ -342,7 +349,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	// Draw the progress bar by showing the progress bar widget's window.
 	win_show(wtk_progress_bar_as_child(progress_bar));
 
-	//! \todo Add code to set up button here.
+
 	area.pos.x = 10;
 	area.pos.y = 150;
 	area.size.x = 90;
@@ -355,7 +362,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	}
 	win_show(wtk_button_as_child(btn));
 
-	//! \todo Add code to set up basic frame here.
+
 	area.pos.x += area.size.x + 40;
 
 	sub_frame_background.type = BITMAP_SOLID;
@@ -368,6 +375,15 @@ void app_widget_launch(struct workqueue_task *task) {
 		goto error_widget;
 	}
 	win_show(wtk_basic_frame_as_child(sub_frame));
+
+
+
+	//! Create the dialogue_box
+	dialogue_box = wtk_dialogue_box_create(parent, &area, NULL, NULL, finished_task);
+	if (!sub_frame) {
+		goto error_widget;
+	}
+	
 
 	return;
 
