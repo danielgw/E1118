@@ -377,7 +377,7 @@ typedef uint8_t wtk_radio_group_size_t;
 
 #ifndef WTK_TRIG_TABLE_MAX_VALUE
 //! Trigtable max value.
-# define WTK_TRIG_TABLE_MAX_VALUE     128
+# define WTK_TRIG_TABLE_MAX_VALUE     255
 #endif
 
 //! @}
