@@ -394,8 +394,7 @@ void app_widget_launch(struct workqueue_task *task) {
 		SLIDER_TWO_MAX_VALUE + GAUGE_START_DISPLACEMENT,
 		(SLIDER_TWO_MAX_VALUE + GAUGE_START_DISPLACEMENT) / 2, 
 		GAUGE_TWO_OUTER_POS, GAUGE_TWO_INNER_POS, GFX_COLOR(255, 0, 0),
-		GFX_COLOR(100, 100, 100), 
-		APP_BACKGROUND_COLOR, 0);
+		GFX_COLOR(100, 100, 100), APP_BACKGROUND_COLOR, 0);
 	if (!gauge_two) {
 		goto error_widget;
 	}

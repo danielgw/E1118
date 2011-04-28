@@ -553,7 +553,7 @@ Linker script and memory map
 
                 0x00000000                . = 0x0
 
-.text           0x00000000     0x50d8
+.text           0x00000000     0x5262
                 0x00000000                _text = .
  *(.vectors)
  .vectors       0x00000000      0x1f4 arch/avr8/entry.o
@@ -836,209 +836,209 @@ Linker script and memory map
                 0x00001ff4      0x13c util/gfx/wtk_gauge.o
                 0x00001ff4                wtk_gauge_create
  .text.wtk_gauge_draw
-                0x00002130      0x1d8 util/gfx/wtk_gauge.o
+                0x00002130      0x360 util/gfx/wtk_gauge.o
  .text.wtk_gauge_handler
-                0x00002308       0xf2 util/gfx/wtk_gauge.o
+                0x00002490       0xf2 util/gfx/wtk_gauge.o
  .text.wtk_gauge_set_value
-                0x000023fa       0x52 util/gfx/wtk_gauge.o
-                0x000023fa                wtk_gauge_set_value
+                0x00002582       0x54 util/gfx/wtk_gauge.o
+                0x00002582                wtk_gauge_set_value
  .text.generic_memcpy
-                0x0000244c       0x32 util/string/generic_memcpy.o
-                0x0000244c                generic_memcpy
+                0x000025d6       0x32 util/string/generic_memcpy.o
+                0x000025d6                generic_memcpy
  .text.generic_strlen
-                0x0000247e       0x16 util/string/generic_strlen.o
-                0x0000247e                generic_strlen
+                0x00002608       0x16 util/string/generic_strlen.o
+                0x00002608                generic_strlen
  .text.membag_free
-                0x00002494       0x44 util/membag.o
-                0x00002494                membag_free
+                0x0000261e       0x44 util/membag.o
+                0x0000261e                membag_free
  .text.membag_alloc
-                0x000024d8       0x60 util/membag.o
-                0x000024d8                membag_alloc
+                0x00002662       0x60 util/membag.o
+                0x00002662                membag_alloc
  .text.membag_init
-                0x00002538       0xc8 util/membag.o
-                0x00002538                membag_init
+                0x000026c2       0xc8 util/membag.o
+                0x000026c2                membag_init
  .text.mem_pool_init
-                0x00002600       0x8c util/mempool.o
-                0x00002600                mem_pool_init
+                0x0000278a       0x8c util/mempool.o
+                0x0000278a                mem_pool_init
  .text.mem_pool_alloc
-                0x0000268c       0x1e util/mempool.o
-                0x0000268c                mem_pool_alloc
+                0x00002816       0x1e util/mempool.o
+                0x00002816                mem_pool_alloc
  .text.mem_pool_free
-                0x000026aa       0x20 util/mempool.o
-                0x000026aa                mem_pool_free
+                0x00002834       0x20 util/mempool.o
+                0x00002834                mem_pool_free
  .text.physmem_alloc
-                0x000026ca       0x6a util/physmem.o
-                0x000026ca                physmem_alloc
+                0x00002854       0x6a util/physmem.o
+                0x00002854                physmem_alloc
  .text.softirq_set_handler
-                0x00002734       0x1a util/softirq_common.o
-                0x00002734                softirq_set_handler
+                0x000028be       0x1a util/softirq_common.o
+                0x000028be                softirq_set_handler
  .text.workqueue_add_task
-                0x0000274e       0x40 util/workqueue.o
-                0x0000274e                workqueue_add_task
+                0x000028d8       0x40 util/workqueue.o
+                0x000028d8                workqueue_add_task
  .text.sysclk_enable_module
-                0x0000278e       0x18 drivers/clk/xmega_pr.o
-                0x0000278e                sysclk_enable_module
+                0x00002918       0x18 drivers/clk/xmega_pr.o
+                0x00002918                sysclk_enable_module
  .text.gfx_select_register
-                0x000027a6       0x3e drivers/gfx/hx8347a/gfx_hx8347a.o
+                0x00002930       0x3e drivers/gfx/hx8347a/gfx_hx8347a.o
  .text.gfx_write_register
-                0x000027e4       0x44 drivers/gfx/hx8347a/gfx_hx8347a.o
+                0x0000296e       0x44 drivers/gfx/hx8347a/gfx_hx8347a.o
  .text.gfx_read_register
-                0x00002828       0x54 drivers/gfx/hx8347a/gfx_hx8347a.o
+                0x000029b2       0x54 drivers/gfx/hx8347a/gfx_hx8347a.o
  .text.gfx_write_gram
-                0x0000287c       0x60 drivers/gfx/hx8347a/gfx_hx8347a.o
+                0x00002a06       0x60 drivers/gfx/hx8347a/gfx_hx8347a.o
  .text.gfx_duplicate_pixel
-                0x000028dc       0xfc drivers/gfx/hx8347a/gfx_hx8347a.o
-                0x000028dc                gfx_duplicate_pixel
+                0x00002a66       0xfc drivers/gfx/hx8347a/gfx_hx8347a.o
+                0x00002a66                gfx_duplicate_pixel
  .text.gfx_copy_pixels_to_screen
-                0x000029d8       0xc2 drivers/gfx/hx8347a/gfx_hx8347a.o
-                0x000029d8                gfx_copy_pixels_to_screen
+                0x00002b62       0xc2 drivers/gfx/hx8347a/gfx_hx8347a.o
+                0x00002b62                gfx_copy_pixels_to_screen
  .text.gfx_copy_progmem_pixels_to_screen
-                0x00002a9a       0x8e drivers/gfx/hx8347a/gfx_hx8347a.o
-                0x00002a9a                gfx_copy_progmem_pixels_to_screen
+                0x00002c24       0x8e drivers/gfx/hx8347a/gfx_hx8347a.o
+                0x00002c24                gfx_copy_progmem_pixels_to_screen
  .text.gfx_copy_hugemem_pixels_to_screen
-                0x00002b28       0xae drivers/gfx/hx8347a/gfx_hx8347a.o
-                0x00002b28                gfx_copy_hugemem_pixels_to_screen
+                0x00002cb2       0xae drivers/gfx/hx8347a/gfx_hx8347a.o
+                0x00002cb2                gfx_copy_hugemem_pixels_to_screen
  .text.gfx_set_clipping
-                0x00002bd6       0x60 drivers/gfx/hx8347a/gfx_hx8347a.o
-                0x00002bd6                gfx_set_clipping
+                0x00002d60       0x60 drivers/gfx/hx8347a/gfx_hx8347a.o
+                0x00002d60                gfx_set_clipping
  .text.gfx_set_orientation
-                0x00002c36       0x86 drivers/gfx/hx8347a/gfx_hx8347a.o
-                0x00002c36                gfx_set_orientation
+                0x00002dc0       0x86 drivers/gfx/hx8347a/gfx_hx8347a.o
+                0x00002dc0                gfx_set_orientation
  .text.gfx_get_width
-                0x00002cbc        0xa drivers/gfx/hx8347a/gfx_hx8347a.o
-                0x00002cbc                gfx_get_width
+                0x00002e46        0xa drivers/gfx/hx8347a/gfx_hx8347a.o
+                0x00002e46                gfx_get_width
  .text.gfx_get_height
-                0x00002cc6        0xa drivers/gfx/hx8347a/gfx_hx8347a.o
-                0x00002cc6                gfx_get_height
+                0x00002e50        0xa drivers/gfx/hx8347a/gfx_hx8347a.o
+                0x00002e50                gfx_get_height
  .text.gfx_set_top_left_limit
-                0x00002cd0       0x3a drivers/gfx/hx8347a/gfx_hx8347a.o
-                0x00002cd0                gfx_set_top_left_limit
+                0x00002e5a       0x3a drivers/gfx/hx8347a/gfx_hx8347a.o
+                0x00002e5a                gfx_set_top_left_limit
  .text.gfx_draw_line_pixel
-                0x00002d0a       0x4e drivers/gfx/hx8347a/gfx_hx8347a.o
-                0x00002d0a                gfx_draw_line_pixel
+                0x00002e94       0x4e drivers/gfx/hx8347a/gfx_hx8347a.o
+                0x00002e94                gfx_draw_line_pixel
  .text.gfx_set_bottom_right_limit
-                0x00002d58       0x3a drivers/gfx/hx8347a/gfx_hx8347a.o
-                0x00002d58                gfx_set_bottom_right_limit
+                0x00002ee2       0x3a drivers/gfx/hx8347a/gfx_hx8347a.o
+                0x00002ee2                gfx_set_bottom_right_limit
  .text.gfx_set_limits
-                0x00002d92       0x1e drivers/gfx/hx8347a/gfx_hx8347a.o
-                0x00002d92                gfx_set_limits
+                0x00002f1c       0x1e drivers/gfx/hx8347a/gfx_hx8347a.o
+                0x00002f1c                gfx_set_limits
  .text.gfx_draw_pixel
-                0x00002db0       0x52 drivers/gfx/hx8347a/gfx_hx8347a.o
-                0x00002db0                gfx_draw_pixel
+                0x00002f3a       0x52 drivers/gfx/hx8347a/gfx_hx8347a.o
+                0x00002f3a                gfx_draw_pixel
  .text.gfx_init
-                0x00002e02      0x25c drivers/gfx/hx8347a/gfx_hx8347a.o
-                0x00002e02                gfx_init
+                0x00002f8c      0x25c drivers/gfx/hx8347a/gfx_hx8347a.o
+                0x00002f8c                gfx_init
  .text.gfx_generic_draw_circle
-                0x0000305e      0x202 drivers/gfx/gfx_generic.o
-                0x0000305e                gfx_generic_draw_circle
+                0x000031e8      0x202 drivers/gfx/gfx_generic.o
+                0x000031e8                gfx_generic_draw_circle
  .text.gfx_generic_draw_filled_rect
-                0x00003260      0x134 drivers/gfx/gfx_generic.o
-                0x00003260                gfx_generic_draw_filled_rect
+                0x000033ea      0x134 drivers/gfx/gfx_generic.o
+                0x000033ea                gfx_generic_draw_filled_rect
  .text.gfx_generic_draw_vertical_line
-                0x00003394       0x16 drivers/gfx/gfx_generic.o
-                0x00003394                gfx_generic_draw_vertical_line
+                0x0000351e       0x16 drivers/gfx/gfx_generic.o
+                0x0000351e                gfx_generic_draw_vertical_line
  .text.gfx_generic_draw_filled_circle
-                0x000033aa      0x1dc drivers/gfx/gfx_generic.o
-                0x000033aa                gfx_generic_draw_filled_circle
+                0x00003534      0x1dc drivers/gfx/gfx_generic.o
+                0x00003534                gfx_generic_draw_filled_circle
  .text.gfx_generic_draw_horizontal_line
-                0x00003586       0x12 drivers/gfx/gfx_generic.o
-                0x00003586                gfx_generic_draw_horizontal_line
+                0x00003710       0x12 drivers/gfx/gfx_generic.o
+                0x00003710                gfx_generic_draw_horizontal_line
  .text.gfx_generic_draw_rect
-                0x00003598       0x66 drivers/gfx/gfx_generic.o
-                0x00003598                gfx_generic_draw_rect
+                0x00003722       0x66 drivers/gfx/gfx_generic.o
+                0x00003722                gfx_generic_draw_rect
  .text.gfx_generic_draw_line
-                0x000035fe      0x118 drivers/gfx/gfx_generic.o
-                0x000035fe                gfx_generic_draw_line
+                0x00003788      0x118 drivers/gfx/gfx_generic.o
+                0x00003788                gfx_generic_draw_line
  .text.gfx_get_string_bounding_box
-                0x00003716       0x88 drivers/gfx/gfx_text.o
-                0x00003716                gfx_get_string_bounding_box
+                0x000038a0       0x88 drivers/gfx/gfx_text.o
+                0x000038a0                gfx_get_string_bounding_box
  .text.gfx_draw_char
-                0x0000379e      0x28e drivers/gfx/gfx_text.o
-                0x0000379e                gfx_draw_char
+                0x00003928      0x28e drivers/gfx/gfx_text.o
+                0x00003928                gfx_draw_char
  .text.gfx_draw_progmem_string
-                0x00003a2c       0xd2 drivers/gfx/gfx_text.o
-                0x00003a2c                gfx_draw_progmem_string
+                0x00003bb6       0xd2 drivers/gfx/gfx_text.o
+                0x00003bb6                gfx_draw_progmem_string
  .text.gfx_draw_string
-                0x00003afe       0xca drivers/gfx/gfx_text.o
-                0x00003afe                gfx_draw_string
+                0x00003c88       0xca drivers/gfx/gfx_text.o
+                0x00003c88                gfx_draw_string
  .text.gfx_put_bitmap
-                0x00003bc8      0x3e6 drivers/gfx/gfx_bitmap.o
-                0x00003bc8                gfx_put_bitmap
+                0x00003d52      0x3e6 drivers/gfx/gfx_bitmap.o
+                0x00003d52                gfx_put_bitmap
  .text.gfx_draw_bitmap_tiled
-                0x00003fae      0x118 drivers/gfx/gfx_bitmap.o
-                0x00003fae                gfx_draw_bitmap_tiled
+                0x00004138      0x118 drivers/gfx/gfx_bitmap.o
+                0x00004138                gfx_draw_bitmap_tiled
  .text.port_select_gpio
-                0x000040c6       0x56 drivers/gpio/port.o
-                0x000040c6                port_select_gpio
+                0x00004250       0x56 drivers/gpio/port.o
+                0x00004250                port_select_gpio
  .text.intc_priv_entry_irq67
-                0x0000411c       0x7e drivers/touch/resistive/touch.o
-                0x0000411c                intc_priv_entry_irq67
+                0x000042a6       0x7e drivers/touch/resistive/touch.o
+                0x000042a6                intc_priv_entry_irq67
  .text.intc_priv_entry_irq73
-                0x0000419a      0x146 drivers/touch/resistive/touch.o
-                0x0000419a                intc_priv_entry_irq73
+                0x00004324      0x146 drivers/touch/resistive/touch.o
+                0x00004324                intc_priv_entry_irq73
  .text.touch_enable
-                0x000042e0       0x40 drivers/touch/resistive/touch.o
-                0x000042e0                touch_enable
+                0x0000446a       0x40 drivers/touch/resistive/touch.o
+                0x0000446a                touch_enable
  .text.touch_disable
-                0x00004320       0x16 drivers/touch/resistive/touch.o
-                0x00004320                touch_disable
+                0x000044aa       0x16 drivers/touch/resistive/touch.o
+                0x000044aa                touch_disable
  .text.touch_set_event_handler
-                0x00004336       0x10 drivers/touch/resistive/touch.o
-                0x00004336                touch_set_event_handler
+                0x000044c0       0x10 drivers/touch/resistive/touch.o
+                0x000044c0                touch_set_event_handler
  .text.touch_get_event_handler
-                0x00004346        0xa drivers/touch/resistive/touch.o
-                0x00004346                touch_get_event_handler
+                0x000044d0        0xa drivers/touch/resistive/touch.o
+                0x000044d0                touch_get_event_handler
  .text.touch_set_calibration_matrix
-                0x00004350       0x12 drivers/touch/resistive/touch.o
-                0x00004350                touch_set_calibration_matrix
+                0x000044da       0x12 drivers/touch/resistive/touch.o
+                0x000044da                touch_set_calibration_matrix
  .text.touch_compute_calibration_matrix
-                0x00004362      0x4e4 drivers/touch/resistive/touch.o
-                0x00004362                touch_compute_calibration_matrix
+                0x000044ec      0x4e4 drivers/touch/resistive/touch.o
+                0x000044ec                touch_compute_calibration_matrix
  .text.touch_priv_process_samples
-                0x00004846      0x29e drivers/touch/resistive/touch.o
+                0x000049d0      0x29e drivers/touch/resistive/touch.o
  .text.touch_init
-                0x00004ae4       0x56 drivers/touch/resistive/touch.o
-                0x00004ae4                touch_init
- .text.udelay   0x00004b3a       0x18 arch/avr8/delay.o
-                0x00004b3a                udelay
+                0x00004c6e       0x56 drivers/touch/resistive/touch.o
+                0x00004c6e                touch_init
+ .text.udelay   0x00004cc4       0x18 arch/avr8/delay.o
+                0x00004cc4                udelay
  .text.hugemem_read_block
-                0x00004b52       0x1a arch/avr8/arch_hugemem.o
-                0x00004b52                hugemem_read_block
+                0x00004cdc       0x1a arch/avr8/arch_hugemem.o
+                0x00004cdc                hugemem_read_block
  .text.mmio_ccp_write8
-                0x00004b6c        0xc cpu/xmega/ccp.o
-                0x00004b6c                mmio_ccp_write8
+                0x00004cf6        0xc cpu/xmega/ccp.o
+                0x00004cf6                mmio_ccp_write8
  .text.sysclk_init
-                0x00004b78       0x56 chip/atxmega128a1/sysclk.o
-                0x00004b78                sysclk_init
+                0x00004d02       0x56 chip/atxmega128a1/sysclk.o
+                0x00004d02                sysclk_init
  .text.board_init
-                0x00004bce       0xae board/xplain/init.o
-                0x00004bce                board_init
- .text.libgcc   0x00004c7c       0x3e c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avrxmega7/libgcc.a(_mulsi3.o)
-                0x00004c7c                __mulsi3
- .text.libgcc   0x00004cba       0x28 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avrxmega7/libgcc.a(_udivmodhi4.o)
-                0x00004cba                __udivmodhi4
- .text.libgcc   0x00004ce2       0x26 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avrxmega7/libgcc.a(_divmodhi4.o)
-                0x00004ce2                __divmodhi4
-                0x00004ce2                _div
- .text.libgcc   0x00004d08       0x44 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avrxmega7/libgcc.a(_udivmodsi4.o)
-                0x00004d08                __udivmodsi4
- .text.libgcc   0x00004d4c       0x36 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avrxmega7/libgcc.a(_divmodsi4.o)
-                0x00004d4c                __divmodsi4
+                0x00004d58       0xae board/xplain/init.o
+                0x00004d58                board_init
+ .text.libgcc   0x00004e06       0x3e c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avrxmega7/libgcc.a(_mulsi3.o)
+                0x00004e06                __mulsi3
+ .text.libgcc   0x00004e44       0x28 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avrxmega7/libgcc.a(_udivmodhi4.o)
+                0x00004e44                __udivmodhi4
+ .text.libgcc   0x00004e6c       0x26 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avrxmega7/libgcc.a(_divmodhi4.o)
+                0x00004e6c                __divmodhi4
+                0x00004e6c                _div
+ .text.libgcc   0x00004e92       0x44 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avrxmega7/libgcc.a(_udivmodsi4.o)
+                0x00004e92                __udivmodsi4
+ .text.libgcc   0x00004ed6       0x36 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avrxmega7/libgcc.a(_divmodsi4.o)
+                0x00004ed6                __divmodsi4
  *(.progmem.gcc_sw_table)
  *(.progmem.data)
- .progmem.data  0x00004d82       0x35 apps/gauge-demo/app_calibrate.o
- .progmem.data  0x00004db7      0x2a0 util/gfx/sysfont.o
- .progmem.data  0x00005057       0x80 util/gfx/wtk_gauge.o
-                0x00005057                trigtable
-                0x000050d8                . = ALIGN (0x2)
- *fill*         0x000050d7        0x1 00
-                0x000050d8                _etext = .
+ .progmem.data  0x00004f0c       0x35 apps/gauge-demo/app_calibrate.o
+ .progmem.data  0x00004f41      0x2a0 util/gfx/sysfont.o
+ .progmem.data  0x000051e1       0x80 util/gfx/wtk_gauge.o
+                0x000051e1                trigtable
+                0x00005262                . = ALIGN (0x2)
+ *fill*         0x00005261        0x1 00
+                0x00005262                _etext = .
 
-.trampolines    0x000050d8        0x0
- .trampolines   0x000050d8        0x0 linker stubs
+.trampolines    0x00005262        0x0
+ .trampolines   0x00005262        0x0 linker stubs
                 0x00802000                . = 0x802000
 
-.data           0x00802000       0x50 load address 0x000050d8
+.data           0x00802000       0x50 load address 0x00005262
                 0x00802000                _data = .
  *(.rodata)
  *(.rodata.*)
@@ -1057,7 +1057,7 @@ Linker script and memory map
  *fill*         0x0080204f        0x1 00
                 0x00802050                _edata = .
 
-.bss            0x00802050      0x18a load address 0x00005128
+.bss            0x00802050      0x18a load address 0x000052b2
  *(.bss)
  *(.bss.*)
  .bss.launch_application
@@ -1293,7 +1293,7 @@ LOAD linker stubs
  .debug_info    0x00016139      0x4f1 board/xplain/init.o
  .debug_info    0x0001662a      0x103 board/xplain/board_physmem_pools.o
 
-.debug_line     0x00000000     0xb6b6
+.debug_line     0x00000000     0xb6d6
  .debug_line    0x00000000      0x3dd apps/gauge-demo/main.o
  .debug_line    0x000003dd      0x35e apps/gauge-demo/app_calibrate.o
  .debug_line    0x0000073b      0x371 apps/gauge-demo/app_widget.o
@@ -1308,41 +1308,41 @@ LOAD linker stubs
  .debug_line    0x000032b6      0x328 util/gfx/wtk_progress_bar.o
  .debug_line    0x000035de      0x49f util/gfx/wtk_radio_button.o
  .debug_line    0x00003a7d      0x473 util/gfx/wtk_slider.o
- .debug_line    0x00003ef0      0x474 util/gfx/wtk_gauge.o
- .debug_line    0x00004364       0xdc util/string/generic_memcpy.o
- .debug_line    0x00004440       0xdc util/string/generic_memset.o
- .debug_line    0x0000451c       0xdc util/string/generic_strlen.o
- .debug_line    0x000045f8      0x126 util/string/generic_strcmp.o
- .debug_line    0x0000471e      0x65d util/stream/stream_core.o
- .debug_line    0x00004d7b      0x2df util/stream/stream_string.o
- .debug_line    0x0000505a      0x757 util/fs/tsfs.o
- .debug_line    0x000057b1      0x201 util/buffer.o
- .debug_line    0x000059b2      0x112 util/hugemem.o
- .debug_line    0x00005ac4      0x1c6 util/malloc_simple.o
- .debug_line    0x00005c8a      0x30c util/membag.o
- .debug_line    0x00005f96      0x31a util/mempool.o
- .debug_line    0x000062b0      0x161 util/physmem.o
- .debug_line    0x00006411      0x126 util/softirq_common.o
- .debug_line    0x00006537      0x28b util/workqueue.o
- .debug_line    0x000067c2      0x153 drivers/block/block_core.o
- .debug_line    0x00006915      0xc33 drivers/block/dataflash.o
- .debug_line    0x00007548      0x1ae drivers/clk/xmega_pr.o
- .debug_line    0x000076f6      0x51d drivers/flash/at45_device.o
- .debug_line    0x00007c13      0xc76 drivers/gfx/hx8347a/gfx_hx8347a.o
- .debug_line    0x00008889      0x6fb drivers/gfx/gfx_generic.o
- .debug_line    0x00008f84      0x4ba drivers/gfx/gfx_text.o
- .debug_line    0x0000943e      0x3b6 drivers/gfx/gfx_bitmap.o
- .debug_line    0x000097f4      0x19a drivers/gpio/port.o
- .debug_line    0x0000998e      0x333 drivers/serial/spi/spi_polled.o
- .debug_line    0x00009cc1      0x3a2 drivers/serial/spi/spi_polled_buf_list.o
- .debug_line    0x0000a063      0x562 drivers/serial/spi/spi_mega_xmega.o
- .debug_line    0x0000a5c5      0x7b7 drivers/touch/resistive/touch.o
- .debug_line    0x0000ad7c       0xf3 arch/avr8/delay.o
- .debug_line    0x0000ae6f      0x1d0 arch/avr8/arch_hugemem.o
- .debug_line    0x0000b03f       0xfe cpu/xmega/physmem_pools.o
- .debug_line    0x0000b13d      0x263 chip/atxmega128a1/sysclk.o
- .debug_line    0x0000b3a0      0x227 board/xplain/init.o
- .debug_line    0x0000b5c7       0xef board/xplain/board_physmem_pools.o
+ .debug_line    0x00003ef0      0x494 util/gfx/wtk_gauge.o
+ .debug_line    0x00004384       0xdc util/string/generic_memcpy.o
+ .debug_line    0x00004460       0xdc util/string/generic_memset.o
+ .debug_line    0x0000453c       0xdc util/string/generic_strlen.o
+ .debug_line    0x00004618      0x126 util/string/generic_strcmp.o
+ .debug_line    0x0000473e      0x65d util/stream/stream_core.o
+ .debug_line    0x00004d9b      0x2df util/stream/stream_string.o
+ .debug_line    0x0000507a      0x757 util/fs/tsfs.o
+ .debug_line    0x000057d1      0x201 util/buffer.o
+ .debug_line    0x000059d2      0x112 util/hugemem.o
+ .debug_line    0x00005ae4      0x1c6 util/malloc_simple.o
+ .debug_line    0x00005caa      0x30c util/membag.o
+ .debug_line    0x00005fb6      0x31a util/mempool.o
+ .debug_line    0x000062d0      0x161 util/physmem.o
+ .debug_line    0x00006431      0x126 util/softirq_common.o
+ .debug_line    0x00006557      0x28b util/workqueue.o
+ .debug_line    0x000067e2      0x153 drivers/block/block_core.o
+ .debug_line    0x00006935      0xc33 drivers/block/dataflash.o
+ .debug_line    0x00007568      0x1ae drivers/clk/xmega_pr.o
+ .debug_line    0x00007716      0x51d drivers/flash/at45_device.o
+ .debug_line    0x00007c33      0xc76 drivers/gfx/hx8347a/gfx_hx8347a.o
+ .debug_line    0x000088a9      0x6fb drivers/gfx/gfx_generic.o
+ .debug_line    0x00008fa4      0x4ba drivers/gfx/gfx_text.o
+ .debug_line    0x0000945e      0x3b6 drivers/gfx/gfx_bitmap.o
+ .debug_line    0x00009814      0x19a drivers/gpio/port.o
+ .debug_line    0x000099ae      0x333 drivers/serial/spi/spi_polled.o
+ .debug_line    0x00009ce1      0x3a2 drivers/serial/spi/spi_polled_buf_list.o
+ .debug_line    0x0000a083      0x562 drivers/serial/spi/spi_mega_xmega.o
+ .debug_line    0x0000a5e5      0x7b7 drivers/touch/resistive/touch.o
+ .debug_line    0x0000ad9c       0xf3 arch/avr8/delay.o
+ .debug_line    0x0000ae8f      0x1d0 arch/avr8/arch_hugemem.o
+ .debug_line    0x0000b05f       0xfe cpu/xmega/physmem_pools.o
+ .debug_line    0x0000b15d      0x263 chip/atxmega128a1/sysclk.o
+ .debug_line    0x0000b3c0      0x227 board/xplain/init.o
+ .debug_line    0x0000b5e7       0xef board/xplain/board_physmem_pools.o
 
 .debug_frame    0x00000000     0x13f0
  .debug_frame   0x00000000       0x20 apps/gauge-demo/main.o
@@ -1392,7 +1392,7 @@ LOAD linker stubs
  .debug_frame   0x000013b0       0x20 chip/atxmega128a1/sysclk.o
  .debug_frame   0x000013d0       0x20 board/xplain/init.o
 
-.debug_loc      0x00000000     0x8dd0
+.debug_loc      0x00000000     0x8d80
  .debug_loc     0x00000000      0x121 apps/gauge-demo/main.o
  .debug_loc     0x00000121      0x120 apps/gauge-demo/app_calibrate.o
  .debug_loc     0x00000241       0xe0 apps/gauge-demo/app_widget.o
@@ -1406,38 +1406,38 @@ LOAD linker stubs
  .debug_loc     0x0000271a      0x448 util/gfx/wtk_progress_bar.o
  .debug_loc     0x00002b62      0x3a7 util/gfx/wtk_radio_button.o
  .debug_loc     0x00002f09      0x591 util/gfx/wtk_slider.o
- .debug_loc     0x0000349a      0x5a0 util/gfx/wtk_gauge.o
- .debug_loc     0x00003a3a       0x38 util/string/generic_memcpy.o
- .debug_loc     0x00003a72       0x60 util/string/generic_memset.o
- .debug_loc     0x00003ad2       0x40 util/string/generic_strlen.o
- .debug_loc     0x00003b12       0xd9 util/string/generic_strcmp.o
- .debug_loc     0x00003beb      0x563 util/stream/stream_core.o
- .debug_loc     0x0000414e      0x143 util/stream/stream_string.o
- .debug_loc     0x00004291      0x5d7 util/fs/tsfs.o
- .debug_loc     0x00004868       0x28 util/buffer.o
- .debug_loc     0x00004890       0x6c util/hugemem.o
- .debug_loc     0x000048fc       0xb2 util/malloc_simple.o
- .debug_loc     0x000049ae      0x18a util/membag.o
- .debug_loc     0x00004b38      0x244 util/mempool.o
- .debug_loc     0x00004d7c       0xc2 util/physmem.o
- .debug_loc     0x00004e3e       0x13 util/softirq_common.o
- .debug_loc     0x00004e51      0x14f util/workqueue.o
- .debug_loc     0x00004fa0       0xd0 drivers/block/block_core.o
- .debug_loc     0x00005070      0x6fe drivers/block/dataflash.o
- .debug_loc     0x0000576e       0x26 drivers/clk/xmega_pr.o
- .debug_loc     0x00005794      0x140 drivers/flash/at45_device.o
- .debug_loc     0x000058d4      0x8b5 drivers/gfx/hx8347a/gfx_hx8347a.o
- .debug_loc     0x00006189      0xfb0 drivers/gfx/gfx_generic.o
- .debug_loc     0x00007139      0x9be drivers/gfx/gfx_text.o
- .debug_loc     0x00007af7      0x870 drivers/gfx/gfx_bitmap.o
- .debug_loc     0x00008367       0xb6 drivers/gpio/port.o
- .debug_loc     0x0000841d      0x1d3 drivers/serial/spi/spi_polled.o
- .debug_loc     0x000085f0      0x1fe drivers/serial/spi/spi_polled_buf_list.o
- .debug_loc     0x000087ee      0x2ea drivers/serial/spi/spi_mega_xmega.o
- .debug_loc     0x00008ad8      0x1c8 drivers/touch/resistive/touch.o
- .debug_loc     0x00008ca0       0x2e arch/avr8/delay.o
- .debug_loc     0x00008cce       0xdc arch/avr8/arch_hugemem.o
- .debug_loc     0x00008daa       0x26 chip/atxmega128a1/sysclk.o
+ .debug_loc     0x0000349a      0x550 util/gfx/wtk_gauge.o
+ .debug_loc     0x000039ea       0x38 util/string/generic_memcpy.o
+ .debug_loc     0x00003a22       0x60 util/string/generic_memset.o
+ .debug_loc     0x00003a82       0x40 util/string/generic_strlen.o
+ .debug_loc     0x00003ac2       0xd9 util/string/generic_strcmp.o
+ .debug_loc     0x00003b9b      0x563 util/stream/stream_core.o
+ .debug_loc     0x000040fe      0x143 util/stream/stream_string.o
+ .debug_loc     0x00004241      0x5d7 util/fs/tsfs.o
+ .debug_loc     0x00004818       0x28 util/buffer.o
+ .debug_loc     0x00004840       0x6c util/hugemem.o
+ .debug_loc     0x000048ac       0xb2 util/malloc_simple.o
+ .debug_loc     0x0000495e      0x18a util/membag.o
+ .debug_loc     0x00004ae8      0x244 util/mempool.o
+ .debug_loc     0x00004d2c       0xc2 util/physmem.o
+ .debug_loc     0x00004dee       0x13 util/softirq_common.o
+ .debug_loc     0x00004e01      0x14f util/workqueue.o
+ .debug_loc     0x00004f50       0xd0 drivers/block/block_core.o
+ .debug_loc     0x00005020      0x6fe drivers/block/dataflash.o
+ .debug_loc     0x0000571e       0x26 drivers/clk/xmega_pr.o
+ .debug_loc     0x00005744      0x140 drivers/flash/at45_device.o
+ .debug_loc     0x00005884      0x8b5 drivers/gfx/hx8347a/gfx_hx8347a.o
+ .debug_loc     0x00006139      0xfb0 drivers/gfx/gfx_generic.o
+ .debug_loc     0x000070e9      0x9be drivers/gfx/gfx_text.o
+ .debug_loc     0x00007aa7      0x870 drivers/gfx/gfx_bitmap.o
+ .debug_loc     0x00008317       0xb6 drivers/gpio/port.o
+ .debug_loc     0x000083cd      0x1d3 drivers/serial/spi/spi_polled.o
+ .debug_loc     0x000085a0      0x1fe drivers/serial/spi/spi_polled_buf_list.o
+ .debug_loc     0x0000879e      0x2ea drivers/serial/spi/spi_mega_xmega.o
+ .debug_loc     0x00008a88      0x1c8 drivers/touch/resistive/touch.o
+ .debug_loc     0x00008c50       0x2e arch/avr8/delay.o
+ .debug_loc     0x00008c7e       0xdc arch/avr8/arch_hugemem.o
+ .debug_loc     0x00008d5a       0x26 chip/atxmega128a1/sysclk.o
 
 .debug_pubnames
                 0x00000000     0x16a3

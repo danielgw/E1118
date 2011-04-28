@@ -475,8 +475,8 @@ static bool wtk_gauge_handler(struct win_window *win,
  *
  * \todo Revisit, support larger gauges and values given a config symbol.
  *
- * \param parent Pointer to parent win_window struct.
- * \param area Pointer to win_area struct with position and size of the
+ * \param parent Pointer to parent \ref win_window() struct.
+ * \param area Pointer to \ref win_area() struct with position and size of the
  *             gauge. Minimum size in both x and y direction is 3 pixels.
  * \param maximum Maximum value of the gauge.
  * \param value Initial value of the gauge.
@@ -541,15 +541,19 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 	assert(attr.area.size.y > 3);
 
 
-	assert(attr.ares.size.x < (uint8_t) < 255);
+	assert(attr.ares.size.x < (uint8_t) <= 255);
 	length = attr.area.size.x;
 
 
 	length -= 2;
 	
 	//! Checks if line pos is an accepted value, else set to max
-	if(g_outer_pos < 0 || g_outer_pos > 100){g_outer_pos = 100;};
-	if(g_inner_pos < 0 || g_inner_pos > 100){g_inner_pos = 100;};
+	if(g_outer_pos < 0 || g_outer_pos > 100){
+		g_outer_pos = 100;
+	}
+	if(g_inner_pos < 0 || g_inner_pos > 100){
+		g_inner_pos = 100;
+	}
 	
 	//! Rescales 0-100% into approptiate gauge length size
 	gauge->g_outer_pos = wtk_rescale_value(100 - g_outer_pos, 100, area->size.x - 2);
