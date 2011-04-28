@@ -375,9 +375,45 @@ typedef uint8_t wtk_radio_group_size_t;
 # define WTK_TRIG_TABLE_LENGTH        128
 #endif
 
+//! @}
+
+/**
+ * \ingroup gfx_wtk_gauge_options
+ * @{
+ */
 #ifndef CONFIG_WTK_GAUGE_USE_THICK_LINE
 //! Enables the use of thick indicator lines, comment out for thinner line.
 # define CONFIG_WTK_GAUGE_USE_THICK_LINE
+#endif
+
+#ifndef WTK_GAUGE_OUTER_LINE_COLOR
+//! Defines the color of the outer line around the gauge.
+# define WTK_GAUGE_OUTER_LINE_COLOR   GFX_COLOR(0, 0, 0)
+#endif
+
+#ifndef WTK_GAUGE_INNER_LINE_COLOR
+//! Defines the color of the inner line around the gauge.
+# define WTK_GAUGE_INNER_LINE_COLOR   GFX_COLOR(0, 0, 0)
+#endif
+
+#ifndef WTK_GAUGE_NEEDLE_COLOR
+//! Defines the color of the gauge needle.
+# define WTK_GAUGE_NEEDLE_COLOR       GFX_COLOR(170, 0, 0)
+#endif
+
+#ifndef WTK_GAUGE_OUTER_FILL_COLOR
+//! Defines the color of the outer filled area
+# define WTK_GAUGE_OUTER_FILL_COLOR   GFX_COLOR(100, 100, 100)
+#endif
+
+#ifndef WTK_GAUGE_INNER_FILL_COLOR
+//! Defines the color of the inner filled area
+# define WTK_GAUGE_INNER_FILL_COLOR   GFX_COLOR(90, 90, 90)
+#endif
+
+#ifndef WTK_GAUGE_RECTANGLE_FILL_COLOR
+//! Defines color of the gauge rectangle
+# define WTK_GAUGE_RECTANGLE_FILL_COLOR   GFX_COLOR(77, 77, 77)
 #endif
 
 //! @}

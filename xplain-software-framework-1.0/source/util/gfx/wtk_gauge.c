@@ -64,53 +64,51 @@
 
 struct wtk_gauge {
 	//! Container window of gauge.
-	struct win_window		*container;
+	struct win_window       *container;
 	//! Maximum value of gauge.
-	uint8_t					maximum;
+	uint8_t                 maximum;
 	//! Value of gauge.
-	uint8_t					value;
+	uint8_t                 value;
 	//! End position of gauge.
-	uint8_t					position;
+	uint8_t                 position;
 	//! Configuration of orientation and behavior.
-	uint8_t					option;
-	
+	uint8_t                 option;
+
 	//! Color for gauge fill.
-	gfx_color_t				fill_color;
+	gfx_color_t             fill_color;
 	//! Color for gauge background.
-	gfx_color_t				background_color;
-	//! Color for parent background.
-	gfx_color_t				parent_background_color;
-	
+	gfx_color_t             background_color;
+
 	//! Boolean for drawing gauge background once.
-	bool					redraw_background;
-	
+	bool                    redraw_background;
+
 	//! Boolean for drawing after transparent background redraw parent.
-	bool					solidbg;
-	
+	bool                    solidbg;
+
 	//! Variables for resize of the gauge variables.
 
 	//! Rescaled data position value, rescaled to match trigtable array
-	uint8_t					rescale;
-	
+	uint8_t                 rescale;
+
 	//! Trigtable cos value accessed with rescale
-	uint8_t					xangle;
+	uint8_t                 xangle;
 	//! Trigtable sine value accessed with rescale
-    uint8_t					yangle;
-	
+	uint8_t                 yangle;
+
 	//! Rescaled xangle for drawing the outer gauge line position correctly
-	uint8_t					xrescale;
+	uint8_t                 xrescale;
 	//! Rescaled yangle for drawing the outer gauge line position correctly
-	uint8_t					yrescale;
-	
+	uint8_t                 yrescale;
+
 	//! Rescaled xangle for drawing the inner gauge line position correctly
-	uint8_t					x2rescale;
+	uint8_t                 x2rescale;
 	//! Rescaled yangle for drawing the inner gauge line position correctly
-	uint8_t					y2rescale;
-	
+	uint8_t                 y2rescale;
+
 	//! Rescaled percent value for gauge outer line length
-	uint8_t					g_outer_pos;
+	uint8_t                 g_outer_pos;
 	//! Rescaled percent value for gauge inner line length
-	uint8_t					g_inner_pos;
+	uint8_t                 g_inner_pos;
 
 };
 
@@ -201,9 +199,9 @@ void wtk_gauge_set_colors(struct wtk_gauge *gauge,
 		gfx_color_t fill_color, gfx_color_t background_color)
 {
 	assert(gauge);
-  
+
 	gauge->fill_color = fill_color;
-	
+
 	gauge->background_color = background_color;
 
 }
@@ -225,7 +223,7 @@ static void wtk_gauge_line_erase(struct win_clip_region const *clip,
 			+ gauge->x2rescale,
 			clip->origin.y + area->size.y - 3 - gauge->y2rescale,
 			gauge->background_color);
-	
+
 	#ifdef CONFIG_WTK_GAUGE_USE_THICK_LINE
 	//! Right line +1 X -1 Y
 	gfx_draw_line(clip->origin.x + gauge->xrescale + 1 + gauge->g_outer_pos,
@@ -249,34 +247,37 @@ static void wtk_gauge_draw_background(struct win_clip_region const *clip,
 		struct win_area const *area, struct wtk_gauge *gauge)
 {
 	//! Draw a window border.
-	gfx_draw_rect(clip->origin.x, clip->origin.y, 
-			area->size.x, area->size.y, WTK_PROGRESS_BAR_BORDER_COLOR);
+	//! TODO INSERT LINE DRAWS
+	gfx_draw_horizontal_line(50, 40 , 150, WTK_GAUGE_OUTER_LINE_COLOR);
+	
+	//gfx_draw_rect(clip->origin.x, clip->origin.y, 
+	//		area->size.x, area->size.y, WTK_GAUGE_OUTER_LINE_COLOR);
 
-	gfx_draw_filled_rect(clip->origin.x,
-			clip->origin.y, area->size.x - 2, area->size.y - 2,
-			GFX_COLOR(77, 77, 77));
+	//gfx_draw_filled_rect(clip->origin.x,
+	//		clip->origin.y, area->size.x - 2, area->size.y - 2,
+	//		WTK_GAUGE_RECTANGLE_FILL_COLOR);
 
 	//! Draws gauge track circle in quadrant 1
 	//! Outer edge black line
 	gfx_draw_circle(clip->origin.x + area->size.x - 2,
 			clip->origin.y + area->size.y - 2, area->size.x - 2,
-			GFX_COLOR(0, 0, 0), GFX_QUADRANT1);
+			WTK_GAUGE_OUTER_LINE_COLOR, GFX_QUADRANT1);
 
 	//! Outer filled circle
 	gfx_draw_filled_circle(clip->origin.x + area->size.x - 2,
 			clip->origin.y + area->size.y - 2, area->size.x - 3,
-			gauge->background_color, GFX_QUADRANT1);
+			WTK_GAUGE_OUTER_FILL_COLOR, GFX_QUADRANT1);
 
 	//! Inner filled circle
 	gfx_draw_filled_circle(clip->origin.x + area->size.x - 2,
 			clip->origin.y + area->size.y - 2, gauge->g_inner_pos - 2,
-			GFX_COLOR(150, 150, 150), GFX_QUADRANT1);
+			WTK_GAUGE_INNER_FILL_COLOR, GFX_QUADRANT1);
 
 	//! Inner circle black line
 	gfx_draw_circle(clip->origin.x + area->size.x - 2,
 		clip->origin.y + area->size.y - 2,
 		gauge->g_inner_pos - 2,
-		GFX_COLOR(0, 0, 0), GFX_QUADRANT1);
+		WTK_GAUGE_INNER_LINE_COLOR, GFX_QUADRANT1);
 }
 
 static void wtk_gauge_draw_line(struct win_clip_region const *clip,
@@ -289,7 +290,7 @@ static void wtk_gauge_draw_line(struct win_clip_region const *clip,
 			clip->origin.x + area->size.x - 3 - gauge->g_inner_pos + 
 			gauge->x2rescale,
 			clip->origin.y + area->size.y - 3 - gauge->y2rescale,
-			GFX_COLOR(200, 0, 0));
+			WTK_GAUGE_NEEDLE_COLOR);
 
 	#ifdef CONFIG_WTK_GAUGE_USE_THICK_LINE
 	//! Right line +1 X -1 Y
@@ -299,7 +300,7 @@ static void wtk_gauge_draw_line(struct win_clip_region const *clip,
 			clip->origin.x + area->size.x - 3 - gauge->g_inner_pos + 
 			gauge->x2rescale + 1,
 			clip->origin.y + area->size.y - 3 - gauge->y2rescale,
-			gauge->fill_color);
+			WTK_GAUGE_NEEDLE_COLOR);
 
 	//! Left line -1 X +1 Y
 	gfx_draw_line(clip->origin.x + gauge->xrescale + 
@@ -308,7 +309,7 @@ static void wtk_gauge_draw_line(struct win_clip_region const *clip,
 			clip->origin.x + area->size.x - 3 - gauge->g_inner_pos + 
 			gauge->x2rescale,
 			clip->origin.y + area->size.y - 3 - gauge->y2rescale + 1,
-			GFX_COLOR(170, 0, 0));
+			WTK_GAUGE_NEEDLE_COLOR);
 	#endif
 }
 
@@ -375,47 +376,44 @@ static bool wtk_gauge_handler(struct win_window *win,
 			 */
 			gauge->redraw_background = false;
 		}
-		
-		//! For draw functions with transparent background
-		if(!gauge->solidbg) {}
-		
+
 		//! Rescales the position value for accessing data in the trigtable array
 		gauge->rescale = wtk_rescale_value(position, 
 			area->size.x - 2, 127);
-		
+
 		//! Reads x trigonometric value from PROGMEM array
 		gauge->xangle = 255 - wtk_trigtable_cos(gauge->rescale);
-			
+
 		//! Reads y trigonometric value from PROGMEM array
 		gauge->yangle = wtk_trigtable_sin(gauge->rescale);
-				
+
 		/** Rescales the first x trigonometric value for 
 		 * usage in the draw function
 		 */
 		gauge->xrescale = wtk_rescale_value(gauge->xangle, 255, 
 			area->size.x - 3 - gauge->g_outer_pos);
-		
+
 		/** Rescales the first y trigonometric value for usage in the 
 		 * draw function
 		 */
 		gauge->yrescale = wtk_rescale_value(gauge->yangle, 255, 
 			area->size.y - 3 - gauge->g_outer_pos);
-		
+
 		/** Rescales the second x trigonometric value for usage in the 
 		 * draw function
 		 */
 		gauge->x2rescale = wtk_rescale_value(gauge->xangle, 255, 
 			gauge->g_inner_pos);
-		
+
 		/** Rescales the second y trigonometric value for usage in the 
 		 * draw function
 		 */
 		gauge->y2rescale = wtk_rescale_value(gauge->yangle, 255, 
 			gauge->g_inner_pos);
-			
+
 		//! Draws gauge line
 		wtk_gauge_draw_line(clip, area, gauge);
-		
+
 		/** Always accept DRAW events, as the return value is ignored
 		 * anyway for that event type.
 		 */
@@ -523,7 +521,7 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 	assert(attr.area.size.y > 3);
 
 
-	assert(attr.ares.size.x < (uint8_t) <= 255);
+	assert(attr.ares.size.x <= 255);
 	length = attr.area.size.x;
 
 
