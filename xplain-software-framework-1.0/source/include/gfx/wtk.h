@@ -277,6 +277,8 @@ bool wtk_slider_set_value(struct wtk_slider *slider, uint8_t value);
 
 //! @}
 
+//! @}
+
 /**
  * \defgroup gfx_wtk_label Label widget
  * @{
@@ -345,7 +347,6 @@ void wtk_progress_bar_set_colors(struct wtk_progress_bar *bar,
 		
 //! @}
 
-//! @}
 /**
  * \defgroup gfx_wtk_gauge Gauge widget
  *
@@ -357,13 +358,6 @@ void wtk_progress_bar_set_colors(struct wtk_progress_bar *bar,
 
 //! Inverts the gauge traveling direction
 #define WTK_GAUGE_INVERT        (1 << 1)
-//! Unused: for drawing a normal 90deg gauge
-#define WTK_GAUGE_NORMAL        (0 << 2)
-//! Unused: for drawing a 360deg gauge
-#define WTK_GAUGE_CIRCLE        (1 << 2)
-
-//! Enables the use of thick indicator lines, comment out for thinner line.
-#define CONFIG_WTK_GAUGE_USE_THICK_LINE
 
 struct wtk_gauge;
 

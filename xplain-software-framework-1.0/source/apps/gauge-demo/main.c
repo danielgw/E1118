@@ -50,11 +50,11 @@
  * - \ref gfx_win "Window system"
  * - \ref gfx_wtk "Widget toolkit"
  * - \ref touch_driver_group "Touch drivers"
- * - \ref apps_training_group.
+ * - \ref apps_demo_group "Demo applications"
  */
 
 /**
- * \defgroup apps_group Applications
+ * \defgroup apps_demo_group
  */
 #include <dma.h>
 #include <led.h>
