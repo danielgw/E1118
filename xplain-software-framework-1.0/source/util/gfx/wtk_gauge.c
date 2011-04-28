@@ -246,16 +246,12 @@ static void wtk_gauge_line_erase(struct win_clip_region const *clip,
 static void wtk_gauge_draw_background(struct win_clip_region const *clip,
 		struct win_area const *area, struct wtk_gauge *gauge)
 {
-	//! Draw a window border.
-	//! TODO INSERT LINE DRAWS
-	gfx_draw_horizontal_line(50, 40 , 150, WTK_GAUGE_OUTER_LINE_COLOR);
-	
-	//gfx_draw_rect(clip->origin.x, clip->origin.y, 
-	//		area->size.x, area->size.y, WTK_GAUGE_OUTER_LINE_COLOR);
+	gfx_draw_rect(clip->origin.x, clip->origin.y, 
+			area->size.x, area->size.y, WTK_GAUGE_OUTER_LINE_COLOR);
 
-	//gfx_draw_filled_rect(clip->origin.x,
-	//		clip->origin.y, area->size.x - 2, area->size.y - 2,
-	//		WTK_GAUGE_RECTANGLE_FILL_COLOR);
+	gfx_draw_filled_rect(clip->origin.x,
+			clip->origin.y, area->size.x - 2, area->size.y - 2,
+			WTK_GAUGE_RECTANGLE_FILL_COLOR);
 
 	//! Draws gauge track circle in quadrant 1
 	//! Outer edge black line
@@ -379,10 +375,11 @@ static bool wtk_gauge_handler(struct win_window *win,
 
 		//! Rescales the position value for accessing data in the trigtable array
 		gauge->rescale = wtk_rescale_value(position, 
-			area->size.x - 2, 127);
+				area->size.x - 2, WTK_TRIG_TABLE_MAX_VALUE / 2);
 
 		//! Reads x trigonometric value from PROGMEM array
-		gauge->xangle = 255 - wtk_trigtable_cos(gauge->rescale);
+		gauge->xangle = WTK_TRIG_TABLE_MAX_VALUE 
+				- wtk_trigtable_cos(gauge->rescale);
 
 		//! Reads y trigonometric value from PROGMEM array
 		gauge->yangle = wtk_trigtable_sin(gauge->rescale);
@@ -390,26 +387,28 @@ static bool wtk_gauge_handler(struct win_window *win,
 		/** Rescales the first x trigonometric value for 
 		 * usage in the draw function
 		 */
-		gauge->xrescale = wtk_rescale_value(gauge->xangle, 255, 
-			area->size.x - 3 - gauge->g_outer_pos);
+		gauge->xrescale = wtk_rescale_value(gauge->xangle,
+				WTK_TRIG_TABLE_MAX_VALUE, 
+				area->size.x - 3 - gauge->g_outer_pos);
 
 		/** Rescales the first y trigonometric value for usage in the 
 		 * draw function
 		 */
-		gauge->yrescale = wtk_rescale_value(gauge->yangle, 255, 
-			area->size.y - 3 - gauge->g_outer_pos);
+		gauge->yrescale = wtk_rescale_value(gauge->yangle,
+				WTK_TRIG_TABLE_MAX_VALUE, 
+				area->size.y - 3 - gauge->g_outer_pos);
 
 		/** Rescales the second x trigonometric value for usage in the 
 		 * draw function
 		 */
-		gauge->x2rescale = wtk_rescale_value(gauge->xangle, 255, 
-			gauge->g_inner_pos);
+		gauge->x2rescale = wtk_rescale_value(gauge->xangle,
+				WTK_TRIG_TABLE_MAX_VALUE, gauge->g_inner_pos);
 
 		/** Rescales the second y trigonometric value for usage in the 
 		 * draw function
 		 */
-		gauge->y2rescale = wtk_rescale_value(gauge->yangle, 255, 
-			gauge->g_inner_pos);
+		gauge->y2rescale = wtk_rescale_value(gauge->yangle, 
+				WTK_TRIG_TABLE_MAX_VALUE, gauge->g_inner_pos);
 
 		//! Draws gauge line
 		wtk_gauge_draw_line(clip, area, gauge);
