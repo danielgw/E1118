@@ -273,8 +273,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	 * handler. Check the return value if an error occured while creating
 	 * the widget.
 	 */
-	frame = wtk_basic_frame_create(win_root, &area,
-			&frame_background, NULL,
+	frame = wtk_basic_frame_create(win_root, &area, &frame_background, NULL,
 			widget_frame_command_handler, NULL);
 	if (!frame) {
 		goto error_frame;

@@ -212,121 +212,104 @@ void wtk_gauge_set_colors(struct wtk_gauge *gauge,
  * \brief Gauge draw functions
  *
  */
-static void wtk_gauge_draw(uint8_t option, struct win_clip_region const *clip,
+
+
+static void wtk_gauge_line_erase(struct win_clip_region const *clip,
 		struct win_area const *area, struct wtk_gauge *gauge)
-{	
-	switch(option) 
-	{
-		case 0: // Erase gauge line
-		{
-			//! Gauge middle line
-			gfx_draw_line(clip->origin.x + gauge->xrescale + 
-					gauge->g_outer_pos,
-				clip->origin.y + area->size.y - 
-					gauge->yrescale - 3,
-				clip->origin.x + area->size.x - 3 - 
-					gauge->g_inner_pos 
-					+ gauge->x2rescale,
-				clip->origin.y + area->size.y - 3 - 
-					gauge->y2rescale,
-				gauge->background_color);
+{
+	//! Gauge middle line
+	gfx_draw_line(clip->origin.x + gauge->xrescale + 
+			gauge->g_outer_pos,
+			clip->origin.y + area->size.y - gauge->yrescale - 3,
+			clip->origin.x + area->size.x - 3 - gauge->g_inner_pos
+			+ gauge->x2rescale,
+			clip->origin.y + area->size.y - 3 - gauge->y2rescale,
+			gauge->background_color);
 	
-			#ifdef CONFIG_WTK_GAUGE_USE_THICK_LINE
-			//! Right line +1 X -1 Y
-			gfx_draw_line(clip->origin.x + gauge->xrescale + 1 + 
-					gauge->g_outer_pos,
-				clip->origin.y + area->size.y - 
-					gauge->yrescale - 3,
-				clip->origin.x + area->size.x - 3 - 
-					gauge->g_inner_pos
-					+ gauge->x2rescale + 1,
-				clip->origin.y + area->size.y - 3 - 
-					gauge->y2rescale,
-				gauge->background_color);
-			//! Left line -1 X +1 Y
-			gfx_draw_line(clip->origin.x + gauge->xrescale + 
-					gauge->g_outer_pos,
-				clip->origin.y + area->size.y + 1 - 
-					gauge->yrescale - 3,
-				clip->origin.x + area->size.x - 3 - 
-					gauge->g_inner_pos
-					+ gauge->x2rescale,
-				clip->origin.y + area->size.y - 3 - 
-					gauge->y2rescale + 1,
-				gauge->background_color);
-			#endif
-			break;
-		};
-		case 1: //! Draw gauge background
-		{
-			//! Draw a window border.
-			gfx_draw_rect(clip->origin.x, clip->origin.y, 
-				area->size.x, area->size.y, 
-				WTK_PROGRESS_BAR_BORDER_COLOR);
-				
-			gfx_draw_filled_rect(clip->origin.x,
-				clip->origin.y,
-				area->size.x - 2,
-				area->size.y - 2,
-				GFX_COLOR(77, 77, 77));
-				
-				
-			/** Draws gauge track circle in quadrant 1 */
-			//! Outer edge black line
-			gfx_draw_circle(clip->origin.x + area->size.x - 2,
-				clip->origin.y + area->size.y - 2,
-				area->size.x - 2,
-				GFX_COLOR(0, 0, 0), GFX_QUADRANT1);
-			//! Outer filled circle
-			gfx_draw_filled_circle(clip->origin.x + area->size.x - 2,
-				clip->origin.y + area->size.y - 2,
-				area->size.x - 3,
-				gauge->background_color, GFX_QUADRANT1);
-			//! Inner filled circle
-			gfx_draw_filled_circle(clip->origin.x + area->size.x - 2,
-				clip->origin.y + area->size.y - 2,
-				gauge->g_inner_pos - 2,
-				GFX_COLOR(150, 150, 150), GFX_QUADRANT1);
-			//! Inner circle black line
-			gfx_draw_circle(clip->origin.x + area->size.x - 2,
-				clip->origin.y + area->size.y - 2,
-				gauge->g_inner_pos - 2,
-				GFX_COLOR(0, 0, 0), GFX_QUADRANT1);
-			break;
-		};
-		case 2: //! Draws gauge line
-		{
-			//! Draws the gauge middle line from the rescaled position value
-			gfx_draw_line(clip->origin.x + gauge->xrescale + 
-					gauge->g_outer_pos,
-				clip->origin.y + area->size.y - gauge->yrescale - 3,
-				clip->origin.x + area->size.x - 3 - gauge->g_inner_pos + 
-					gauge->x2rescale,
-				clip->origin.y + area->size.y - 3 - gauge->y2rescale,
-				GFX_COLOR(200, 0, 0));
-		
-			#ifdef CONFIG_WTK_GAUGE_USE_THICK_LINE
-			//! Right line +1 X -1 Y
-			gfx_draw_line(clip->origin.x + gauge->xrescale + 1 +
-					gauge->g_outer_pos,
-				clip->origin.y + area->size.y - gauge->yrescale - 3,
-				clip->origin.x + area->size.x - 3 - gauge->g_inner_pos + 
-					gauge->x2rescale + 1,
-				clip->origin.y + area->size.y - 3 - gauge->y2rescale,
-				gauge->fill_color);
-		
-			//! Left line -1 X +1 Y
-			gfx_draw_line(clip->origin.x + gauge->xrescale + 
-					gauge->g_outer_pos,
-				clip->origin.y + area->size.y - gauge->yrescale - 3 + 1,
-				clip->origin.x + area->size.x - 3 - gauge->g_inner_pos + 
-					gauge->x2rescale,
-				clip->origin.y + area->size.y - 3 - gauge->y2rescale + 1,
-				GFX_COLOR(170, 0, 0));
-			#endif
-			break;
-		};
-	}
+	#ifdef CONFIG_WTK_GAUGE_USE_THICK_LINE
+	//! Right line +1 X -1 Y
+	gfx_draw_line(clip->origin.x + gauge->xrescale + 1 + gauge->g_outer_pos,
+			clip->origin.y + area->size.y - gauge->yrescale - 3,
+			clip->origin.x + area->size.x - 3 - gauge->g_inner_pos
+			+ gauge->x2rescale + 1,
+			clip->origin.y + area->size.y - 3 - gauge->y2rescale,
+			gauge->background_color);
+	//! Left line -1 X +1 Y
+	gfx_draw_line(clip->origin.x + gauge->xrescale + gauge->g_outer_pos,
+			clip->origin.y + area->size.y + 1 - gauge->yrescale - 3,
+			clip->origin.x + area->size.x - 3 - gauge->g_inner_pos
+			+ gauge->x2rescale,
+			clip->origin.y + area->size.y - 3 - 
+			gauge->y2rescale + 1,
+			gauge->background_color);
+	#endif
+}
+
+static void wtk_gauge_draw_background(struct win_clip_region const *clip,
+		struct win_area const *area, struct wtk_gauge *gauge)
+{
+	//! Draw a window border.
+	gfx_draw_rect(clip->origin.x, clip->origin.y, 
+			area->size.x, area->size.y, WTK_PROGRESS_BAR_BORDER_COLOR);
+
+	gfx_draw_filled_rect(clip->origin.x,
+			clip->origin.y, area->size.x - 2, area->size.y - 2,
+			GFX_COLOR(77, 77, 77));
+
+	//! Draws gauge track circle in quadrant 1
+	//! Outer edge black line
+	gfx_draw_circle(clip->origin.x + area->size.x - 2,
+			clip->origin.y + area->size.y - 2, area->size.x - 2,
+			GFX_COLOR(0, 0, 0), GFX_QUADRANT1);
+
+	//! Outer filled circle
+	gfx_draw_filled_circle(clip->origin.x + area->size.x - 2,
+			clip->origin.y + area->size.y - 2, area->size.x - 3,
+			gauge->background_color, GFX_QUADRANT1);
+
+	//! Inner filled circle
+	gfx_draw_filled_circle(clip->origin.x + area->size.x - 2,
+			clip->origin.y + area->size.y - 2, gauge->g_inner_pos - 2,
+			GFX_COLOR(150, 150, 150), GFX_QUADRANT1);
+
+	//! Inner circle black line
+	gfx_draw_circle(clip->origin.x + area->size.x - 2,
+		clip->origin.y + area->size.y - 2,
+		gauge->g_inner_pos - 2,
+		GFX_COLOR(0, 0, 0), GFX_QUADRANT1);
+}
+
+static void wtk_gauge_draw_line(struct win_clip_region const *clip,
+		struct win_area const *area, struct wtk_gauge *gauge)
+{
+	//! Draws the gauge middle line from the rescaled position value
+	gfx_draw_line(clip->origin.x + gauge->xrescale + 
+			gauge->g_outer_pos,
+			clip->origin.y + area->size.y - gauge->yrescale - 3,
+			clip->origin.x + area->size.x - 3 - gauge->g_inner_pos + 
+			gauge->x2rescale,
+			clip->origin.y + area->size.y - 3 - gauge->y2rescale,
+			GFX_COLOR(200, 0, 0));
+
+	#ifdef CONFIG_WTK_GAUGE_USE_THICK_LINE
+	//! Right line +1 X -1 Y
+	gfx_draw_line(clip->origin.x + gauge->xrescale + 1 +
+			gauge->g_outer_pos,
+			clip->origin.y + area->size.y - gauge->yrescale - 3,
+			clip->origin.x + area->size.x - 3 - gauge->g_inner_pos + 
+			gauge->x2rescale + 1,
+			clip->origin.y + area->size.y - 3 - gauge->y2rescale,
+			gauge->fill_color);
+
+	//! Left line -1 X +1 Y
+	gfx_draw_line(clip->origin.x + gauge->xrescale + 
+			gauge->g_outer_pos,
+			clip->origin.y + area->size.y - gauge->yrescale - 3 + 1,
+			clip->origin.x + area->size.x - 3 - gauge->g_inner_pos + 
+			gauge->x2rescale,
+			clip->origin.y + area->size.y - 3 - gauge->y2rescale + 1,
+			GFX_COLOR(170, 0, 0));
+	#endif
 }
 
 /**
@@ -373,9 +356,10 @@ static bool wtk_gauge_handler(struct win_window *win,
 	/** Erases the previous gauge line using old x\y values, 
 	 * not enabled at first draw event
 	 */
+	
  		if (!gauge->redraw_background && gauge->solidbg) {
 			//! Erases gauge line
-			wtk_gauge_draw(0, clip, area, gauge);
+			wtk_gauge_line_erase(clip, area, gauge);
 		}
 		
 		
@@ -383,7 +367,7 @@ static bool wtk_gauge_handler(struct win_window *win,
 		if (gauge->redraw_background && gauge->solidbg) {
 			
 			//! Draws background
-			wtk_gauge_draw(1, clip, area, gauge);
+			wtk_gauge_draw_background(clip, area, gauge);
 		
 			/** Sets redraw_background to false so the background draw is halted 
 			 * and enables the gauge line erase function for next 
@@ -430,7 +414,7 @@ static bool wtk_gauge_handler(struct win_window *win,
 			gauge->g_inner_pos);
 			
 		//! Draws gauge line
-		wtk_gauge_draw(2, clip, area, gauge);
+		wtk_gauge_draw_line(clip, area, gauge);
 		
 		/** Always accept DRAW events, as the return value is ignored
 		 * anyway for that event type.
