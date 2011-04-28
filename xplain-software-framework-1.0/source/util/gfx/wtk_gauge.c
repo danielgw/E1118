@@ -490,7 +490,7 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 		struct win_area const *area, struct gfx_bitmap *background, 
 		uint8_t maximum, uint8_t value, uint8_t g_outer_pos, uint8_t g_inner_pos,
 		gfx_color_t fill_color, gfx_color_t background_color, 
-		gfx_color_t parent_background_color, uint8_t option)
+		uint8_t option)
 {
 	uint8_t length;
 
@@ -522,8 +522,6 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 	gauge->fill_color = fill_color;
 		
 	gauge->background_color = background_color;
-	
-	gauge->parent_background_color = parent_background_color;
 	
 	if (option & WTK_GAUGE_INVERT) {
 		value = maximum - value;
