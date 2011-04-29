@@ -11,7 +11,7 @@ c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avrxmega7/libgcc.a(_udivmodsi4.o)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avrxmega7/libgcc.a(_divmodsi4.o)
                               util/stream/stream_core.o (__divmodsi4)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avrxmega7/libgcc.a(_copy_data.o)
-                              apps/gauge-demo/app_widget.o (__do_copy_data)
+                              apps/gauge-demo/gauge-demo.o (__do_copy_data)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avrxmega7/libgcc.a(_clear_bss.o)
                               apps/gauge-demo/main.o (__do_clear_bss)
 
@@ -43,8 +43,8 @@ Discarded input sections
  .text          0x00000000        0x0 apps/gauge-demo/app_calibrate.o
  .data          0x00000000        0x0 apps/gauge-demo/app_calibrate.o
  .bss           0x00000000        0x0 apps/gauge-demo/app_calibrate.o
- .text          0x00000000        0x0 apps/gauge-demo/app_widget.o
- .bss           0x00000000        0x0 apps/gauge-demo/app_widget.o
+ .text          0x00000000        0x0 apps/gauge-demo/gauge-demo.o
+ .bss           0x00000000        0x0 apps/gauge-demo/gauge-demo.o
  .text          0x00000000        0x0 util/gfx/sysfont.o
  .data          0x00000000        0x0 util/gfx/sysfont.o
  .bss           0x00000000        0x0 util/gfx/sysfont.o
@@ -699,10 +699,10 @@ Linker script and memory map
  .text.touch_calibrate_task_handler
                 0x000004f2      0x1ce apps/gauge-demo/app_calibrate.o
  .text.app_widget_launch
-                0x000006c0      0x276 apps/gauge-demo/app_widget.o
+                0x000006c0      0x276 apps/gauge-demo/gauge-demo.o
                 0x000006c0                app_widget_launch
  .text.widget_frame_command_handler
-                0x00000936       0x44 apps/gauge-demo/app_widget.o
+                0x00000936       0x44 apps/gauge-demo/gauge-demo.o
  .text.win_get_root
                 0x0000097a        0x6 util/gfx/win.o
                 0x0000097a                win_get_root
@@ -1041,9 +1041,9 @@ Linker script and memory map
  *(.rodata)
  *(.rodata.*)
  .rodata.demo_string
-                0x00802000        0x2 apps/gauge-demo/app_widget.o
+                0x00802000        0x2 apps/gauge-demo/gauge-demo.o
  *(.data)
- .data          0x00802002        0xb apps/gauge-demo/app_widget.o
+ .data          0x00802002        0xb apps/gauge-demo/gauge-demo.o
  *(.data.*)
  .data.sysfont  0x0080200d        0xa util/gfx/sysfont.o
                 0x0080200d                sysfont
@@ -1064,19 +1064,19 @@ Linker script and memory map
                 0x00802054        0x2 apps/gauge-demo/app_calibrate.o
  .bss.sysfont2x
                 0x00802056        0xa apps/gauge-demo/app_calibrate.o
- .bss.frame     0x00802060        0x2 apps/gauge-demo/app_widget.o
- .bss.slider    0x00802062        0x2 apps/gauge-demo/app_widget.o
+ .bss.frame     0x00802060        0x2 apps/gauge-demo/gauge-demo.o
+ .bss.slider    0x00802062        0x2 apps/gauge-demo/gauge-demo.o
  .bss.slidertwo
-                0x00802064        0x2 apps/gauge-demo/app_widget.o
+                0x00802064        0x2 apps/gauge-demo/gauge-demo.o
  .bss.frame_background
-                0x00802066        0x9 apps/gauge-demo/app_widget.o
+                0x00802066        0x9 apps/gauge-demo/gauge-demo.o
  .bss.sub_frame
-                0x0080206f        0x2 apps/gauge-demo/app_widget.o
+                0x0080206f        0x2 apps/gauge-demo/gauge-demo.o
  .bss.gauge_background
-                0x00802071        0x9 apps/gauge-demo/app_widget.o
- .bss.gauge     0x0080207a        0x2 apps/gauge-demo/app_widget.o
+                0x00802071        0x9 apps/gauge-demo/gauge-demo.o
+ .bss.gauge     0x0080207a        0x2 apps/gauge-demo/gauge-demo.o
  .bss.gauge_two
-                0x0080207c        0x2 apps/gauge-demo/app_widget.o
+                0x0080207c        0x2 apps/gauge-demo/gauge-demo.o
  .bss.win_root_background
                 0x0080207e        0x9 util/gfx/win.o
  .bss.win_root  0x00802087       0x18 util/gfx/win.o
@@ -1136,7 +1136,7 @@ Linker script and memory map
                 0x00804000                _estack = .
 LOAD apps/gauge-demo/main.o
 LOAD apps/gauge-demo/app_calibrate.o
-LOAD apps/gauge-demo/app_widget.o
+LOAD apps/gauge-demo/gauge-demo.o
 LOAD util/gfx/sysfont.o
 LOAD util/gfx/win.o
 LOAD util/gfx/wtk.o
@@ -1192,7 +1192,7 @@ LOAD linker stubs
 .debug_abbrev   0x00000000     0x5752
  .debug_abbrev  0x00000000      0x2b8 apps/gauge-demo/main.o
  .debug_abbrev  0x000002b8      0x1da apps/gauge-demo/app_calibrate.o
- .debug_abbrev  0x00000492      0x1ca apps/gauge-demo/app_widget.o
+ .debug_abbrev  0x00000492      0x1ca apps/gauge-demo/gauge-demo.o
  .debug_abbrev  0x0000065c       0xd2 util/gfx/sysfont.o
  .debug_abbrev  0x0000072e      0x39e util/gfx/win.o
  .debug_abbrev  0x00000acc       0xe6 util/gfx/wtk.o
@@ -1243,7 +1243,7 @@ LOAD linker stubs
 .debug_info     0x00000000    0x167bc
  .debug_info    0x00000000      0xbb5 apps/gauge-demo/main.o
  .debug_info    0x00000bb5      0x655 apps/gauge-demo/app_calibrate.o
- .debug_info    0x0000120a      0x55a apps/gauge-demo/app_widget.o
+ .debug_info    0x0000120a      0x55a apps/gauge-demo/gauge-demo.o
  .debug_info    0x00001764      0x17b util/gfx/sysfont.o
  .debug_info    0x000018df     0x1981 util/gfx/win.o
  .debug_info    0x00003260      0x1bd util/gfx/wtk.o
@@ -1294,7 +1294,7 @@ LOAD linker stubs
 .debug_line     0x00000000     0xb6a3
  .debug_line    0x00000000      0x3dd apps/gauge-demo/main.o
  .debug_line    0x000003dd      0x35e apps/gauge-demo/app_calibrate.o
- .debug_line    0x0000073b      0x371 apps/gauge-demo/app_widget.o
+ .debug_line    0x0000073b      0x371 apps/gauge-demo/gauge-demo.o
  .debug_line    0x00000aac       0xbd util/gfx/sysfont.o
  .debug_line    0x00000b69     0x111f util/gfx/win.o
  .debug_line    0x00001c88      0x182 util/gfx/wtk.o
@@ -1345,7 +1345,7 @@ LOAD linker stubs
 .debug_frame    0x00000000     0x13e0
  .debug_frame   0x00000000       0x20 apps/gauge-demo/main.o
  .debug_frame   0x00000020       0x40 apps/gauge-demo/app_calibrate.o
- .debug_frame   0x00000060       0x30 apps/gauge-demo/app_widget.o
+ .debug_frame   0x00000060       0x30 apps/gauge-demo/gauge-demo.o
  .debug_frame   0x00000090      0x2b0 util/gfx/win.o
  .debug_frame   0x00000340       0x40 util/gfx/wtk.o
  .debug_frame   0x00000380       0x50 util/gfx/wtk_basic_frame.o
@@ -1393,7 +1393,7 @@ LOAD linker stubs
 .debug_loc      0x00000000     0x8cc0
  .debug_loc     0x00000000      0x121 apps/gauge-demo/main.o
  .debug_loc     0x00000121      0x120 apps/gauge-demo/app_calibrate.o
- .debug_loc     0x00000241       0xe0 apps/gauge-demo/app_widget.o
+ .debug_loc     0x00000241       0xe0 apps/gauge-demo/gauge-demo.o
  .debug_loc     0x00000321      0xe24 util/gfx/win.o
  .debug_loc     0x00001145      0x129 util/gfx/wtk.o
  .debug_loc     0x0000126e      0x28e util/gfx/wtk_basic_frame.o
@@ -1444,7 +1444,7 @@ LOAD linker stubs
  .debug_pubnames
                 0x0000001b       0x30 apps/gauge-demo/app_calibrate.o
  .debug_pubnames
-                0x0000004b       0x28 apps/gauge-demo/app_widget.o
+                0x0000004b       0x28 apps/gauge-demo/gauge-demo.o
  .debug_pubnames
                 0x00000073       0x1e util/gfx/sysfont.o
  .debug_pubnames
@@ -1544,7 +1544,7 @@ LOAD linker stubs
  .debug_aranges
                 0x00000020       0x30 apps/gauge-demo/app_calibrate.o
  .debug_aranges
-                0x00000050       0x28 apps/gauge-demo/app_widget.o
+                0x00000050       0x28 apps/gauge-demo/gauge-demo.o
  .debug_aranges
                 0x00000078      0x168 util/gfx/win.o
  .debug_aranges
@@ -1635,7 +1635,7 @@ LOAD linker stubs
 .debug_ranges   0x00000000      0xd20
  .debug_ranges  0x00000000       0x78 apps/gauge-demo/main.o
  .debug_ranges  0x00000078       0x28 apps/gauge-demo/app_calibrate.o
- .debug_ranges  0x000000a0       0x20 apps/gauge-demo/app_widget.o
+ .debug_ranges  0x000000a0       0x20 apps/gauge-demo/gauge-demo.o
  .debug_ranges  0x000000c0      0x178 util/gfx/win.o
  .debug_ranges  0x00000238       0x28 util/gfx/wtk.o
  .debug_ranges  0x00000260       0x30 util/gfx/wtk_basic_frame.o
@@ -1685,7 +1685,7 @@ LOAD linker stubs
                                 0x6ba (size before relaxing)
  .debug_str     0x000005bb      0x1ef apps/gauge-demo/app_calibrate.o
                                 0x4a0 (size before relaxing)
- .debug_str     0x000007aa      0x11d apps/gauge-demo/app_widget.o
+ .debug_str     0x000007aa      0x11d apps/gauge-demo/gauge-demo.o
                                 0x433 (size before relaxing)
  .debug_str     0x000008c7       0x2e util/gfx/sysfont.o
                                 0x1b4 (size before relaxing)
@@ -1804,7 +1804,7 @@ __do_clear_bss                                    c:/winavr-20100110/bin/../lib/
                                                   util/buffer.o
                                                   util/gfx/wtk_frame.o
                                                   util/gfx/win.o
-                                                  apps/gauge-demo/app_widget.o
+                                                  apps/gauge-demo/gauge-demo.o
                                                   apps/gauge-demo/app_calibrate.o
                                                   apps/gauge-demo/main.o
 __do_copy_data                                    c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avrxmega7/libgcc.a(_copy_data.o)
@@ -1816,7 +1816,7 @@ __do_copy_data                                    c:/winavr-20100110/bin/../lib/
                                                   util/stream/stream_core.o
                                                   util/gfx/wtk_frame.o
                                                   util/gfx/sysfont.o
-                                                  apps/gauge-demo/app_widget.o
+                                                  apps/gauge-demo/gauge-demo.o
 __mulsi3                                          c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avrxmega7/libgcc.a(_mulsi3.o)
                                                   drivers/touch/resistive/touch.o
                                                   drivers/gfx/gfx_bitmap.o
@@ -1837,7 +1837,7 @@ _etext                                            arch/avr8/entry.o
 _start                                            arch/avr8/entry.o
 app_touch_calibrate_setup                         apps/gauge-demo/app_calibrate.o
                                                   apps/gauge-demo/main.o
-app_widget_launch                                 apps/gauge-demo/app_widget.o
+app_widget_launch                                 apps/gauge-demo/gauge-demo.o
                                                   apps/gauge-demo/main.o
 at45_device_init                                  drivers/flash/at45_device.o
                                                   drivers/block/dataflash.o
@@ -1945,7 +1945,7 @@ gfx_generic_put_pixmap                            drivers/gfx/gfx_generic.o
 gfx_get_height                                    drivers/gfx/hx8347a/gfx_hx8347a.o
                                                   util/gfx/wtk_frame.o
                                                   util/gfx/win.o
-                                                  apps/gauge-demo/app_widget.o
+                                                  apps/gauge-demo/gauge-demo.o
                                                   apps/gauge-demo/app_calibrate.o
 gfx_get_pixel                                     drivers/gfx/hx8347a/gfx_hx8347a.o
 gfx_get_progmem_string_bounding_box               drivers/gfx/gfx_text.o
@@ -1957,7 +1957,7 @@ gfx_get_string_bounding_box                       drivers/gfx/gfx_text.o
 gfx_get_width                                     drivers/gfx/hx8347a/gfx_hx8347a.o
                                                   util/gfx/wtk_frame.o
                                                   util/gfx/win.o
-                                                  apps/gauge-demo/app_widget.o
+                                                  apps/gauge-demo/gauge-demo.o
                                                   apps/gauge-demo/app_calibrate.o
 gfx_height                                        drivers/gfx/gfx_generic.o
                                                   drivers/gfx/hx8347a/gfx_hx8347a.o
@@ -2259,7 +2259,7 @@ sysfont                                           util/gfx/sysfont.o
                                                   util/gfx/wtk_frame.o
                                                   util/gfx/wtk_check_box.o
                                                   util/gfx/wtk_button.o
-                                                  apps/gauge-demo/app_widget.o
+                                                  apps/gauge-demo/gauge-demo.o
                                                   apps/gauge-demo/app_calibrate.o
 touch_compute_calibration_matrix                  drivers/touch/resistive/touch.o
                                                   apps/gauge-demo/app_calibrate.o
@@ -2303,7 +2303,7 @@ win_create                                        util/gfx/win.o
 win_destroy                                       util/gfx/win.o
                                                   util/gfx/wtk_frame.o
                                                   util/gfx/wtk_basic_frame.o
-                                                  apps/gauge-demo/app_widget.o
+                                                  apps/gauge-demo/gauge-demo.o
 win_get_area                                      util/gfx/win.o
                                                   util/gfx/wtk_gauge.o
                                                   util/gfx/wtk_slider.o
@@ -2326,7 +2326,7 @@ win_get_custom_data                               util/gfx/win.o
 win_get_parent                                    util/gfx/win.o
                                                   util/gfx/wtk_frame.o
 win_get_root                                      util/gfx/win.o
-                                                  apps/gauge-demo/app_widget.o
+                                                  apps/gauge-demo/gauge-demo.o
                                                   apps/gauge-demo/main.o
 win_grab_pointer                                  util/gfx/win.o
                                                   util/gfx/wtk_slider.o
@@ -2371,7 +2371,7 @@ win_set_attributes                                util/gfx/win.o
 win_set_keyboard_focus                            util/gfx/win.o
 win_show                                          util/gfx/win.o
                                                   util/gfx/wtk_frame.o
-                                                  apps/gauge-demo/app_widget.o
+                                                  apps/gauge-demo/gauge-demo.o
                                                   apps/gauge-demo/main.o
 win_translate_win_to_root                         util/gfx/win.o
                                                   util/gfx/wtk_slider.o
@@ -2384,9 +2384,9 @@ workqueue_add_task                                util/workqueue.o
                                                   util/gfx/win.o
                                                   apps/gauge-demo/app_calibrate.o
 wtk_basic_frame_as_child                          util/gfx/wtk_basic_frame.o
-                                                  apps/gauge-demo/app_widget.o
+                                                  apps/gauge-demo/gauge-demo.o
 wtk_basic_frame_create                            util/gfx/wtk_basic_frame.o
-                                                  apps/gauge-demo/app_widget.o
+                                                  apps/gauge-demo/gauge-demo.o
 wtk_basic_frame_get_custom_data                   util/gfx/wtk_basic_frame.o
 wtk_button_as_child                               util/gfx/wtk_button.o
 wtk_button_create                                 util/gfx/wtk_button.o
@@ -2408,20 +2408,20 @@ wtk_frame_as_parent                               util/gfx/wtk_frame.o
 wtk_frame_create                                  util/gfx/wtk_frame.o
 wtk_frame_get_custom_data                         util/gfx/wtk_frame.o
 wtk_gauge_as_child                                util/gfx/wtk_gauge.o
-                                                  apps/gauge-demo/app_widget.o
+                                                  apps/gauge-demo/gauge-demo.o
 wtk_gauge_create                                  util/gfx/wtk_gauge.o
-                                                  apps/gauge-demo/app_widget.o
+                                                  apps/gauge-demo/gauge-demo.o
 wtk_gauge_get_value                               util/gfx/wtk_gauge.o
 wtk_gauge_set_colors                              util/gfx/wtk_gauge.o
 wtk_gauge_set_value                               util/gfx/wtk_gauge.o
-                                                  apps/gauge-demo/app_widget.o
+                                                  apps/gauge-demo/gauge-demo.o
 wtk_label_as_child                                util/gfx/wtk_label.o
-                                                  apps/gauge-demo/app_widget.o
+                                                  apps/gauge-demo/gauge-demo.o
 wtk_label_change                                  util/gfx/wtk_label.o
 wtk_label_create                                  util/gfx/wtk_label.o
-                                                  apps/gauge-demo/app_widget.o
+                                                  apps/gauge-demo/gauge-demo.o
 wtk_label_size_hint                               util/gfx/wtk_label.o
-                                                  apps/gauge-demo/app_widget.o
+                                                  apps/gauge-demo/gauge-demo.o
 wtk_progress_bar_as_child                         util/gfx/wtk_progress_bar.o
 wtk_progress_bar_create                           util/gfx/wtk_progress_bar.o
 wtk_progress_bar_get_value                        util/gfx/wtk_progress_bar.o
@@ -2440,11 +2440,11 @@ wtk_rescale_value                                 util/gfx/wtk.o
 wtk_shade_pixel                                   util/gfx/wtk.o
                                                   util/gfx/wtk_frame.o
 wtk_slider_as_child                               util/gfx/wtk_slider.o
-                                                  apps/gauge-demo/app_widget.o
+                                                  apps/gauge-demo/gauge-demo.o
 wtk_slider_create                                 util/gfx/wtk_slider.o
-                                                  apps/gauge-demo/app_widget.o
+                                                  apps/gauge-demo/gauge-demo.o
 wtk_slider_get_value                              util/gfx/wtk_slider.o
-                                                  apps/gauge-demo/app_widget.o
+                                                  apps/gauge-demo/gauge-demo.o
 wtk_slider_is_moving                              util/gfx/wtk_slider.o
 wtk_slider_set_value                              util/gfx/wtk_slider.o
 wtk_trigtable_cos                                 util/gfx/wtk_gauge.o

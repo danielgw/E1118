@@ -245,8 +245,8 @@ static void wtk_gauge_line_erase(struct win_clip_region const *clip,
 static void wtk_gauge_draw_background(struct win_clip_region const *clip,
 		struct win_area const *area, struct wtk_gauge *gauge)
 {
-	//! Draws a window border.
-	gfx_draw_horizontal_line(clip->origin.x, clip->origin.y + area->size.y - 1, 
+	//! Drawa a window border.
+	gfx_draw_horizontal_line(clip->origin.x, clip->origin.y + area->size.y - 1,
 			area->size.y, WTK_GAUGE_OUTER_LINE_COLOR);
 
 	gfx_draw_vertical_line(clip->origin.x + area->size.x - 1, clip->origin.y,

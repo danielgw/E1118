@@ -416,6 +416,30 @@ typedef uint8_t wtk_radio_group_size_t;
 # define WTK_GAUGE_INNER_FILL_COLOR   GFX_COLOR(90, 90, 90)
 #endif
 
+#ifndef WTK_GAUGE_X_LENGTH
+/** The lenght of the gauge along the x-axis
+ * the -2 at the end is to ensure that the gauge is actually inside the frame
+ * that is set up for the gauge
+ */
+# define WTK_GAUGE_X_LENGTH    clip->origin.x + area->size.x - 2
+#endif
+
+#ifndef WTK_GAUGE_Y_LENGTH
+/** The lenght of the gauge along the y-axis
+ * the -2 at the end is to ensure that the gauge is actually inside the frame
+ * that is set up for the gauge
+ */
+# define WTK_GAUGE_Y_LENGTH    clip->origin.y + area->size.y - 2
+#endif
+
+#ifndef WTK_GAUGE_CIRCLE_OFFSET
+/** This is set to make sure that the gauge circles are drawn inside the frame
+ * that is set up for the gauge
+ */
+# define WTK_GAUGE_CIRCLE_OFFSET    2
+#endif
+
+
 //! @}
 
 //! @}
