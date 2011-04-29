@@ -416,11 +416,6 @@ typedef uint8_t wtk_radio_group_size_t;
 # define WTK_GAUGE_INNER_FILL_COLOR   GFX_COLOR(90, 90, 90)
 #endif
 
-#ifndef WTK_GAUGE_RECTANGLE_FILL_COLOR
-//! Defines color of the gauge rectangle
-# define WTK_GAUGE_RECTANGLE_FILL_COLOR   GFX_COLOR(77, 77, 77)
-#endif
-
 //! @}
 
 //! @}

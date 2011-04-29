@@ -203,7 +203,6 @@ void wtk_gauge_set_colors(struct wtk_gauge *gauge,
 	gauge->fill_color = fill_color;
 
 	gauge->background_color = background_color;
-
 }
 
 /**
@@ -246,12 +245,12 @@ static void wtk_gauge_line_erase(struct win_clip_region const *clip,
 static void wtk_gauge_draw_background(struct win_clip_region const *clip,
 		struct win_area const *area, struct wtk_gauge *gauge)
 {
-	gfx_draw_rect(clip->origin.x, clip->origin.y, 
-			area->size.x, area->size.y, WTK_GAUGE_OUTER_LINE_COLOR);
+	//! Draws a window border.
+	gfx_draw_horizontal_line(clip->origin.x, clip->origin.y + area->size.y - 1, 
+			area->size.y, WTK_GAUGE_OUTER_LINE_COLOR);
 
-	gfx_draw_filled_rect(clip->origin.x,
-			clip->origin.y, area->size.x - 2, area->size.y - 2,
-			WTK_GAUGE_RECTANGLE_FILL_COLOR);
+	gfx_draw_vertical_line(clip->origin.x + area->size.x - 1, clip->origin.y,
+			area->size.x, WTK_GAUGE_OUTER_LINE_COLOR);
 
 	//! Draws gauge track circle in quadrant 1
 	//! Outer edge black line
@@ -525,7 +524,7 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 
 
 	length -= 2;
-	
+
 	//! Checks if line pos is an accepted value, else set to max
 	if(g_outer_pos < 0 || g_outer_pos > 100){
 		g_outer_pos = 100;
@@ -533,7 +532,7 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 	if(g_inner_pos < 0 || g_inner_pos > 100){
 		g_inner_pos = 100;
 	}
-	
+
 	//! Rescales 0-100% into approptiate gauge length size
 	gauge->g_outer_pos = wtk_rescale_value(100 - g_outer_pos, 100, area->size.x - 2);
 	gauge->g_inner_pos = wtk_rescale_value(g_inner_pos, 100, area->size.x - 2);
@@ -562,10 +561,10 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 
 	return gauge;
 
-    outofmem_container:
+outofmem_container:
 	membag_free(gauge);
 
-    outofmem_gauge:
+outofmem_gauge:
 	return NULL;
 }
 
