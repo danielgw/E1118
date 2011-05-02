@@ -42,6 +42,10 @@
 #include <assert.h>
 #include <gfx/gfx.h>
 
+/**
+ * \ingroup gfx_gradient
+ * @{
+ */
 
 #ifdef CONFIG_GRADIENT
 
@@ -289,3 +293,6 @@ void gfx_gradient_set_options(struct gfx_gradient *gradient, uint8_t option)
 	}
 }
 #endif
+
+
+//! @}

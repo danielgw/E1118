@@ -368,4 +368,3 @@ void gfx_put_bitmap(const struct gfx_bitmap *bmp,
 #endif
 	}
 }
-

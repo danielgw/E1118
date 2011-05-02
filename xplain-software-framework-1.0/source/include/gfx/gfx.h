@@ -179,6 +179,12 @@
 
 
 #ifdef CONFIG_GRADIENT
+
+/**
+ * \defgroup gfx_gradient Bitmap gradients
+ * @{
+ */
+ 
 /**
  * \defgroup gfx_gradient_options Gradient options
  * These options can be ORed together to specify the behaviour of a
@@ -197,7 +203,8 @@
 
 
 
-//@}
+//! @}
+//! @}
 
 #endif
 
@@ -306,6 +313,11 @@ enum gfx_bitmap_type {
 #ifdef CONFIG_GRADIENT
  
 /**
+ * \ingroup gfx_gradient
+ * @{
+ */
+ 
+/**
  * \brief Storage structure for gradient data and metadata
  */
  struct gfx_gradient {
@@ -327,6 +339,8 @@ enum gfx_bitmap_type {
 	gfx_coord_t length;
  };
  
+
+ 
 void gfx_gradient_set_options(struct gfx_gradient *gradient, uint8_t option);
 
 void gfx_gradient_set_values(struct gfx_gradient *gradient,
@@ -337,6 +351,8 @@ void gfx_gradient_set_values(struct gfx_gradient *gradient,
 void gfx_gradient_draw(struct gfx_gradient *gradient, gfx_coord_t map_x,
 		gfx_coord_t map_y,gfx_coord_t x, gfx_coord_t y,
 		gfx_coord_t width,gfx_coord_t height);
+ 
+ //! @}
  #endif
 /**
  * \brief Storage structure for bitmap pixel data and metadata
