@@ -214,30 +214,45 @@ void wtk_gauge_set_colors(struct wtk_gauge *gauge,
 static void wtk_gauge_line_erase(struct win_clip_region const *clip,
 		struct win_area const *area, struct wtk_gauge *gauge)
 {
+	//! The outer x-axis start position of the gauge needle
+	gfx_coord_t gauge_needle_x_outer = 
+		clip->origin.x + gauge->xrescale + gauge->g_outer_pos;
+	/**
+	 * The outer y-axis start position of the gauge needle. Has a -3 offset
+	 * to ensure that its within the gauge draw area.
+	 */
+	gfx_coord_t gauge_needle_y_outer = 
+		clip->origin.y + area->size.y - gauge->yrescale - 3;
+
+	/**
+	 * The inner x-axis start position of the gauge needle. Has a -3 offset
+	 * to ensure that its within the gauge draw area.
+	 */
+	gfx_coord_t gauge_needle_x_inner = 
+		clip->origin.x + area->size.x - gauge->g_inner_pos +
+		gauge->x2rescale - 3;
+
+	/**
+	 * The inner y-axis start position of the gauge needle. Has a -3 offset
+	 * to ensure that its within the gauge draw area.
+	 */
+	gfx_coord_t gauge_needle_y_inner = 
+		clip->origin.y + area->size.y - gauge->y2rescale - 3;
+
 	//! Gauge middle line
-	gfx_draw_line(clip->origin.x + gauge->xrescale + 
-			gauge->g_outer_pos,
-			clip->origin.y + area->size.y - gauge->yrescale - 3,
-			clip->origin.x + area->size.x - 3 - gauge->g_inner_pos
-			+ gauge->x2rescale,
-			clip->origin.y + area->size.y - 3 - gauge->y2rescale,
+	gfx_draw_line(gauge_needle_x_outer, gauge_needle_y_outer,
+			gauge_needle_x_inner, gauge_needle_y_inner,
 			gauge->background_color);
 
 	#ifdef CONFIG_WTK_GAUGE_USE_THICK_LINE
-	//! Right line +1 X -1 Y
-	gfx_draw_line(clip->origin.x + gauge->xrescale + 1 + gauge->g_outer_pos,
-			clip->origin.y + area->size.y - gauge->yrescale - 3,
-			clip->origin.x + area->size.x - 3 - gauge->g_inner_pos
-			+ gauge->x2rescale + 1,
-			clip->origin.y + area->size.y - 3 - gauge->y2rescale,
+	//! Right line has +1 offset on x-axis
+	gfx_draw_line(gauge_needle_x_outer + 1, gauge_needle_y_outer,
+			gauge_needle_x_inner + 1, gauge_needle_y_inner,
 			gauge->background_color);
-	//! Left line -1 X +1 Y
-	gfx_draw_line(clip->origin.x + gauge->xrescale + gauge->g_outer_pos,
-			clip->origin.y + area->size.y + 1 - gauge->yrescale - 3,
-			clip->origin.x + area->size.x - 3 - gauge->g_inner_pos
-			+ gauge->x2rescale,
-			clip->origin.y + area->size.y - 3 - 
-			gauge->y2rescale + 1,
+
+	//! Left line has +1 offset on y-axis
+	gfx_draw_line(gauge_needle_x_outer, gauge_needle_y_outer + 1,
+			gauge_needle_x_inner, gauge_needle_y_inner + 1,
 			gauge->background_color);
 	#endif
 }
@@ -320,15 +335,15 @@ static void wtk_gauge_draw_line(struct win_clip_region const *clip,
 	 * to ensure that its within the gauge draw area.
 	 */
 	gfx_coord_t gauge_needle_x_inner = 
-		clip->origin.x + area->size.x - 3 - gauge->g_inner_pos + 
-		gauge->x2rescale;
+		clip->origin.x + area->size.x - gauge->g_inner_pos + 
+		gauge->x2rescale - 3;
 
 	/**
 	 * The inner y-axis start position of the gauge needle. Has a -3 offset
 	 * to ensure that its within the gauge draw area.
 	 */
 	gfx_coord_t gauge_needle_y_inner = 
-		clip->origin.y + area->size.y - 3 - gauge->y2rescale;
+		clip->origin.y + area->size.y - gauge->y2rescale - 3;
 
 	//! Draws the gauge middle line from the rescaled position value
 	gfx_draw_line(gauge_needle_x_outer, gauge_needle_y_outer,
