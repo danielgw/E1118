@@ -427,7 +427,8 @@ static bool wtk_gauge_handler(struct win_window *win,
 			gauge->redraw_background = false;
 		}
 
-		/** Rescales the position value for accessing data in the trigtable array
+		/**
+		 * Rescales the position value for accessing data in the trigtable array
 		 * The -2 after area-> size.x is a offset, so that the line is within the frame
 		 */
 		gauge->rescale = wtk_rescale_value(position, 
@@ -440,21 +441,25 @@ static bool wtk_gauge_handler(struct win_window *win,
 		//! Reads y trigonometric value from PROGMEM array
 		gauge->yangle = wtk_trigtable_sin(gauge->rescale);
 
-		/** Rescales the first x trigonometric value for 
-		 * usage in the draw function
+		/**
+		 * Rescales the first x trigonometric value for 
+		 * usage in the draw function. Uses -3 offset to ensure that
+		 * its witin draw area
 		 */
 		gauge->xrescale = wtk_rescale_value(gauge->xangle,
 				WTK_TRIG_TABLE_MAX_VALUE, 
 				area->size.x - 3 - gauge->g_outer_pos);
 
-		/** Rescales the first y trigonometric value for usage in the 
-		 * draw function
+		/** 
+		 * Rescales the first y trigonometric value for usage in the 
+		 * draw function Uses -3 offset to ensure that its witin draw area
 		 */
 		gauge->yrescale = wtk_rescale_value(gauge->yangle,
 				WTK_TRIG_TABLE_MAX_VALUE, 
 				area->size.y - 3 - gauge->g_outer_pos);
 
-		/** Rescales the second x trigonometric value for usage in the 
+		/** 
+		 * Rescales the second x trigonometric value for usage in the 
 		 * draw function
 		 */
 		gauge->x2rescale = wtk_rescale_value(gauge->xangle,
@@ -525,9 +530,9 @@ static bool wtk_gauge_handler(struct win_window *win,
  */
 struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 		struct win_area const *area, struct gfx_bitmap *background, 
-		uint8_t maximum, uint8_t value, uint8_t g_outer_pos, uint8_t g_inner_pos,
-		gfx_color_t fill_color, gfx_color_t background_color, 
-		uint8_t option)
+		uint8_t maximum, uint8_t value, uint8_t g_outer_pos, 
+		uint8_t g_inner_pos, gfx_color_t fill_color,
+		gfx_color_t background_color, uint8_t option)
 {
 	uint8_t length;
 
@@ -582,17 +587,24 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 
 	length -= 2;
 
-	//! Checks if line pos is an accepted value, else set to max
-	if(g_outer_pos < 0 || g_outer_pos > 100){
-		g_outer_pos = 100;
+	//! Checks if line pos is an accepted value, else set to max, fail safe
+	//! Todo: could this be done with assert?
+	if(g_outer_pos < WTK_GAUGE_MIN_NEEDLE_PERCENT_SIZE ||
+			g_outer_pos > WTK_GAUGE_MAX_NEEDLE_PERCENT_SIZE) {
+		g_outer_pos = WTK_GAUGE_MAX_NEEDLE_PERCENT_SIZE;
 	}
-	if(g_inner_pos < 0 || g_inner_pos > 100){
-		g_inner_pos = 100;
+	
+	if(g_inner_pos < WTK_GAUGE_MIN_NEEDLE_PERCENT_SIZE || 
+			g_inner_pos > WTK_GAUGE_MAX_NEEDLE_PERCENT_SIZE) {
+		g_inner_pos = WTK_GAUGE_MAX_NEEDLE_PERCENT_SIZE;
 	}
 
 	//! Rescales 0-100% into approptiate gauge length size
-	gauge->g_outer_pos = wtk_rescale_value(100 - g_outer_pos, 100, area->size.x - 2);
-	gauge->g_inner_pos = wtk_rescale_value(g_inner_pos, 100, area->size.x - 2);
+	gauge->g_outer_pos = 
+		wtk_rescale_value(WTK_GAUGE_MAX_NEEDLE_PERCENT_SIZE - g_outer_pos, 
+				WTK_GAUGE_MAX_NEEDLE_PERCENT_SIZE, area->size.x - 2);
+	gauge->g_inner_pos = wtk_rescale_value(g_inner_pos, 
+			WTK_GAUGE_MAX_NEEDLE_PERCENT_SIZE, area->size.x - 2);
 
 	//! Set the gauge's end position.
 	gauge->position = wtk_rescale_value(value, maximum, length);
