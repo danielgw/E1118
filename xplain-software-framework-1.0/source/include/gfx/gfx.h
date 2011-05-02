@@ -188,10 +188,16 @@
 /**
  * \defgroup gfx_gradient_options Gradient options
  * These options can be ORed together to specify the behaviour of a
- * gradient when creating it with \ref wtk_gradient_set_values
+ * gradient when generating it with \ref wtk_gradient_set_values
  * @{
  */
  
+ /**
+ * \name gradient orientation configuration options.
+ * For use with the option parameter of \ref wtk_gradient_set_values
+ * @{
+ */
+
 //! Bitmask for horizontal gradients.
 #define GFX_GRADIENT_VERTICAL (0<<0)
 //! Bitmask for vertical gradients.
@@ -203,6 +209,7 @@
 
 
 
+//! @}
 //! @}
 //! @}
 
