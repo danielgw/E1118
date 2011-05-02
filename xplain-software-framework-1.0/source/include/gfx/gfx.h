@@ -285,31 +285,6 @@ static inline uint_fast8_t gfx_font_get_width(struct font *font)
 	return (font->width * font->scale);
 }
 
-/**
- * \name Bitmap functions and structures
- */
-//@{
-
-/**
- * \ brief Valid bitmap types
- */
-enum gfx_bitmap_type {
-	//! Solid color bitmap
-	BITMAP_SOLID,
-	//! Bitmap stored in SRAM
-	BITMAP_RAM,
-	//! Bitmap stored in progmem
-	BITMAP_PROGMEM,
-#ifdef CONFIG_HUGEMEM
-	//! Bitmap stored in hugemem
-	BITMAP_HUGEMEM,
-#endif
-#ifdef CONFIG_GRADIENT
-	//! Gradient bitmap.
-	BITMAP_GRADIENT,
-#endif
-};
-
 #ifdef CONFIG_GRADIENT
  
 /**
@@ -354,6 +329,33 @@ void gfx_gradient_draw(struct gfx_gradient *gradient, gfx_coord_t map_x,
  
  //! @}
  #endif
+ 
+/**
+ * \name Bitmap functions and structures
+ */
+//@{
+
+/**
+ * \ brief Valid bitmap types
+ */
+enum gfx_bitmap_type {
+	//! Solid color bitmap
+	BITMAP_SOLID,
+	//! Bitmap stored in SRAM
+	BITMAP_RAM,
+	//! Bitmap stored in progmem
+	BITMAP_PROGMEM,
+#ifdef CONFIG_HUGEMEM
+	//! Bitmap stored in hugemem
+	BITMAP_HUGEMEM,
+#endif
+#ifdef CONFIG_GRADIENT
+	//! Gradient bitmap.
+	BITMAP_GRADIENT,
+#endif
+};
+
+ 
 /**
  * \brief Storage structure for bitmap pixel data and metadata
  */
