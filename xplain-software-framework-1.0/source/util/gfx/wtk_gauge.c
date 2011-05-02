@@ -109,7 +109,6 @@ struct wtk_gauge {
 	uint8_t                 g_outer_pos;
 	//! Rescaled percent value for gauge inner line length
 	uint8_t                 g_inner_pos;
-
 };
 
 /**
@@ -156,7 +155,7 @@ bool wtk_gauge_set_value(struct wtk_gauge *gauge, uint8_t value)
 		area = win_get_area(gauge->container);
 
 		length = area->size.x;
-		
+
 		length -= 2;
 
 		if (option & WTK_GAUGE_INVERT) {
@@ -195,8 +194,8 @@ uint8_t wtk_gauge_get_value(struct wtk_gauge *gauge)
  * \param fill_color Fill color to set for gauge.
  * \param background_color Background color to set for gauge.
  */
-void wtk_gauge_set_colors(struct wtk_gauge *gauge,
-		gfx_color_t fill_color, gfx_color_t background_color)
+void wtk_gauge_set_colors(struct wtk_gauge *gauge, gfx_color_t fill_color,
+		gfx_color_t background_color)
 {
 	assert(gauge);
 
@@ -217,6 +216,7 @@ static void wtk_gauge_line_erase(struct win_clip_region const *clip,
 	//! The outer x-axis start position of the gauge needle
 	gfx_coord_t gauge_needle_x_outer = 
 		clip->origin.x + gauge->xrescale + gauge->g_outer_pos;
+
 	/**
 	 * The outer y-axis start position of the gauge needle. Has a -3 offset
 	 * to ensure that its within the gauge draw area.
@@ -278,41 +278,40 @@ static void wtk_gauge_draw_background(struct win_clip_region const *clip,
 	 * Drawa a window border. Has a +1 to the offset, so that its outside 
 	 * the filled circles
 	 */
-	gfx_draw_horizontal_line(clip->origin.x, 
+	gfx_draw_horizontal_line(clip->origin.x,
 			clip->origin.y + gauge_area_height + 1,
 			area->size.y, WTK_GAUGE_OUTER_LINE_COLOR);
 
-	gfx_draw_vertical_line(clip->origin.x + gauge_area_length + 1, 
+	gfx_draw_vertical_line(clip->origin.x + gauge_area_length + 1,
 			clip->origin.y, area->size.x, WTK_GAUGE_OUTER_LINE_COLOR);
 
 	//! Outer filled circle
-	gfx_draw_filled_circle(clip->origin.x + gauge_area_length, 
-			clip->origin.y + gauge_area_height,
-			gauge_area_length, WTK_GAUGE_OUTER_FILL_COLOR, 
-			GFX_QUADRANT1);
+	gfx_draw_filled_circle(clip->origin.x + gauge_area_length,
+			clip->origin.y + gauge_area_height, gauge_area_length,
+			WTK_GAUGE_OUTER_FILL_COLOR, GFX_QUADRANT1);
 
 	/** 
 	 * Inner filled circle. Has -2 offset to the radius to ensure that its 
 	 * within the gauge area.
 	 */
 	gfx_draw_filled_circle(clip->origin.x + gauge_area_length,
-			clip->origin.y + gauge_area_height, 
-			gauge->g_inner_pos - 2, WTK_GAUGE_INNER_FILL_COLOR, 
+			clip->origin.y + gauge_area_height,
+			gauge->g_inner_pos - 2, WTK_GAUGE_INNER_FILL_COLOR,
 			GFX_QUADRANT1);
 
 	/**
 	 * Inner circle black line. Has -2 offset to the radius to ensure that
 	 * its within the gauge area.
 	 */
-	gfx_draw_circle(clip->origin.x + gauge_area_length, 
+	gfx_draw_circle(clip->origin.x + gauge_area_length,
 			clip->origin.y + gauge_area_height,
-			gauge->g_inner_pos - 2, WTK_GAUGE_INNER_LINE_COLOR, 
+			gauge->g_inner_pos - 2, WTK_GAUGE_INNER_LINE_COLOR,
 			GFX_QUADRANT1);
 
 	//! Draws gauge track circle in quadrant 1
 	//! Outer edge black line.
-	gfx_draw_circle(clip->origin.x + gauge_area_length, 
-			clip->origin.y + gauge_area_height, gauge_area_length, 
+	gfx_draw_circle(clip->origin.x + gauge_area_length,
+			clip->origin.y + gauge_area_height, gauge_area_length,
 			WTK_GAUGE_OUTER_LINE_COLOR, GFX_QUADRANT1);
 
 }
@@ -321,20 +320,21 @@ static void wtk_gauge_draw_line(struct win_clip_region const *clip,
 		struct win_area const *area, struct wtk_gauge *gauge)
 {
 	//! The outer x-axis start position of the gauge needle
-	gfx_coord_t gauge_needle_x_outer = 
+	gfx_coord_t gauge_needle_x_outer =
 		clip->origin.x + gauge->xrescale + gauge->g_outer_pos;
+
 	/**
 	 * The outer y-axis start position of the gauge needle. Has a -3 offset
 	 * to ensure that its within the gauge draw area.
 	 */
-	gfx_coord_t gauge_needle_y_outer = 
+	gfx_coord_t gauge_needle_y_outer =
 		clip->origin.y + area->size.y - gauge->yrescale - 3;
 
 	/**
 	 * The inner x-axis start position of the gauge needle. Has a -3 offset
 	 * to ensure that its within the gauge draw area.
 	 */
-	gfx_coord_t gauge_needle_x_inner = 
+	gfx_coord_t gauge_needle_x_inner =
 		clip->origin.x + area->size.x - gauge->g_inner_pos + 
 		gauge->x2rescale - 3;
 
@@ -342,7 +342,7 @@ static void wtk_gauge_draw_line(struct win_clip_region const *clip,
 	 * The inner y-axis start position of the gauge needle. Has a -3 offset
 	 * to ensure that its within the gauge draw area.
 	 */
-	gfx_coord_t gauge_needle_y_inner = 
+	gfx_coord_t gauge_needle_y_inner =
 		clip->origin.y + area->size.y - gauge->y2rescale - 3;
 
 	//! Draws the gauge middle line from the rescaled position value
@@ -420,16 +420,17 @@ static bool wtk_gauge_handler(struct win_window *win,
 			//! Draws background
 			wtk_gauge_draw_background(clip, area, gauge);
 		
-			/** Sets redraw_background to false so the background draw is halted 
-			 * and enables the gauge line erase function for next 
-			 * draw event
+			/** Sets redraw_background to false so the background 
+			 * draw is halted and enables the gauge line erase 
+			 * function for next draw event
 			 */
 			gauge->redraw_background = false;
 		}
 
 		/**
-		 * Rescales the position value for accessing data in the trigtable array
-		 * The -2 after area-> size.x is a offset, so that the line is within the frame
+		 * Rescales the position value for accessing data in the
+		 * trigtable array.The -2 after area-> size.x is a offset,
+		 * so that the line is within the frame
 		 */
 		gauge->rescale = wtk_rescale_value(position, 
 				area->size.x - 2, WTK_TRIG_TABLE_MAX_VALUE / 2);
@@ -468,7 +469,7 @@ static bool wtk_gauge_handler(struct win_window *win,
 		/** Rescales the second y trigonometric value for usage in the 
 		 * draw function
 		 */
-		gauge->y2rescale = wtk_rescale_value(gauge->yangle, 
+		gauge->y2rescale = wtk_rescale_value(gauge->yangle,
 				WTK_TRIG_TABLE_MAX_VALUE, gauge->g_inner_pos);
 
 		//! Draws gauge line
@@ -529,8 +530,8 @@ static bool wtk_gauge_handler(struct win_window *win,
  * \return Pointer to new gauge, if memory allocation was successful.
  */
 struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
-		struct win_area const *area, struct gfx_bitmap *background, 
-		uint8_t maximum, uint8_t value, uint8_t g_outer_pos, 
+		struct win_area const *area, struct gfx_bitmap *background,
+		uint8_t maximum, uint8_t value, uint8_t g_outer_pos,
 		uint8_t g_inner_pos, gfx_color_t fill_color,
 		gfx_color_t background_color, uint8_t option)
 {
@@ -594,16 +595,16 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 		g_outer_pos = WTK_GAUGE_MAX_NEEDLE_PERCENT_SIZE;
 	}
 	
-	if(g_inner_pos < WTK_GAUGE_MIN_NEEDLE_PERCENT_SIZE || 
+	if(g_inner_pos < WTK_GAUGE_MIN_NEEDLE_PERCENT_SIZE ||
 			g_inner_pos > WTK_GAUGE_MAX_NEEDLE_PERCENT_SIZE) {
 		g_inner_pos = WTK_GAUGE_MAX_NEEDLE_PERCENT_SIZE;
 	}
 
 	//! Rescales 0-100% into approptiate gauge length size
 	gauge->g_outer_pos = 
-		wtk_rescale_value(WTK_GAUGE_MAX_NEEDLE_PERCENT_SIZE - g_outer_pos, 
+		wtk_rescale_value(WTK_GAUGE_MAX_NEEDLE_PERCENT_SIZE - g_outer_pos,
 				WTK_GAUGE_MAX_NEEDLE_PERCENT_SIZE, area->size.x - 2);
-	gauge->g_inner_pos = wtk_rescale_value(g_inner_pos, 
+	gauge->g_inner_pos = wtk_rescale_value(g_inner_pos,
 			WTK_GAUGE_MAX_NEEDLE_PERCENT_SIZE, area->size.x - 2);
 
 	//! Set the gauge's end position.
