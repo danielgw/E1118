@@ -37,8 +37,7 @@
  */
  
 /**
- * \ingroup gfx_wtk_gauge
- * @{
+ * \ingroup gfx_wtk_trigtable
  */
 
 #include <stdint.h>
