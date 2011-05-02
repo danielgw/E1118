@@ -279,8 +279,6 @@ bool wtk_slider_set_value(struct wtk_slider *slider, uint8_t value);
 
 //! @}
 
-//! @}
-
 /**
  * \defgroup gfx_wtk_label Label widget
  * @{

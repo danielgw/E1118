@@ -557,6 +557,7 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 	gauge->maximum = maximum;
 	gauge->value = value;
 	gauge->option = option;
+	//! Todo: fix this into a separate function
 	gauge->redraw_background = true;
 
 	//! Set the gauge's colors
