@@ -188,8 +188,24 @@ static bool wtk_dialogue_box_handler(struct win_window *win,
 		 */
 		clip = (struct win_clip_region const *)data;
 
-		win_grab_pointer(frame->container);
+		// win_grab_pointer(frame->container);
 
+		struct wtk_button			*button_ok;
+		struct win_attributes		attr;
+		
+			// Create the button
+		attr.area.pos.x = gfx_get_width()/3;
+		attr.area.pos.y = gfx_get_height()/2;
+		attr.area.size.x = gfx_get_width()/3;
+		attr.area.size.y = gfx_get_height()/4;
+
+		button_ok = wtk_button_create(getparent(frame), &attr.area, "OK",
+				(win_command_t)BUTTON_OK_ID);
+		if (!button_ok) {
+			goto error_widget;
+		}
+		
+		win_show(wtk_button_as_child(button_ok));
 		
 		if (win == frame->win) {
 			if (frame->draw_handler) {
@@ -300,7 +316,7 @@ struct wtk_dialogue_box *wtk_dialogue_box_create(struct win_window *parent,
 {
 	struct win_attributes		attr;
 	struct wtk_dialogue_box		*dialogue_box;
-	struct wtk_button			*button_ok;
+
 	
 	
 
@@ -329,7 +345,7 @@ struct wtk_dialogue_box *wtk_dialogue_box_create(struct win_window *parent,
 
 	
 	// Set background for window
-	attr.background = NULL;
+	// attr.background = NULL;
 	
 	/*if (background) {
 		attr.background = background;
@@ -345,18 +361,7 @@ struct wtk_dialogue_box *wtk_dialogue_box_create(struct win_window *parent,
 		goto outofmem_win;
 	}
 	
-	// Create the button
-	attr.area.pos.x = gfx_get_width()/3;
-	attr.area.pos.y = gfx_get_height()/3;
-	attr.area.size.x = gfx_get_width()/3;
-	attr.area.size.y = gfx_get_height()/3;
 
-	button_ok = wtk_button_create(parent, &attr.area, "OK",
-			(win_command_t)BUTTON_OK_ID);
-	if (!button_ok) {
-		goto error_widget;
-	}
-	
 
 	return dialogue_box;
 
