@@ -245,34 +245,54 @@ static void wtk_gauge_line_erase(struct win_clip_region const *clip,
 static void wtk_gauge_draw_background(struct win_clip_region const *clip,
 		struct win_area const *area, struct wtk_gauge *gauge)
 {
-	//! Drawa a window border.
-	gfx_draw_horizontal_line(clip->origin.x, clip->origin.y + area->size.y - 1,
+	/**
+	 * The x-dimension of the gauge circles
+	 * The -2 is an offset, so that the drawn lines are within the gauge
+	 * area
+	 */
+	gfx_coord_t length = area->size.x - 2;
+	
+	/** 
+	 * The y-dimension of the gauge circles
+	 * The -2 is an offset, so that the drawn lines are within the gauge
+	 * area
+	 */
+	gfx_coord_t height = area->size.y - 2;
+	
+	/** 
+	 * Drawa a window border. Has a +1 to the offset, so that its outside 
+	 * the filled circles
+	 */
+	gfx_draw_horizontal_line(clip->origin.x, clip->origin.y + height + 1,
 			area->size.y, WTK_GAUGE_OUTER_LINE_COLOR);
 
-	gfx_draw_vertical_line(clip->origin.x + area->size.x - 1, clip->origin.y,
+	gfx_draw_vertical_line(clip->origin.x + length + 1, clip->origin.y,
 			area->size.x, WTK_GAUGE_OUTER_LINE_COLOR);
 
-	//! Draws gauge track circle in quadrant 1
-	//! Outer edge black line
-	gfx_draw_circle(clip->origin.x + area->size.x - 2,
-			clip->origin.y + area->size.y - 2, area->size.x - 2,
-			WTK_GAUGE_OUTER_LINE_COLOR, GFX_QUADRANT1);
-
 	//! Outer filled circle
-	gfx_draw_filled_circle(clip->origin.x + area->size.x - 2,
-			clip->origin.y + area->size.y - 2, area->size.x - 3,
-			WTK_GAUGE_OUTER_FILL_COLOR, GFX_QUADRANT1);
+	gfx_draw_filled_circle(clip->origin.x + length, clip->origin.y + height,
+			length, WTK_GAUGE_OUTER_FILL_COLOR, GFX_QUADRANT1);
 
-	//! Inner filled circle
-	gfx_draw_filled_circle(clip->origin.x + area->size.x - 2,
-			clip->origin.y + area->size.y - 2, gauge->g_inner_pos - 2,
+	/** 
+	 * Inner filled circle. Has -2 offset to the radius to ensure that its 
+	 * within the gauge area.
+	 */
+	gfx_draw_filled_circle(clip->origin.x + length,
+			clip->origin.y + height, gauge->g_inner_pos - 2,
 			WTK_GAUGE_INNER_FILL_COLOR, GFX_QUADRANT1);
 
-	//! Inner circle black line
-	gfx_draw_circle(clip->origin.x + area->size.x - 2,
-		clip->origin.y + area->size.y - 2,
-		gauge->g_inner_pos - 2,
-		WTK_GAUGE_INNER_LINE_COLOR, GFX_QUADRANT1);
+	//! Draws gauge track circle in quadrant 1
+	//! Outer edge black line.
+	gfx_draw_circle(clip->origin.x + length, clip->origin.y + height,
+			length, WTK_GAUGE_OUTER_LINE_COLOR, GFX_QUADRANT1);
+
+	/**
+	 * Inner circle black line. Has -2 offset to the radius to ensure that
+	 * its within the gauge area.
+	 */
+	gfx_draw_circle(clip->origin.x + length, clip->origin.y + height,
+		gauge->g_inner_pos - 2, WTK_GAUGE_INNER_LINE_COLOR, 
+		GFX_QUADRANT1);
 }
 
 static void wtk_gauge_draw_line(struct win_clip_region const *clip,
@@ -372,7 +392,9 @@ static bool wtk_gauge_handler(struct win_window *win,
 			gauge->redraw_background = false;
 		}
 
-		//! Rescales the position value for accessing data in the trigtable array
+		/** Rescales the position value for accessing data in the trigtable array
+		 * The -2 after area-> size.x is a offset, so that the line is within the frame
+		 */
 		gauge->rescale = wtk_rescale_value(position, 
 				area->size.x - 2, WTK_TRIG_TABLE_MAX_VALUE / 2);
 
