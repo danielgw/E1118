@@ -250,80 +250,100 @@ static void wtk_gauge_draw_background(struct win_clip_region const *clip,
 	 * The -2 is an offset, so that the drawn lines are within the gauge
 	 * area
 	 */
-	gfx_coord_t length = area->size.x - 2;
-	
+	gfx_coord_t gauge_area_length = area->size.x - 2;
+
 	/** 
 	 * The y-dimension of the gauge circles
 	 * The -2 is an offset, so that the drawn lines are within the gauge
 	 * area
 	 */
-	gfx_coord_t height = area->size.y - 2;
-	
+	gfx_coord_t gauge_area_height = area->size.y - 2;
+
 	/** 
 	 * Drawa a window border. Has a +1 to the offset, so that its outside 
 	 * the filled circles
 	 */
-	gfx_draw_horizontal_line(clip->origin.x, clip->origin.y + height + 1,
+	gfx_draw_horizontal_line(clip->origin.x, 
+			clip->origin.y + gauge_area_height + 1,
 			area->size.y, WTK_GAUGE_OUTER_LINE_COLOR);
 
-	gfx_draw_vertical_line(clip->origin.x + length + 1, clip->origin.y,
-			area->size.x, WTK_GAUGE_OUTER_LINE_COLOR);
+	gfx_draw_vertical_line(clip->origin.x + gauge_area_length + 1, 
+			clip->origin.y, area->size.x, WTK_GAUGE_OUTER_LINE_COLOR);
 
 	//! Outer filled circle
-	gfx_draw_filled_circle(clip->origin.x + length, clip->origin.y + height,
-			length, WTK_GAUGE_OUTER_FILL_COLOR, GFX_QUADRANT1);
+	gfx_draw_filled_circle(clip->origin.x + gauge_area_length, 
+			clip->origin.y + gauge_area_height,
+			gauge_area_length, WTK_GAUGE_OUTER_FILL_COLOR, 
+			GFX_QUADRANT1);
 
 	/** 
 	 * Inner filled circle. Has -2 offset to the radius to ensure that its 
 	 * within the gauge area.
 	 */
-	gfx_draw_filled_circle(clip->origin.x + length,
-			clip->origin.y + height, gauge->g_inner_pos - 2,
-			WTK_GAUGE_INNER_FILL_COLOR, GFX_QUADRANT1);
-
-	//! Draws gauge track circle in quadrant 1
-	//! Outer edge black line.
-	gfx_draw_circle(clip->origin.x + length, clip->origin.y + height,
-			length, WTK_GAUGE_OUTER_LINE_COLOR, GFX_QUADRANT1);
+	gfx_draw_filled_circle(clip->origin.x + gauge_area_length,
+			clip->origin.y + gauge_area_height, 
+			gauge->g_inner_pos - 2, WTK_GAUGE_INNER_FILL_COLOR, 
+			GFX_QUADRANT1);
 
 	/**
 	 * Inner circle black line. Has -2 offset to the radius to ensure that
 	 * its within the gauge area.
 	 */
-	gfx_draw_circle(clip->origin.x + length, clip->origin.y + height,
-		gauge->g_inner_pos - 2, WTK_GAUGE_INNER_LINE_COLOR, 
-		GFX_QUADRANT1);
+	gfx_draw_circle(clip->origin.x + gauge_area_length, 
+			clip->origin.y + gauge_area_height,
+			gauge->g_inner_pos - 2, WTK_GAUGE_INNER_LINE_COLOR, 
+			GFX_QUADRANT1);
+
+	//! Draws gauge track circle in quadrant 1
+	//! Outer edge black line.
+	gfx_draw_circle(clip->origin.x + gauge_area_length, 
+			clip->origin.y + gauge_area_height, gauge_area_length, 
+			WTK_GAUGE_OUTER_LINE_COLOR, GFX_QUADRANT1);
+
 }
 
 static void wtk_gauge_draw_line(struct win_clip_region const *clip,
 		struct win_area const *area, struct wtk_gauge *gauge)
 {
+	//! The outer x-axis start position of the gauge needle
+	gfx_coord_t gauge_needle_x_outer = 
+		clip->origin.x + gauge->xrescale + gauge->g_outer_pos;
+	/**
+	 * The outer y-axis start position of the gauge needle. Has a -3 offset
+	 * to ensure that its within the gauge draw area.
+	 */
+	gfx_coord_t gauge_needle_y_outer = 
+		clip->origin.y + area->size.y - gauge->yrescale - 3;
+
+	/**
+	 * The inner x-axis start position of the gauge needle. Has a -3 offset
+	 * to ensure that its within the gauge draw area.
+	 */
+	gfx_coord_t gauge_needle_x_inner = 
+		clip->origin.x + area->size.x - 3 - gauge->g_inner_pos + 
+		gauge->x2rescale;
+
+	/**
+	 * The inner y-axis start position of the gauge needle. Has a -3 offset
+	 * to ensure that its within the gauge draw area.
+	 */
+	gfx_coord_t gauge_needle_y_inner = 
+		clip->origin.y + area->size.y - 3 - gauge->y2rescale;
+
 	//! Draws the gauge middle line from the rescaled position value
-	gfx_draw_line(clip->origin.x + gauge->xrescale + 
-			gauge->g_outer_pos,
-			clip->origin.y + area->size.y - gauge->yrescale - 3,
-			clip->origin.x + area->size.x - 3 - gauge->g_inner_pos + 
-			gauge->x2rescale,
-			clip->origin.y + area->size.y - 3 - gauge->y2rescale,
+	gfx_draw_line(gauge_needle_x_outer, gauge_needle_y_outer,
+			gauge_needle_x_inner, gauge_needle_y_inner,
 			WTK_GAUGE_NEEDLE_COLOR);
 
 	#ifdef CONFIG_WTK_GAUGE_USE_THICK_LINE
-	//! Right line +1 X -1 Y
-	gfx_draw_line(clip->origin.x + gauge->xrescale + 1 +
-			gauge->g_outer_pos,
-			clip->origin.y + area->size.y - gauge->yrescale - 3,
-			clip->origin.x + area->size.x - 3 - gauge->g_inner_pos + 
-			gauge->x2rescale + 1,
-			clip->origin.y + area->size.y - 3 - gauge->y2rescale,
+	//! Right line has +1 offset on x-axis
+	gfx_draw_line(gauge_needle_x_outer + 1, gauge_needle_y_outer,
+			gauge_needle_x_inner + 1, gauge_needle_y_inner,
 			WTK_GAUGE_NEEDLE_COLOR);
 
-	//! Left line -1 X +1 Y
-	gfx_draw_line(clip->origin.x + gauge->xrescale + 
-			gauge->g_outer_pos,
-			clip->origin.y + area->size.y - gauge->yrescale - 3 + 1,
-			clip->origin.x + area->size.x - 3 - gauge->g_inner_pos + 
-			gauge->x2rescale,
-			clip->origin.y + area->size.y - 3 - gauge->y2rescale + 1,
+	//! Left line has +1 offset on y-axis
+	gfx_draw_line(gauge_needle_x_outer, gauge_needle_y_outer + 1,
+			gauge_needle_x_inner, gauge_needle_y_inner + 1,
 			WTK_GAUGE_NEEDLE_COLOR);
 	#endif
 }
