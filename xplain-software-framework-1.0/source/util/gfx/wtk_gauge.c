@@ -244,7 +244,7 @@ static void wtk_gauge_line_erase(struct win_clip_region const *clip,
 			gauge_needle_x_inner, gauge_needle_y_inner,
 			gauge->background_color);
 
-	#ifdef CONFIG_WTK_GAUGE_USE_THICK_LINE
+	#if WTK_GAUGE_NEEDLE_LINE_THICKNESS > 1
 	//! Right line has +1 offset on x-axis
 	gfx_draw_line(gauge_needle_x_outer + 1, gauge_needle_y_outer,
 			gauge_needle_x_inner + 1, gauge_needle_y_inner,
@@ -350,7 +350,7 @@ static void wtk_gauge_draw_line(struct win_clip_region const *clip,
 			gauge_needle_x_inner, gauge_needle_y_inner,
 			WTK_GAUGE_NEEDLE_COLOR);
 
-	#ifdef CONFIG_WTK_GAUGE_USE_THICK_LINE
+	#if WTK_GAUGE_NEEDLE_LINE_THICKNESS > 1
 	//! Right line has +1 offset on x-axis
 	gfx_draw_line(gauge_needle_x_outer + 1, gauge_needle_y_outer,
 			gauge_needle_x_inner + 1, gauge_needle_y_inner,
@@ -518,15 +518,15 @@ static bool wtk_gauge_handler(struct win_window *win,
  *
  * \todo Revisit, support larger gauges and values given a config symbol.
  *
- * \param parent Pointer to parent \ref win_window() struct.
- * \param area Pointer to \ref win_area() struct with position and size of the
+ * \param parent Pointer to parent ref win_window struct.
+ * \param area Pointer to ref win_area struct with position and size of the
  *             gauge. Minimum size in both x and y direction is 3 pixels.
  * \param maximum Maximum value of the gauge.
  * \param value Initial value of the gauge.
  * \param fill_color Color for filled area.
  * \param background_color Color for background area.
- * \param option Configuration options for gauge.
- *
+ * \param option Configuration options for gauge, check here for more details:
+ * \ref gfx_wtk_gauge_options 
  * \return Pointer to new gauge, if memory allocation was successful.
  */
 struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
@@ -537,30 +537,30 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 {
 	uint8_t length;
 
-	//! Do sanity check on parameters.
+	// Do sanity check on parameters.
 	assert(maximum > 0);
 	assert(value <= maximum);
 	assert(area);
 	assert(parent);
 
-	//! Attributes scratchpad.
+	// Attributes scratchpad.
 	struct win_attributes attr;
 
-	//! Allocate memory for the control data.
+	// Allocate memory for the control data.
 	struct wtk_gauge *gauge =
 			membag_alloc(sizeof(struct wtk_gauge));
 	if (!gauge) {
 		goto outofmem_gauge;
 	}
 
-	//! Initialize the gauge data.
+	// Initialize the gauge data.
 	gauge->maximum = maximum;
 	gauge->value = value;
 	gauge->option = option;
-	//! Todo: fix this into a separate function
+	// Todo: fix this into a separate function
 	gauge->redraw_background = true;
 
-	//! Set the gauge's colors
+	// Set the gauge's colors
 	 
 	 
 	gauge->fill_color = fill_color;
@@ -571,11 +571,11 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 		value = maximum - value;
 	}
 
-	//! Set up handling information.
+	// Set up handling information.
 	attr.event_handler = wtk_gauge_handler;
 	attr.custom = gauge;
 
-	/** Do sanity check of specified window area parameters
+	/* Do sanity check of specified window area parameters
 	 * according to the orientation of the gauge.
 	 */
 	attr.area = *area;
@@ -589,8 +589,8 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 
 	length -= 2;
 
-	//! Checks if line pos is an accepted value, else set to max, fail safe
-	//! Todo: could this be done with assert?
+	// Checks if line pos is an accepted value, else set to max, fail safe
+	// Todo: could this be done with assert?
 	if(g_outer_pos < WTK_GAUGE_MIN_NEEDLE_PERCENT_SIZE ||
 			g_outer_pos > WTK_GAUGE_MAX_NEEDLE_PERCENT_SIZE) {
 		g_outer_pos = WTK_GAUGE_MAX_NEEDLE_PERCENT_SIZE;
@@ -601,30 +601,30 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 		g_inner_pos = WTK_GAUGE_MAX_NEEDLE_PERCENT_SIZE;
 	}
 
-	//! Rescales 0-100% into approptiate gauge length size
+	// Rescales 0-100% into approptiate gauge length size
 	gauge->g_outer_pos = 
 		wtk_rescale_value(WTK_GAUGE_MAX_NEEDLE_PERCENT_SIZE - g_outer_pos,
 				WTK_GAUGE_MAX_NEEDLE_PERCENT_SIZE, area->size.x - 2);
 	gauge->g_inner_pos = wtk_rescale_value(g_inner_pos,
 			WTK_GAUGE_MAX_NEEDLE_PERCENT_SIZE, area->size.x - 2);
 
-	//! Set the gauge's end position.
+	// Set the gauge's end position.
 	gauge->position = wtk_rescale_value(value, maximum, length);
 
-	//! Set background for gauge window
+	// Set background for gauge window
 	if (background) {
 		//! solid background bitmap
 		attr.background = NULL;
 		attr.behavior = 0;
 		gauge->solidbg = true;
 	} else {
-		//! transparent, redraw parent
+		// transparent, redraw parent
 		attr.background = NULL;
 		attr.behavior = WIN_BEHAVIOR_REDRAW_PARENT;
 		gauge->solidbg = false;
 	}
 
-	//! Create a new window for the gauge.
+	// Create a new window for the gauge.
 	gauge->container = win_create(parent, &attr);
 	if (!gauge->container) {
 		goto outofmem_container;

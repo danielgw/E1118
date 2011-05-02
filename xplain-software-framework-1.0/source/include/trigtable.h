@@ -45,6 +45,9 @@
 
 #define WTK_TRIG_TABLE_LENGTH 128
 
+uint8_t wtk_trigtable_sin(uint8_t angle);
+uint8_t wtk_trigtable_cos(uint8_t angle);
+
 //! The trigtable values that are loaded into progmem
 DEFINE_PROGMEM (uint8_t, trigtable[WTK_TRIG_TABLE_LENGTH]) = {
 		  0,  3,  6,  9, 13, 16, 19, 22, 25, 28, 31, 34, 37, 41, 44, 47,
