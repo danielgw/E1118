@@ -41,6 +41,7 @@
 #include <membag.h>
 #include <string.h>
 #include <gfx/wtk.h>
+#include <mainloop.h>
 
 /**
  * \brief Event command ID for the application widgets.
@@ -96,29 +97,34 @@ struct wtk_dialogue_box {
  *
  * \sa wtk_basic_frame_command_handler_t
  */
-static bool dialogue_box_command_handler(struct wtk_dialogue_box *frame,
+static bool dialogue_box_command_handler(struct win_window *frame,
 		win_command_t command_data)
 {
 	char command = (char)(uintptr_t)command_data;
 	
-	struct wtk_dialogue_box  *dialogue_box;
-	
+	struct wtk_dialogue_box *dialogue_box;
+	dialogue_box = (struct wtk_dialogue_box*) win_get_custom_data(frame);
+
 	switch (command) {
 	case BUTTON_OK_ID:
 		
-		membag_free(dialogue_box);
+		win_grab_pointer(NULL);
 		
-		win_redraw(win_get_parent(frame->container));
+		win_redraw(win_get_parent(frame));
 
         workqueue_add_task(&main_workqueue, dialogue_box->task);
+		
+		membag_free(dialogue_box);
 		
 		break;
 
 	case BUTTON_CANCEL_ID:
 		
-		membag_free(dialogue_box);
+		win_grab_pointer(NULL);
 		
-		win_redraw(win_get_parent(frame->container));
+		win_redraw(win_get_parent(frame));
+		
+		membag_free(dialogue_box);
 		
 		break;
 	}
@@ -187,35 +193,7 @@ static bool wtk_dialogue_box_handler(struct win_window *win,
 		 * clipping region.
 		 */
 		clip = (struct win_clip_region const *)data;
-
 		
-
-		struct wtk_button			*button_ok;
-		struct win_attributes		attr;
-		
-		
-		
-		gfx_draw_filled_rect(gfx_get_width()/5,
-					gfx_get_height()/5,
-					gfx_get_width()/2,
-					gfx_get_height()/2, GFX_COLOR(200, 200, 200));
-		
-		
-		
-		attr.area.pos.x = gfx_get_width()/3;
-		attr.area.pos.y = gfx_get_height()/2;
-		attr.area.size.x = gfx_get_width()/4;
-		attr.area.size.y = gfx_get_height()/5;
-
-		button_ok = wtk_button_create(win, &attr.area, "OK",
-				(win_command_t)BUTTON_OK_ID);
-		if (!button_ok) {
-			// goto error_widget;
-		}
-		
-		win_grab_pointer(frame->container);
-		
-		win_show(wtk_button_as_child(button_ok));
 		
 		if (win == frame->win) {
 			if (frame->draw_handler) {
@@ -326,7 +304,7 @@ struct wtk_dialogue_box *wtk_dialogue_box_create(struct win_window *parent,
 {
 	struct win_attributes		attr;
 	struct wtk_dialogue_box		*dialogue_box;
-
+	struct wtk_button			*button_ok;
 	
 	
 
@@ -340,7 +318,7 @@ struct wtk_dialogue_box *wtk_dialogue_box_create(struct win_window *parent,
 	}
 
 	// Set window attributes
-	dialogue_box->frame_handler = dialogue_box_command_handler;
+	//tas bort                                       dialogue_box->frame_handler = dialogue_box_command_handler;
 	dialogue_box->custom_data = custom_data;
 	dialogue_box->task = task;
 
@@ -372,11 +350,35 @@ struct wtk_dialogue_box *wtk_dialogue_box_create(struct win_window *parent,
 	}
 	
 
+	
+	// dialogue_box_command_handler;
+	attr.area.pos.x = gfx_get_width()/3;
+	attr.area.pos.y = gfx_get_height()/3;
+	attr.area.size.x = gfx_get_width()/4;
+	attr.area.size.y = gfx_get_height()/5;
+
+	button_ok = wtk_button_create(dialogue_box->win, &attr.area, "OK",
+			(win_command_t)BUTTON_OK_ID);
+	if (!button_ok) {
+		goto error_widget;
+	}
+	
+	win_grab_pointer(dialogue_box->win);
+		
+	win_show(wtk_dialogue_box_as_child(dialogue_box)); //sjekk dette
+
+	gfx_draw_filled_rect(gfx_get_width()/5,
+		gfx_get_height()/6,
+		gfx_get_width()/2,
+		gfx_get_height()/2, GFX_COLOR(200, 200, 200));
+
+	
+	win_show(wtk_button_as_child(button_ok));
 
 	return dialogue_box;
 
-/*error_widget:
-	win_destroy(wtk_dialogue_box_as_child(dialogue_box));*/	
+error_widget:
+	win_destroy(wtk_dialogue_box_as_child(dialogue_box));
 	
 outofmem_win:
 	membag_free(dialogue_box);

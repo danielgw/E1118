@@ -141,7 +141,7 @@ const static char                   *demo_string = "Demonstrating widgets";
  */
 
 //! Pointer to frame for dialogue_box
-static struct wtk_dialogue_box       *dialogue_box;
+static struct wtk_dialogue_box      *dialogue_box;
 
 static struct wtk_frame             *frametest;
 
@@ -160,6 +160,7 @@ static struct wtk_basic_frame       *sub_frame;
 //! Sub-frame background bitmap
 static struct gfx_bitmap            sub_frame_background;
 
+//! @}
 
 //! Finished task that runs after finishing dialogue box
 static void finished_task(struct workqueue_task *task)
@@ -167,8 +168,6 @@ static void finished_task(struct workqueue_task *task)
 	counter++;
 	win_redraw(wtk_basic_frame_as_child(sub_frame));
 }
-
-//! @}
 
 /**
  * \brief Frame command events handler
@@ -182,6 +181,10 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 {
 	char command = (char)(uintptr_t)command_data;
 
+	struct win_window       *parent;
+
+	parent = wtk_basic_frame_as_child(frame);
+	
 	switch (command) {
 	case SLIDER_ID:
 		wtk_progress_bar_set_value(progress_bar,
@@ -189,9 +192,13 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 		break;
 
 	case BUTTON_ID:
-		counter++;
+		// counter++;
 		
-		win_show(wtk_dialogue_box_as_child(dialogue_box));
+		// Create the dialogue_box
+		dialogue_box = wtk_dialogue_box_create(parent, NULL, widget_frame_command_handler, finished_task);
+		if (!dialogue_box) {
+			// goto error_widget;
+		}
 
 		win_redraw(wtk_basic_frame_as_child(sub_frame));
 		break;
@@ -378,11 +385,7 @@ void app_widget_launch(struct workqueue_task *task) {
 
 
 
-	//! Create the dialogue_box
-	dialogue_box = wtk_dialogue_box_create(parent, &area, NULL, &finished_task);
-	if (!sub_frame) {
-		goto error_widget;
-	}
+	
 	
 
 	return;
