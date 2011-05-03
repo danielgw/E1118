@@ -11,7 +11,7 @@ c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avrxmega7/libgcc.a(_udivmodsi4.o)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avrxmega7/libgcc.a(_divmodsi4.o)
                               util/stream/stream_core.o (__divmodsi4)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avrxmega7/libgcc.a(_copy_data.o)
-                              apps/gauge-demo/gauge-demo.o (__do_copy_data)
+                              apps/gauge-demo/app_gauge.o (__do_copy_data)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avrxmega7/libgcc.a(_clear_bss.o)
                               apps/gauge-demo/main.o (__do_clear_bss)
 
@@ -43,8 +43,8 @@ Discarded input sections
  .text          0x00000000        0x0 apps/gauge-demo/app_calibrate.o
  .data          0x00000000        0x0 apps/gauge-demo/app_calibrate.o
  .bss           0x00000000        0x0 apps/gauge-demo/app_calibrate.o
- .text          0x00000000        0x0 apps/gauge-demo/gauge-demo.o
- .bss           0x00000000        0x0 apps/gauge-demo/gauge-demo.o
+ .text          0x00000000        0x0 apps/gauge-demo/app_gauge.o
+ .bss           0x00000000        0x0 apps/gauge-demo/app_gauge.o
  .text          0x00000000        0x0 util/gfx/sysfont.o
  .data          0x00000000        0x0 util/gfx/sysfont.o
  .bss           0x00000000        0x0 util/gfx/sysfont.o
@@ -699,10 +699,10 @@ Linker script and memory map
  .text.touch_calibrate_task_handler
                 0x000004f2      0x1ce apps/gauge-demo/app_calibrate.o
  .text.app_widget_launch
-                0x000006c0      0x276 apps/gauge-demo/gauge-demo.o
+                0x000006c0      0x276 apps/gauge-demo/app_gauge.o
                 0x000006c0                app_widget_launch
  .text.widget_frame_command_handler
-                0x00000936       0x44 apps/gauge-demo/gauge-demo.o
+                0x00000936       0x44 apps/gauge-demo/app_gauge.o
  .text.win_get_root
                 0x0000097a        0x6 util/gfx/win.o
                 0x0000097a                win_get_root
@@ -1041,9 +1041,9 @@ Linker script and memory map
  *(.rodata)
  *(.rodata.*)
  .rodata.demo_string
-                0x00802000        0x2 apps/gauge-demo/gauge-demo.o
+                0x00802000        0x2 apps/gauge-demo/app_gauge.o
  *(.data)
- .data          0x00802002        0xb apps/gauge-demo/gauge-demo.o
+ .data          0x00802002        0xb apps/gauge-demo/app_gauge.o
  *(.data.*)
  .data.sysfont  0x0080200d        0xa util/gfx/sysfont.o
                 0x0080200d                sysfont
@@ -1064,19 +1064,19 @@ Linker script and memory map
                 0x00802054        0x2 apps/gauge-demo/app_calibrate.o
  .bss.sysfont2x
                 0x00802056        0xa apps/gauge-demo/app_calibrate.o
- .bss.frame     0x00802060        0x2 apps/gauge-demo/gauge-demo.o
- .bss.slider    0x00802062        0x2 apps/gauge-demo/gauge-demo.o
+ .bss.frame     0x00802060        0x2 apps/gauge-demo/app_gauge.o
+ .bss.slider    0x00802062        0x2 apps/gauge-demo/app_gauge.o
  .bss.slidertwo
-                0x00802064        0x2 apps/gauge-demo/gauge-demo.o
+                0x00802064        0x2 apps/gauge-demo/app_gauge.o
  .bss.frame_background
-                0x00802066        0x9 apps/gauge-demo/gauge-demo.o
+                0x00802066        0x9 apps/gauge-demo/app_gauge.o
  .bss.sub_frame
-                0x0080206f        0x2 apps/gauge-demo/gauge-demo.o
+                0x0080206f        0x2 apps/gauge-demo/app_gauge.o
  .bss.gauge_background
-                0x00802071        0x9 apps/gauge-demo/gauge-demo.o
- .bss.gauge     0x0080207a        0x2 apps/gauge-demo/gauge-demo.o
+                0x00802071        0x9 apps/gauge-demo/app_gauge.o
+ .bss.gauge     0x0080207a        0x2 apps/gauge-demo/app_gauge.o
  .bss.gauge_two
-                0x0080207c        0x2 apps/gauge-demo/gauge-demo.o
+                0x0080207c        0x2 apps/gauge-demo/app_gauge.o
  .bss.win_root_background
                 0x0080207e        0x9 util/gfx/win.o
  .bss.win_root  0x00802087       0x18 util/gfx/win.o
@@ -1136,7 +1136,7 @@ Linker script and memory map
                 0x00804000                _estack = .
 LOAD apps/gauge-demo/main.o
 LOAD apps/gauge-demo/app_calibrate.o
-LOAD apps/gauge-demo/gauge-demo.o
+LOAD apps/gauge-demo/app_gauge.o
 LOAD util/gfx/sysfont.o
 LOAD util/gfx/win.o
 LOAD util/gfx/wtk.o
@@ -1192,7 +1192,7 @@ LOAD linker stubs
 .debug_abbrev   0x00000000     0x5752
  .debug_abbrev  0x00000000      0x2b8 apps/gauge-demo/main.o
  .debug_abbrev  0x000002b8      0x1da apps/gauge-demo/app_calibrate.o
- .debug_abbrev  0x00000492      0x1ca apps/gauge-demo/gauge-demo.o
+ .debug_abbrev  0x00000492      0x1ca apps/gauge-demo/app_gauge.o
  .debug_abbrev  0x0000065c       0xd2 util/gfx/sysfont.o
  .debug_abbrev  0x0000072e      0x39e util/gfx/win.o
  .debug_abbrev  0x00000acc       0xe6 util/gfx/wtk.o
@@ -1240,10 +1240,10 @@ LOAD linker stubs
  .debug_abbrev  0x0000558d      0x141 board/xplain/init.o
  .debug_abbrev  0x000056ce       0x84 board/xplain/board_physmem_pools.o
 
-.debug_info     0x00000000    0x1688c
+.debug_info     0x00000000    0x168bd
  .debug_info    0x00000000      0xbb5 apps/gauge-demo/main.o
  .debug_info    0x00000bb5      0x655 apps/gauge-demo/app_calibrate.o
- .debug_info    0x0000120a      0x55a apps/gauge-demo/gauge-demo.o
+ .debug_info    0x0000120a      0x55a apps/gauge-demo/app_gauge.o
  .debug_info    0x00001764      0x17b util/gfx/sysfont.o
  .debug_info    0x000018df     0x1981 util/gfx/win.o
  .debug_info    0x00003260      0x1bd util/gfx/wtk.o
@@ -1255,97 +1255,97 @@ LOAD linker stubs
  .debug_info    0x00005d11      0x608 util/gfx/wtk_progress_bar.o
  .debug_info    0x00006319      0x868 util/gfx/wtk_radio_button.o
  .debug_info    0x00006b81      0x72d util/gfx/wtk_slider.o
- .debug_info    0x000072ae      0xa3c util/gfx/wtk_gauge.o
- .debug_info    0x00007cea       0xfc util/string/generic_memcpy.o
- .debug_info    0x00007de6       0xe1 util/string/generic_memset.o
- .debug_info    0x00007ec7       0xc8 util/string/generic_strlen.o
- .debug_info    0x00007f8f      0x145 util/string/generic_strcmp.o
- .debug_info    0x000080d4      0xb41 util/stream/stream_core.o
- .debug_info    0x00008c15      0x684 util/stream/stream_string.o
- .debug_info    0x00009299     0x12fe util/fs/tsfs.o
- .debug_info    0x0000a597      0x293 util/buffer.o
- .debug_info    0x0000a82a      0x178 util/hugemem.o
- .debug_info    0x0000a9a2      0x21b util/malloc_simple.o
- .debug_info    0x0000abbd      0x4dd util/membag.o
- .debug_info    0x0000b09a      0x5cf util/mempool.o
- .debug_info    0x0000b669      0x27b util/physmem.o
- .debug_info    0x0000b8e4      0x198 util/softirq_common.o
- .debug_info    0x0000ba7c      0x58b util/workqueue.o
- .debug_info    0x0000c007      0x3e7 drivers/block/block_core.o
- .debug_info    0x0000c3ee     0x2070 drivers/block/dataflash.o
- .debug_info    0x0000e45e      0x2b6 drivers/clk/xmega_pr.o
- .debug_info    0x0000e714      0xf03 drivers/flash/at45_device.o
- .debug_info    0x0000f617     0x1af9 drivers/gfx/hx8347a/gfx_hx8347a.o
- .debug_info    0x00011110      0x639 drivers/gfx/gfx_generic.o
- .debug_info    0x00011749      0x897 drivers/gfx/gfx_text.o
- .debug_info    0x00011fe0      0x3ed drivers/gfx/gfx_bitmap.o
- .debug_info    0x000123cd      0x3c6 drivers/gpio/port.o
- .debug_info    0x00012793      0x7c3 drivers/serial/spi/spi_polled.o
- .debug_info    0x00012f56      0x684 drivers/serial/spi/spi_polled_buf_list.o
- .debug_info    0x000135da     0x111e drivers/serial/spi/spi_mega_xmega.o
- .debug_info    0x000146f8     0x112d drivers/touch/resistive/touch.o
- .debug_info    0x00015825      0x157 arch/avr8/delay.o
- .debug_info    0x0001597c      0x268 arch/avr8/arch_hugemem.o
- .debug_info    0x00015be4      0x128 cpu/xmega/physmem_pools.o
- .debug_info    0x00015d0c      0x58c chip/atxmega128a1/sysclk.o
- .debug_info    0x00016298      0x4f1 board/xplain/init.o
- .debug_info    0x00016789      0x103 board/xplain/board_physmem_pools.o
+ .debug_info    0x000072ae      0xa6d util/gfx/wtk_gauge.o
+ .debug_info    0x00007d1b       0xfc util/string/generic_memcpy.o
+ .debug_info    0x00007e17       0xe1 util/string/generic_memset.o
+ .debug_info    0x00007ef8       0xc8 util/string/generic_strlen.o
+ .debug_info    0x00007fc0      0x145 util/string/generic_strcmp.o
+ .debug_info    0x00008105      0xb41 util/stream/stream_core.o
+ .debug_info    0x00008c46      0x684 util/stream/stream_string.o
+ .debug_info    0x000092ca     0x12fe util/fs/tsfs.o
+ .debug_info    0x0000a5c8      0x293 util/buffer.o
+ .debug_info    0x0000a85b      0x178 util/hugemem.o
+ .debug_info    0x0000a9d3      0x21b util/malloc_simple.o
+ .debug_info    0x0000abee      0x4dd util/membag.o
+ .debug_info    0x0000b0cb      0x5cf util/mempool.o
+ .debug_info    0x0000b69a      0x27b util/physmem.o
+ .debug_info    0x0000b915      0x198 util/softirq_common.o
+ .debug_info    0x0000baad      0x58b util/workqueue.o
+ .debug_info    0x0000c038      0x3e7 drivers/block/block_core.o
+ .debug_info    0x0000c41f     0x2070 drivers/block/dataflash.o
+ .debug_info    0x0000e48f      0x2b6 drivers/clk/xmega_pr.o
+ .debug_info    0x0000e745      0xf03 drivers/flash/at45_device.o
+ .debug_info    0x0000f648     0x1af9 drivers/gfx/hx8347a/gfx_hx8347a.o
+ .debug_info    0x00011141      0x639 drivers/gfx/gfx_generic.o
+ .debug_info    0x0001177a      0x897 drivers/gfx/gfx_text.o
+ .debug_info    0x00012011      0x3ed drivers/gfx/gfx_bitmap.o
+ .debug_info    0x000123fe      0x3c6 drivers/gpio/port.o
+ .debug_info    0x000127c4      0x7c3 drivers/serial/spi/spi_polled.o
+ .debug_info    0x00012f87      0x684 drivers/serial/spi/spi_polled_buf_list.o
+ .debug_info    0x0001360b     0x111e drivers/serial/spi/spi_mega_xmega.o
+ .debug_info    0x00014729     0x112d drivers/touch/resistive/touch.o
+ .debug_info    0x00015856      0x157 arch/avr8/delay.o
+ .debug_info    0x000159ad      0x268 arch/avr8/arch_hugemem.o
+ .debug_info    0x00015c15      0x128 cpu/xmega/physmem_pools.o
+ .debug_info    0x00015d3d      0x58c chip/atxmega128a1/sysclk.o
+ .debug_info    0x000162c9      0x4f1 board/xplain/init.o
+ .debug_info    0x000167ba      0x103 board/xplain/board_physmem_pools.o
 
-.debug_line     0x00000000     0xb6b3
+.debug_line     0x00000000     0xb6b7
  .debug_line    0x00000000      0x3dd apps/gauge-demo/main.o
  .debug_line    0x000003dd      0x35e apps/gauge-demo/app_calibrate.o
- .debug_line    0x0000073b      0x371 apps/gauge-demo/gauge-demo.o
- .debug_line    0x00000aac       0xbd util/gfx/sysfont.o
- .debug_line    0x00000b69     0x111f util/gfx/win.o
- .debug_line    0x00001c88      0x182 util/gfx/wtk.o
- .debug_line    0x00001e0a      0x264 util/gfx/wtk_basic_frame.o
- .debug_line    0x0000206e      0x365 util/gfx/wtk_button.o
- .debug_line    0x000023d3      0x418 util/gfx/wtk_check_box.o
- .debug_line    0x000027eb      0x7d0 util/gfx/wtk_frame.o
- .debug_line    0x00002fbb      0x2fb util/gfx/wtk_label.o
- .debug_line    0x000032b6      0x328 util/gfx/wtk_progress_bar.o
- .debug_line    0x000035de      0x49f util/gfx/wtk_radio_button.o
- .debug_line    0x00003a7d      0x473 util/gfx/wtk_slider.o
- .debug_line    0x00003ef0      0x471 util/gfx/wtk_gauge.o
- .debug_line    0x00004361       0xdc util/string/generic_memcpy.o
- .debug_line    0x0000443d       0xdc util/string/generic_memset.o
- .debug_line    0x00004519       0xdc util/string/generic_strlen.o
- .debug_line    0x000045f5      0x126 util/string/generic_strcmp.o
- .debug_line    0x0000471b      0x65d util/stream/stream_core.o
- .debug_line    0x00004d78      0x2df util/stream/stream_string.o
- .debug_line    0x00005057      0x757 util/fs/tsfs.o
- .debug_line    0x000057ae      0x201 util/buffer.o
- .debug_line    0x000059af      0x112 util/hugemem.o
- .debug_line    0x00005ac1      0x1c6 util/malloc_simple.o
- .debug_line    0x00005c87      0x30c util/membag.o
- .debug_line    0x00005f93      0x31a util/mempool.o
- .debug_line    0x000062ad      0x161 util/physmem.o
- .debug_line    0x0000640e      0x126 util/softirq_common.o
- .debug_line    0x00006534      0x28b util/workqueue.o
- .debug_line    0x000067bf      0x153 drivers/block/block_core.o
- .debug_line    0x00006912      0xc33 drivers/block/dataflash.o
- .debug_line    0x00007545      0x1ae drivers/clk/xmega_pr.o
- .debug_line    0x000076f3      0x51d drivers/flash/at45_device.o
- .debug_line    0x00007c10      0xc76 drivers/gfx/hx8347a/gfx_hx8347a.o
- .debug_line    0x00008886      0x6fb drivers/gfx/gfx_generic.o
- .debug_line    0x00008f81      0x4ba drivers/gfx/gfx_text.o
- .debug_line    0x0000943b      0x3b6 drivers/gfx/gfx_bitmap.o
- .debug_line    0x000097f1      0x19a drivers/gpio/port.o
- .debug_line    0x0000998b      0x333 drivers/serial/spi/spi_polled.o
- .debug_line    0x00009cbe      0x3a2 drivers/serial/spi/spi_polled_buf_list.o
- .debug_line    0x0000a060      0x562 drivers/serial/spi/spi_mega_xmega.o
- .debug_line    0x0000a5c2      0x7b7 drivers/touch/resistive/touch.o
- .debug_line    0x0000ad79       0xf3 arch/avr8/delay.o
- .debug_line    0x0000ae6c      0x1d0 arch/avr8/arch_hugemem.o
- .debug_line    0x0000b03c       0xfe cpu/xmega/physmem_pools.o
- .debug_line    0x0000b13a      0x263 chip/atxmega128a1/sysclk.o
- .debug_line    0x0000b39d      0x227 board/xplain/init.o
- .debug_line    0x0000b5c4       0xef board/xplain/board_physmem_pools.o
+ .debug_line    0x0000073b      0x370 apps/gauge-demo/app_gauge.o
+ .debug_line    0x00000aab       0xbd util/gfx/sysfont.o
+ .debug_line    0x00000b68     0x111f util/gfx/win.o
+ .debug_line    0x00001c87      0x182 util/gfx/wtk.o
+ .debug_line    0x00001e09      0x264 util/gfx/wtk_basic_frame.o
+ .debug_line    0x0000206d      0x365 util/gfx/wtk_button.o
+ .debug_line    0x000023d2      0x418 util/gfx/wtk_check_box.o
+ .debug_line    0x000027ea      0x7d0 util/gfx/wtk_frame.o
+ .debug_line    0x00002fba      0x2fb util/gfx/wtk_label.o
+ .debug_line    0x000032b5      0x328 util/gfx/wtk_progress_bar.o
+ .debug_line    0x000035dd      0x49f util/gfx/wtk_radio_button.o
+ .debug_line    0x00003a7c      0x473 util/gfx/wtk_slider.o
+ .debug_line    0x00003eef      0x476 util/gfx/wtk_gauge.o
+ .debug_line    0x00004365       0xdc util/string/generic_memcpy.o
+ .debug_line    0x00004441       0xdc util/string/generic_memset.o
+ .debug_line    0x0000451d       0xdc util/string/generic_strlen.o
+ .debug_line    0x000045f9      0x126 util/string/generic_strcmp.o
+ .debug_line    0x0000471f      0x65d util/stream/stream_core.o
+ .debug_line    0x00004d7c      0x2df util/stream/stream_string.o
+ .debug_line    0x0000505b      0x757 util/fs/tsfs.o
+ .debug_line    0x000057b2      0x201 util/buffer.o
+ .debug_line    0x000059b3      0x112 util/hugemem.o
+ .debug_line    0x00005ac5      0x1c6 util/malloc_simple.o
+ .debug_line    0x00005c8b      0x30c util/membag.o
+ .debug_line    0x00005f97      0x31a util/mempool.o
+ .debug_line    0x000062b1      0x161 util/physmem.o
+ .debug_line    0x00006412      0x126 util/softirq_common.o
+ .debug_line    0x00006538      0x28b util/workqueue.o
+ .debug_line    0x000067c3      0x153 drivers/block/block_core.o
+ .debug_line    0x00006916      0xc33 drivers/block/dataflash.o
+ .debug_line    0x00007549      0x1ae drivers/clk/xmega_pr.o
+ .debug_line    0x000076f7      0x51d drivers/flash/at45_device.o
+ .debug_line    0x00007c14      0xc76 drivers/gfx/hx8347a/gfx_hx8347a.o
+ .debug_line    0x0000888a      0x6fb drivers/gfx/gfx_generic.o
+ .debug_line    0x00008f85      0x4ba drivers/gfx/gfx_text.o
+ .debug_line    0x0000943f      0x3b6 drivers/gfx/gfx_bitmap.o
+ .debug_line    0x000097f5      0x19a drivers/gpio/port.o
+ .debug_line    0x0000998f      0x333 drivers/serial/spi/spi_polled.o
+ .debug_line    0x00009cc2      0x3a2 drivers/serial/spi/spi_polled_buf_list.o
+ .debug_line    0x0000a064      0x562 drivers/serial/spi/spi_mega_xmega.o
+ .debug_line    0x0000a5c6      0x7b7 drivers/touch/resistive/touch.o
+ .debug_line    0x0000ad7d       0xf3 arch/avr8/delay.o
+ .debug_line    0x0000ae70      0x1d0 arch/avr8/arch_hugemem.o
+ .debug_line    0x0000b040       0xfe cpu/xmega/physmem_pools.o
+ .debug_line    0x0000b13e      0x263 chip/atxmega128a1/sysclk.o
+ .debug_line    0x0000b3a1      0x227 board/xplain/init.o
+ .debug_line    0x0000b5c8       0xef board/xplain/board_physmem_pools.o
 
 .debug_frame    0x00000000     0x13e0
  .debug_frame   0x00000000       0x20 apps/gauge-demo/main.o
  .debug_frame   0x00000020       0x40 apps/gauge-demo/app_calibrate.o
- .debug_frame   0x00000060       0x30 apps/gauge-demo/gauge-demo.o
+ .debug_frame   0x00000060       0x30 apps/gauge-demo/app_gauge.o
  .debug_frame   0x00000090      0x2b0 util/gfx/win.o
  .debug_frame   0x00000340       0x40 util/gfx/wtk.o
  .debug_frame   0x00000380       0x50 util/gfx/wtk_basic_frame.o
@@ -1393,7 +1393,7 @@ LOAD linker stubs
 .debug_loc      0x00000000     0x8d10
  .debug_loc     0x00000000      0x121 apps/gauge-demo/main.o
  .debug_loc     0x00000121      0x120 apps/gauge-demo/app_calibrate.o
- .debug_loc     0x00000241       0xe0 apps/gauge-demo/gauge-demo.o
+ .debug_loc     0x00000241       0xe0 apps/gauge-demo/app_gauge.o
  .debug_loc     0x00000321      0xe24 util/gfx/win.o
  .debug_loc     0x00001145      0x129 util/gfx/wtk.o
  .debug_loc     0x0000126e      0x28e util/gfx/wtk_basic_frame.o
@@ -1444,7 +1444,7 @@ LOAD linker stubs
  .debug_pubnames
                 0x0000001b       0x30 apps/gauge-demo/app_calibrate.o
  .debug_pubnames
-                0x0000004b       0x28 apps/gauge-demo/gauge-demo.o
+                0x0000004b       0x28 apps/gauge-demo/app_gauge.o
  .debug_pubnames
                 0x00000073       0x1e util/gfx/sysfont.o
  .debug_pubnames
@@ -1544,7 +1544,7 @@ LOAD linker stubs
  .debug_aranges
                 0x00000020       0x30 apps/gauge-demo/app_calibrate.o
  .debug_aranges
-                0x00000050       0x28 apps/gauge-demo/gauge-demo.o
+                0x00000050       0x28 apps/gauge-demo/app_gauge.o
  .debug_aranges
                 0x00000078      0x168 util/gfx/win.o
  .debug_aranges
@@ -1635,7 +1635,7 @@ LOAD linker stubs
 .debug_ranges   0x00000000      0xd20
  .debug_ranges  0x00000000       0x78 apps/gauge-demo/main.o
  .debug_ranges  0x00000078       0x28 apps/gauge-demo/app_calibrate.o
- .debug_ranges  0x000000a0       0x20 apps/gauge-demo/gauge-demo.o
+ .debug_ranges  0x000000a0       0x20 apps/gauge-demo/app_gauge.o
  .debug_ranges  0x000000c0      0x178 util/gfx/win.o
  .debug_ranges  0x00000238       0x28 util/gfx/wtk.o
  .debug_ranges  0x00000260       0x30 util/gfx/wtk_basic_frame.o
@@ -1680,104 +1680,104 @@ LOAD linker stubs
  .debug_ranges  0x00000cf0       0x18 chip/atxmega128a1/sysclk.o
  .debug_ranges  0x00000d08       0x18 board/xplain/init.o
 
-.debug_str      0x00000000     0x5c1a
+.debug_str      0x00000000     0x5c23
  .debug_str     0x00000000      0x5bb apps/gauge-demo/main.o
                                 0x6ba (size before relaxing)
  .debug_str     0x000005bb      0x1ef apps/gauge-demo/app_calibrate.o
                                 0x4a0 (size before relaxing)
- .debug_str     0x000007aa      0x11d apps/gauge-demo/gauge-demo.o
-                                0x433 (size before relaxing)
- .debug_str     0x000008c7       0x2e util/gfx/sysfont.o
+ .debug_str     0x000007aa      0x11c apps/gauge-demo/app_gauge.o
+                                0x432 (size before relaxing)
+ .debug_str     0x000008c6       0x2e util/gfx/sysfont.o
                                 0x1b4 (size before relaxing)
- .debug_str     0x000008f5      0x820 util/gfx/win.o
+ .debug_str     0x000008f4      0x820 util/gfx/win.o
                                 0xcf8 (size before relaxing)
- .debug_str     0x00001115       0x8a util/gfx/wtk.o
+ .debug_str     0x00001114       0x8a util/gfx/wtk.o
                                 0x1b1 (size before relaxing)
- .debug_str     0x0000119f      0x10e util/gfx/wtk_basic_frame.o
+ .debug_str     0x0000119e      0x10e util/gfx/wtk_basic_frame.o
                                 0x482 (size before relaxing)
- .debug_str     0x000012ad      0x10d util/gfx/wtk_button.o
+ .debug_str     0x000012ac      0x10d util/gfx/wtk_button.o
                                 0x59d (size before relaxing)
- .debug_str     0x000013ba      0x139 util/gfx/wtk_check_box.o
+ .debug_str     0x000013b9      0x139 util/gfx/wtk_check_box.o
                                 0x5ec (size before relaxing)
- .debug_str     0x000014f3      0x33b util/gfx/wtk_frame.o
+ .debug_str     0x000014f2      0x33b util/gfx/wtk_frame.o
                                 0x7fd (size before relaxing)
- .debug_str     0x0000182e       0xa7 util/gfx/wtk_label.o
+ .debug_str     0x0000182d       0xa7 util/gfx/wtk_label.o
                                 0x483 (size before relaxing)
- .debug_str     0x000018d5      0x106 util/gfx/wtk_progress_bar.o
+ .debug_str     0x000018d4      0x106 util/gfx/wtk_progress_bar.o
                                 0x46b (size before relaxing)
- .debug_str     0x000019db      0x19f util/gfx/wtk_radio_button.o
+ .debug_str     0x000019da      0x19f util/gfx/wtk_radio_button.o
                                 0x682 (size before relaxing)
- .debug_str     0x00001b7a      0x100 util/gfx/wtk_slider.o
+ .debug_str     0x00001b79      0x100 util/gfx/wtk_slider.o
                                 0x552 (size before relaxing)
- .debug_str     0x00001c7a      0x1f2 util/gfx/wtk_gauge.o
-                                0x5a6 (size before relaxing)
- .debug_str     0x00001e6c       0x38 util/string/generic_memcpy.o
+ .debug_str     0x00001c79      0x1fc util/gfx/wtk_gauge.o
+                                0x5c2 (size before relaxing)
+ .debug_str     0x00001e75       0x38 util/string/generic_memcpy.o
                                 0x130 (size before relaxing)
- .debug_str     0x00001ea4       0x38 util/string/generic_memset.o
+ .debug_str     0x00001ead       0x38 util/string/generic_memset.o
                                 0x12b (size before relaxing)
- .debug_str     0x00001edc       0x38 util/string/generic_strlen.o
+ .debug_str     0x00001ee5       0x38 util/string/generic_strlen.o
                                 0x12b (size before relaxing)
- .debug_str     0x00001f14       0x52 util/string/generic_strcmp.o
+ .debug_str     0x00001f1d       0x52 util/string/generic_strcmp.o
                                 0x145 (size before relaxing)
- .debug_str     0x00001f66      0x282 util/stream/stream_core.o
+ .debug_str     0x00001f6f      0x282 util/stream/stream_core.o
                                 0x4aa (size before relaxing)
- .debug_str     0x000021e8      0x105 util/stream/stream_string.o
+ .debug_str     0x000021f1      0x105 util/stream/stream_string.o
                                 0x305 (size before relaxing)
- .debug_str     0x000022ed      0x648 util/fs/tsfs.o
+ .debug_str     0x000022f6      0x648 util/fs/tsfs.o
                                 0x9b1 (size before relaxing)
- .debug_str     0x00002935       0x8e util/buffer.o
+ .debug_str     0x0000293e       0x8e util/buffer.o
                                 0x200 (size before relaxing)
- .debug_str     0x000029c3       0x41 util/hugemem.o
+ .debug_str     0x000029cc       0x41 util/hugemem.o
                                 0x18e (size before relaxing)
- .debug_str     0x00002a04       0x3b util/malloc_simple.o
+ .debug_str     0x00002a0d       0x3b util/malloc_simple.o
                                 0x1a0 (size before relaxing)
- .debug_str     0x00002a3f      0x10b util/membag.o
+ .debug_str     0x00002a48      0x10b util/membag.o
                                 0x2ce (size before relaxing)
- .debug_str     0x00002b4a       0xa8 util/mempool.o
+ .debug_str     0x00002b53       0xa8 util/mempool.o
                                 0x346 (size before relaxing)
- .debug_str     0x00002bf2       0x53 util/physmem.o
+ .debug_str     0x00002bfb       0x53 util/physmem.o
                                 0x1a8 (size before relaxing)
- .debug_str     0x00002c45       0x36 util/softirq_common.o
+ .debug_str     0x00002c4e       0x36 util/softirq_common.o
                                 0x1be (size before relaxing)
- .debug_str     0x00002c7b       0x8f util/workqueue.o
+ .debug_str     0x00002c84       0x8f util/workqueue.o
                                 0x2be (size before relaxing)
- .debug_str     0x00002d0a       0x4e drivers/block/block_core.o
+ .debug_str     0x00002d13       0x4e drivers/block/block_core.o
                                 0x3c1 (size before relaxing)
- .debug_str     0x00002d58      0x669 drivers/block/dataflash.o
+ .debug_str     0x00002d61      0x669 drivers/block/dataflash.o
                                 0xc3d (size before relaxing)
- .debug_str     0x000033c1       0x4e drivers/clk/xmega_pr.o
+ .debug_str     0x000033ca       0x4e drivers/clk/xmega_pr.o
                                 0x193 (size before relaxing)
- .debug_str     0x0000340f      0x293 drivers/flash/at45_device.o
+ .debug_str     0x00003418      0x293 drivers/flash/at45_device.o
                                 0x7aa (size before relaxing)
- .debug_str     0x000036a2     0x1453 drivers/gfx/hx8347a/gfx_hx8347a.o
+ .debug_str     0x000036ab     0x1453 drivers/gfx/hx8347a/gfx_hx8347a.o
                                0x1682 (size before relaxing)
- .debug_str     0x00004af5      0x178 drivers/gfx/gfx_generic.o
+ .debug_str     0x00004afe      0x178 drivers/gfx/gfx_generic.o
                                 0x2ee (size before relaxing)
- .debug_str     0x00004c6d      0x18f drivers/gfx/gfx_text.o
+ .debug_str     0x00004c76      0x18f drivers/gfx/gfx_text.o
                                 0x3d0 (size before relaxing)
- .debug_str     0x00004dfc       0xbf drivers/gfx/gfx_bitmap.o
+ .debug_str     0x00004e05       0xbf drivers/gfx/gfx_bitmap.o
                                 0x2b4 (size before relaxing)
- .debug_str     0x00004ebb       0x79 drivers/gpio/port.o
+ .debug_str     0x00004ec4       0x79 drivers/gpio/port.o
                                 0x207 (size before relaxing)
- .debug_str     0x00004f34      0x17d drivers/serial/spi/spi_polled.o
+ .debug_str     0x00004f3d      0x17d drivers/serial/spi/spi_polled.o
                                 0x4d3 (size before relaxing)
- .debug_str     0x000050b1       0xd9 drivers/serial/spi/spi_polled_buf_list.o
+ .debug_str     0x000050ba       0xd9 drivers/serial/spi/spi_polled_buf_list.o
                                 0x4a5 (size before relaxing)
- .debug_str     0x0000518a      0x2dc drivers/serial/spi/spi_mega_xmega.o
+ .debug_str     0x00005193      0x2dc drivers/serial/spi/spi_mega_xmega.o
                                 0x815 (size before relaxing)
- .debug_str     0x00005466      0x4bb drivers/touch/resistive/touch.o
+ .debug_str     0x0000546f      0x4bb drivers/touch/resistive/touch.o
                                 0x784 (size before relaxing)
- .debug_str     0x00005921       0x52 arch/avr8/delay.o
+ .debug_str     0x0000592a       0x52 arch/avr8/delay.o
                                 0x142 (size before relaxing)
- .debug_str     0x00005973       0x98 arch/avr8/arch_hugemem.o
+ .debug_str     0x0000597c       0x98 arch/avr8/arch_hugemem.o
                                 0x1c4 (size before relaxing)
- .debug_str     0x00005a0b       0x3b cpu/xmega/physmem_pools.o
+ .debug_str     0x00005a14       0x3b cpu/xmega/physmem_pools.o
                                 0x169 (size before relaxing)
- .debug_str     0x00005a46      0x143 chip/atxmega128a1/sysclk.o
+ .debug_str     0x00005a4f      0x143 chip/atxmega128a1/sysclk.o
                                 0x398 (size before relaxing)
- .debug_str     0x00005b89       0x62 board/xplain/init.o
+ .debug_str     0x00005b92       0x62 board/xplain/init.o
                                 0x237 (size before relaxing)
- .debug_str     0x00005beb       0x2f board/xplain/board_physmem_pools.o
+ .debug_str     0x00005bf4       0x2f board/xplain/board_physmem_pools.o
                                 0x161 (size before relaxing)
 
 Cross Reference Table
@@ -1804,7 +1804,7 @@ __do_clear_bss                                    c:/winavr-20100110/bin/../lib/
                                                   util/buffer.o
                                                   util/gfx/wtk_frame.o
                                                   util/gfx/win.o
-                                                  apps/gauge-demo/gauge-demo.o
+                                                  apps/gauge-demo/app_gauge.o
                                                   apps/gauge-demo/app_calibrate.o
                                                   apps/gauge-demo/main.o
 __do_copy_data                                    c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avrxmega7/libgcc.a(_copy_data.o)
@@ -1816,7 +1816,7 @@ __do_copy_data                                    c:/winavr-20100110/bin/../lib/
                                                   util/stream/stream_core.o
                                                   util/gfx/wtk_frame.o
                                                   util/gfx/sysfont.o
-                                                  apps/gauge-demo/gauge-demo.o
+                                                  apps/gauge-demo/app_gauge.o
 __mulsi3                                          c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avrxmega7/libgcc.a(_mulsi3.o)
                                                   drivers/touch/resistive/touch.o
                                                   drivers/gfx/gfx_bitmap.o
@@ -1837,7 +1837,7 @@ _etext                                            arch/avr8/entry.o
 _start                                            arch/avr8/entry.o
 app_touch_calibrate_setup                         apps/gauge-demo/app_calibrate.o
                                                   apps/gauge-demo/main.o
-app_widget_launch                                 apps/gauge-demo/gauge-demo.o
+app_widget_launch                                 apps/gauge-demo/app_gauge.o
                                                   apps/gauge-demo/main.o
 at45_device_init                                  drivers/flash/at45_device.o
                                                   drivers/block/dataflash.o
@@ -1945,7 +1945,7 @@ gfx_generic_put_pixmap                            drivers/gfx/gfx_generic.o
 gfx_get_height                                    drivers/gfx/hx8347a/gfx_hx8347a.o
                                                   util/gfx/wtk_frame.o
                                                   util/gfx/win.o
-                                                  apps/gauge-demo/gauge-demo.o
+                                                  apps/gauge-demo/app_gauge.o
                                                   apps/gauge-demo/app_calibrate.o
 gfx_get_pixel                                     drivers/gfx/hx8347a/gfx_hx8347a.o
 gfx_get_progmem_string_bounding_box               drivers/gfx/gfx_text.o
@@ -1957,7 +1957,7 @@ gfx_get_string_bounding_box                       drivers/gfx/gfx_text.o
 gfx_get_width                                     drivers/gfx/hx8347a/gfx_hx8347a.o
                                                   util/gfx/wtk_frame.o
                                                   util/gfx/win.o
-                                                  apps/gauge-demo/gauge-demo.o
+                                                  apps/gauge-demo/app_gauge.o
                                                   apps/gauge-demo/app_calibrate.o
 gfx_height                                        drivers/gfx/gfx_generic.o
                                                   drivers/gfx/hx8347a/gfx_hx8347a.o
@@ -2259,7 +2259,7 @@ sysfont                                           util/gfx/sysfont.o
                                                   util/gfx/wtk_frame.o
                                                   util/gfx/wtk_check_box.o
                                                   util/gfx/wtk_button.o
-                                                  apps/gauge-demo/gauge-demo.o
+                                                  apps/gauge-demo/app_gauge.o
                                                   apps/gauge-demo/app_calibrate.o
 touch_compute_calibration_matrix                  drivers/touch/resistive/touch.o
                                                   apps/gauge-demo/app_calibrate.o
@@ -2303,7 +2303,7 @@ win_create                                        util/gfx/win.o
 win_destroy                                       util/gfx/win.o
                                                   util/gfx/wtk_frame.o
                                                   util/gfx/wtk_basic_frame.o
-                                                  apps/gauge-demo/gauge-demo.o
+                                                  apps/gauge-demo/app_gauge.o
 win_get_area                                      util/gfx/win.o
                                                   util/gfx/wtk_gauge.o
                                                   util/gfx/wtk_slider.o
@@ -2326,7 +2326,7 @@ win_get_custom_data                               util/gfx/win.o
 win_get_parent                                    util/gfx/win.o
                                                   util/gfx/wtk_frame.o
 win_get_root                                      util/gfx/win.o
-                                                  apps/gauge-demo/gauge-demo.o
+                                                  apps/gauge-demo/app_gauge.o
                                                   apps/gauge-demo/main.o
 win_grab_pointer                                  util/gfx/win.o
                                                   util/gfx/wtk_slider.o
@@ -2371,7 +2371,7 @@ win_set_attributes                                util/gfx/win.o
 win_set_keyboard_focus                            util/gfx/win.o
 win_show                                          util/gfx/win.o
                                                   util/gfx/wtk_frame.o
-                                                  apps/gauge-demo/gauge-demo.o
+                                                  apps/gauge-demo/app_gauge.o
                                                   apps/gauge-demo/main.o
 win_translate_win_to_root                         util/gfx/win.o
                                                   util/gfx/wtk_slider.o
@@ -2384,9 +2384,9 @@ workqueue_add_task                                util/workqueue.o
                                                   util/gfx/win.o
                                                   apps/gauge-demo/app_calibrate.o
 wtk_basic_frame_as_child                          util/gfx/wtk_basic_frame.o
-                                                  apps/gauge-demo/gauge-demo.o
+                                                  apps/gauge-demo/app_gauge.o
 wtk_basic_frame_create                            util/gfx/wtk_basic_frame.o
-                                                  apps/gauge-demo/gauge-demo.o
+                                                  apps/gauge-demo/app_gauge.o
 wtk_basic_frame_get_custom_data                   util/gfx/wtk_basic_frame.o
 wtk_button_as_child                               util/gfx/wtk_button.o
 wtk_button_create                                 util/gfx/wtk_button.o
@@ -2408,20 +2408,20 @@ wtk_frame_as_parent                               util/gfx/wtk_frame.o
 wtk_frame_create                                  util/gfx/wtk_frame.o
 wtk_frame_get_custom_data                         util/gfx/wtk_frame.o
 wtk_gauge_as_child                                util/gfx/wtk_gauge.o
-                                                  apps/gauge-demo/gauge-demo.o
+                                                  apps/gauge-demo/app_gauge.o
 wtk_gauge_create                                  util/gfx/wtk_gauge.o
-                                                  apps/gauge-demo/gauge-demo.o
+                                                  apps/gauge-demo/app_gauge.o
 wtk_gauge_get_value                               util/gfx/wtk_gauge.o
 wtk_gauge_set_colors                              util/gfx/wtk_gauge.o
 wtk_gauge_set_value                               util/gfx/wtk_gauge.o
-                                                  apps/gauge-demo/gauge-demo.o
+                                                  apps/gauge-demo/app_gauge.o
 wtk_label_as_child                                util/gfx/wtk_label.o
-                                                  apps/gauge-demo/gauge-demo.o
+                                                  apps/gauge-demo/app_gauge.o
 wtk_label_change                                  util/gfx/wtk_label.o
 wtk_label_create                                  util/gfx/wtk_label.o
-                                                  apps/gauge-demo/gauge-demo.o
+                                                  apps/gauge-demo/app_gauge.o
 wtk_label_size_hint                               util/gfx/wtk_label.o
-                                                  apps/gauge-demo/gauge-demo.o
+                                                  apps/gauge-demo/app_gauge.o
 wtk_progress_bar_as_child                         util/gfx/wtk_progress_bar.o
 wtk_progress_bar_create                           util/gfx/wtk_progress_bar.o
 wtk_progress_bar_get_value                        util/gfx/wtk_progress_bar.o
@@ -2440,11 +2440,11 @@ wtk_rescale_value                                 util/gfx/wtk.o
 wtk_shade_pixel                                   util/gfx/wtk.o
                                                   util/gfx/wtk_frame.o
 wtk_slider_as_child                               util/gfx/wtk_slider.o
-                                                  apps/gauge-demo/gauge-demo.o
+                                                  apps/gauge-demo/app_gauge.o
 wtk_slider_create                                 util/gfx/wtk_slider.o
-                                                  apps/gauge-demo/gauge-demo.o
+                                                  apps/gauge-demo/app_gauge.o
 wtk_slider_get_value                              util/gfx/wtk_slider.o
-                                                  apps/gauge-demo/gauge-demo.o
+                                                  apps/gauge-demo/app_gauge.o
 wtk_slider_is_moving                              util/gfx/wtk_slider.o
 wtk_slider_set_value                              util/gfx/wtk_slider.o
 wtk_trigtable_cos                                 util/gfx/wtk_gauge.o

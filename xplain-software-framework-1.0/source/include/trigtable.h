@@ -37,13 +37,24 @@
  */
  
 /**
- * \ingroup gfx_wtk_trigtable
+ * \ingroup gfx_wtk
+ * @{
+ */
+ 
+/**
+ * \defgroup gfx_wtk_trigtable Trigonometric sine table
+ *
+ * Contains a table holding trigonometric sine values from zero to ninety
+ * degrees. Useful for drawing i.e. circles. 
+ *
+ * Contains two different functions for getting sin- and cos-values
+ *
+ * Best suited for small drawings, as the resolution of the table is quite low
+ * @{
  */
 
 #include <stdint.h>
 #include <progmem.h>
-
-#define WTK_TRIG_TABLE_LENGTH 128
 
 uint8_t wtk_trigtable_sin(uint8_t angle);
 uint8_t wtk_trigtable_cos(uint8_t angle);
@@ -63,7 +74,6 @@ DEFINE_PROGMEM (uint8_t, trigtable[WTK_TRIG_TABLE_LENGTH]) = {
 //! Returns the sine value of the given angle
 inline uint8_t wtk_trigtable_sin(uint8_t angle)
 {
-	
 	return progmem_read8(&(trigtable[angle]));
 }
 
@@ -72,4 +82,6 @@ inline uint8_t wtk_trigtable_cos(uint8_t angle)
 {
 	return progmem_read8(&(trigtable[(WTK_TRIG_TABLE_LENGTH - 1) - angle]));
 }
+//! @}
+
 //! @}

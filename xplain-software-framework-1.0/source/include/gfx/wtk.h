@@ -395,20 +395,5 @@ uint8_t wtk_rescale_value(uint8_t value, uint8_t from_scale, uint8_t to_scale);
 void wtk_copy_string(char *dest, char const *source);
 
 void wtk_shade_pixel(gfx_color_t *pixel, uint8_t alpha);
- 
- /**
- * \defgroup gfx_wtk_trigtable Trigonometric sine table
- *
- * Contains a table holding trigonometric sine values from zero to ninety
- * degrees. Useful for drawing i.e. circles. 
- *
- * Contains two different functions for getting sin- and cos-values
- *
- * Best suited for small drawings, as the resolution of the table is quite low
- * @{
- */
-
-
-//! @}
 
 #endif /* WTK_H_INCLUDED */

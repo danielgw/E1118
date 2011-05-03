@@ -86,7 +86,6 @@ struct wtk_gauge {
 	bool                    solidbg;
 
 	//! Variables for resize of the gauge variables.
-
 	//! Rescaled data position value, rescaled to match trigtable array
 	uint8_t                 rescale;
 
@@ -206,9 +205,9 @@ void wtk_gauge_set_colors(struct wtk_gauge *gauge, gfx_color_t fill_color,
 
 /**
  * \brief Gauge draw functions
- *
+ * 
+ * Multiple functions related to the gauge draw action.
  */
-
 
 static void wtk_gauge_line_erase(struct win_clip_region const *clip,
 		struct win_area const *area, struct wtk_gauge *gauge)
@@ -363,6 +362,12 @@ static void wtk_gauge_draw_line(struct win_clip_region const *clip,
 	#endif
 }
 
+static void wtk_gauge_redraw_background(struct wtk_gauge *gauge)
+{
+	//! Enables the redraw of gauge background
+	gauge->redraw_background = true;
+}
+
 /**
  * \brief Gauge event handler.
  *
@@ -384,7 +389,6 @@ static bool wtk_gauge_handler(struct win_window *win,
 	struct wtk_gauge                *gauge;
 	uint8_t                         position;
 	uint8_t                         option;
-
 
 	 gauge = (struct wtk_gauge *)win_get_custom_data(win);
 
@@ -525,8 +529,7 @@ static bool wtk_gauge_handler(struct win_window *win,
  * \param value Initial value of the gauge.
  * \param fill_color Color for filled area.
  * \param background_color Color for background area.
- * \param option Configuration options for gauge, check here for more details:
- * \ref gfx_wtk_gauge_options 
+ * \param option \ref gfx_wtk_gauge_options "Configuration options for gauge"
  * \return Pointer to new gauge, if memory allocation was successful.
  */
 struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
@@ -557,12 +560,10 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 	gauge->maximum = maximum;
 	gauge->value = value;
 	gauge->option = option;
-	// Todo: fix this into a separate function
-	gauge->redraw_background = true;
+	// Enable background redraw
+	wtk_gauge_redraw_background(gauge);
 
 	// Set the gauge's colors
-	 
-	 
 	gauge->fill_color = fill_color;
 		
 	gauge->background_color = background_color;
@@ -613,7 +614,7 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 
 	// Set background for gauge window
 	if (background) {
-		//! solid background bitmap
+		// solid background bitmap
 		attr.background = NULL;
 		attr.behavior = 0;
 		gauge->solidbg = true;

@@ -56,7 +56,7 @@
  */
 
 /**
- * \defgroup apps_demo_group
+ * \defgroup apps_demo_group Demo Applications
  */
 #include <dma.h>
 #include <led.h>
@@ -72,7 +72,7 @@
 #include <touch/touch.h>
 
 #include "app_calibrate.h"
-#include "gauge-demo.h"
+#include "app_gauge.h"
 
 static struct workqueue_task launch_application;
 
