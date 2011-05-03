@@ -1291,7 +1291,7 @@ LOAD linker stubs
  .debug_info    0x000162c9      0x4f1 board/xplain/init.o
  .debug_info    0x000167ba      0x103 board/xplain/board_physmem_pools.o
 
-.debug_line     0x00000000     0xb6b7
+.debug_line     0x00000000     0xb6b9
  .debug_line    0x00000000      0x3dd apps/gauge-demo/main.o
  .debug_line    0x000003dd      0x35e apps/gauge-demo/app_calibrate.o
  .debug_line    0x0000073b      0x370 apps/gauge-demo/app_gauge.o
@@ -1306,41 +1306,41 @@ LOAD linker stubs
  .debug_line    0x000032b5      0x328 util/gfx/wtk_progress_bar.o
  .debug_line    0x000035dd      0x49f util/gfx/wtk_radio_button.o
  .debug_line    0x00003a7c      0x473 util/gfx/wtk_slider.o
- .debug_line    0x00003eef      0x476 util/gfx/wtk_gauge.o
- .debug_line    0x00004365       0xdc util/string/generic_memcpy.o
- .debug_line    0x00004441       0xdc util/string/generic_memset.o
- .debug_line    0x0000451d       0xdc util/string/generic_strlen.o
- .debug_line    0x000045f9      0x126 util/string/generic_strcmp.o
- .debug_line    0x0000471f      0x65d util/stream/stream_core.o
- .debug_line    0x00004d7c      0x2df util/stream/stream_string.o
- .debug_line    0x0000505b      0x757 util/fs/tsfs.o
- .debug_line    0x000057b2      0x201 util/buffer.o
- .debug_line    0x000059b3      0x112 util/hugemem.o
- .debug_line    0x00005ac5      0x1c6 util/malloc_simple.o
- .debug_line    0x00005c8b      0x30c util/membag.o
- .debug_line    0x00005f97      0x31a util/mempool.o
- .debug_line    0x000062b1      0x161 util/physmem.o
- .debug_line    0x00006412      0x126 util/softirq_common.o
- .debug_line    0x00006538      0x28b util/workqueue.o
- .debug_line    0x000067c3      0x153 drivers/block/block_core.o
- .debug_line    0x00006916      0xc33 drivers/block/dataflash.o
- .debug_line    0x00007549      0x1ae drivers/clk/xmega_pr.o
- .debug_line    0x000076f7      0x51d drivers/flash/at45_device.o
- .debug_line    0x00007c14      0xc76 drivers/gfx/hx8347a/gfx_hx8347a.o
- .debug_line    0x0000888a      0x6fb drivers/gfx/gfx_generic.o
- .debug_line    0x00008f85      0x4ba drivers/gfx/gfx_text.o
- .debug_line    0x0000943f      0x3b6 drivers/gfx/gfx_bitmap.o
- .debug_line    0x000097f5      0x19a drivers/gpio/port.o
- .debug_line    0x0000998f      0x333 drivers/serial/spi/spi_polled.o
- .debug_line    0x00009cc2      0x3a2 drivers/serial/spi/spi_polled_buf_list.o
- .debug_line    0x0000a064      0x562 drivers/serial/spi/spi_mega_xmega.o
- .debug_line    0x0000a5c6      0x7b7 drivers/touch/resistive/touch.o
- .debug_line    0x0000ad7d       0xf3 arch/avr8/delay.o
- .debug_line    0x0000ae70      0x1d0 arch/avr8/arch_hugemem.o
- .debug_line    0x0000b040       0xfe cpu/xmega/physmem_pools.o
- .debug_line    0x0000b13e      0x263 chip/atxmega128a1/sysclk.o
- .debug_line    0x0000b3a1      0x227 board/xplain/init.o
- .debug_line    0x0000b5c8       0xef board/xplain/board_physmem_pools.o
+ .debug_line    0x00003eef      0x478 util/gfx/wtk_gauge.o
+ .debug_line    0x00004367       0xdc util/string/generic_memcpy.o
+ .debug_line    0x00004443       0xdc util/string/generic_memset.o
+ .debug_line    0x0000451f       0xdc util/string/generic_strlen.o
+ .debug_line    0x000045fb      0x126 util/string/generic_strcmp.o
+ .debug_line    0x00004721      0x65d util/stream/stream_core.o
+ .debug_line    0x00004d7e      0x2df util/stream/stream_string.o
+ .debug_line    0x0000505d      0x757 util/fs/tsfs.o
+ .debug_line    0x000057b4      0x201 util/buffer.o
+ .debug_line    0x000059b5      0x112 util/hugemem.o
+ .debug_line    0x00005ac7      0x1c6 util/malloc_simple.o
+ .debug_line    0x00005c8d      0x30c util/membag.o
+ .debug_line    0x00005f99      0x31a util/mempool.o
+ .debug_line    0x000062b3      0x161 util/physmem.o
+ .debug_line    0x00006414      0x126 util/softirq_common.o
+ .debug_line    0x0000653a      0x28b util/workqueue.o
+ .debug_line    0x000067c5      0x153 drivers/block/block_core.o
+ .debug_line    0x00006918      0xc33 drivers/block/dataflash.o
+ .debug_line    0x0000754b      0x1ae drivers/clk/xmega_pr.o
+ .debug_line    0x000076f9      0x51d drivers/flash/at45_device.o
+ .debug_line    0x00007c16      0xc76 drivers/gfx/hx8347a/gfx_hx8347a.o
+ .debug_line    0x0000888c      0x6fb drivers/gfx/gfx_generic.o
+ .debug_line    0x00008f87      0x4ba drivers/gfx/gfx_text.o
+ .debug_line    0x00009441      0x3b6 drivers/gfx/gfx_bitmap.o
+ .debug_line    0x000097f7      0x19a drivers/gpio/port.o
+ .debug_line    0x00009991      0x333 drivers/serial/spi/spi_polled.o
+ .debug_line    0x00009cc4      0x3a2 drivers/serial/spi/spi_polled_buf_list.o
+ .debug_line    0x0000a066      0x562 drivers/serial/spi/spi_mega_xmega.o
+ .debug_line    0x0000a5c8      0x7b7 drivers/touch/resistive/touch.o
+ .debug_line    0x0000ad7f       0xf3 arch/avr8/delay.o
+ .debug_line    0x0000ae72      0x1d0 arch/avr8/arch_hugemem.o
+ .debug_line    0x0000b042       0xfe cpu/xmega/physmem_pools.o
+ .debug_line    0x0000b140      0x263 chip/atxmega128a1/sysclk.o
+ .debug_line    0x0000b3a3      0x227 board/xplain/init.o
+ .debug_line    0x0000b5ca       0xef board/xplain/board_physmem_pools.o
 
 .debug_frame    0x00000000     0x13e0
  .debug_frame   0x00000000       0x20 apps/gauge-demo/main.o

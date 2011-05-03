@@ -51,6 +51,16 @@
 #include <stdint.h>
 #include <progmem.h>
 
+#ifndef WTK_TRIG_TABLE_LENGTH
+//! Trigtable length.
+# define WTK_TRIG_TABLE_LENGTH        128
+#endif
+
+#ifndef WTK_TRIG_TABLE_MAX_VALUE
+//! Trigtable max value.
+# define WTK_TRIG_TABLE_MAX_VALUE     255
+#endif
+
 uint8_t wtk_trigtable_sin(uint8_t angle);
 uint8_t wtk_trigtable_cos(uint8_t angle);
 
@@ -77,15 +87,5 @@ inline uint8_t wtk_trigtable_cos(uint8_t angle)
 {
 	return progmem_read8(&(trigtable[(WTK_TRIG_TABLE_LENGTH - 1) - angle]));
 }
-
-#ifndef WTK_TRIG_TABLE_LENGTH
-//! Trigtable length.
-# define WTK_TRIG_TABLE_LENGTH        128
-#endif
-
-#ifndef WTK_TRIG_TABLE_MAX_VALUE
-//! Trigtable max value.
-# define WTK_TRIG_TABLE_MAX_VALUE     255
-#endif
 
 //! @}
