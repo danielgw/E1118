@@ -402,12 +402,12 @@ typedef uint8_t wtk_radio_group_size_t;
 
 #ifndef WTK_GAUGE_MAX_NEEDLE_PERCENT_SIZE
 //! Defines the maximum value for the needle size
-#define WTK_GAUGE_MAX_NEEDLE_PERCENT_SIZE   100
+# define WTK_GAUGE_MAX_NEEDLE_PERCENT_SIZE   100
 #endif
 
 #ifndef WTK_GAUGE_MIN_NEEDLE_PERCENT_SIZE
 //! Defines the minimum value for the needle size
-#define WTK_GAUGE_MIN_NEEDLE_PERCENT_SIZE   0
+# define WTK_GAUGE_MIN_NEEDLE_PERCENT_SIZE   0
 #endif
 
 //! @}

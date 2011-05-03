@@ -41,12 +41,13 @@
  * \section gauge_demo_intro Introduction
  *
  * The Gauge demo application is an application that introduces users to
- * the gauge widget. The application has two different sliders which input 
- * values for the two separate gauges. It also demonstrates the use of some of 
+ * the gauge widget. The application has two different sliders which input
+ * values for the two separate gauges. It also demonstrates the use of some of
  * the implemented options for the gauge.
- * 
- * The documentation of the the demo application is found here: \ref apps_demo_group "Demo applications"
- * 
+ *
+ * The documentation of the the demo application is found here:
+ * \ref apps_demo_group "Demo applications"
+ *
  *  This demo is also based upon the following modules:
  * - \ref gfx "Graphics display system"
  * - \ref gfx_gfx "Graphics drivers"
