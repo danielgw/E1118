@@ -53,6 +53,7 @@
  * - \ref gfx_win "Window system"
  * - \ref gfx_wtk "Widget toolkit"
  * - \ref touch_driver_group "Touch drivers"
+ * - \ref gfx_trigtable "Trigonometric table"
  */
 
 /**
