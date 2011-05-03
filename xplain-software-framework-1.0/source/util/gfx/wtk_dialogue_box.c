@@ -188,22 +188,32 @@ static bool wtk_dialogue_box_handler(struct win_window *win,
 		 */
 		clip = (struct win_clip_region const *)data;
 
-		// win_grab_pointer(frame->container);
+		
 
 		struct wtk_button			*button_ok;
 		struct win_attributes		attr;
 		
-			// Create the button
+		
+		
+		gfx_draw_filled_rect(gfx_get_width()/5,
+					gfx_get_height()/5,
+					gfx_get_width()/2,
+					gfx_get_height()/2, GFX_COLOR(200, 200, 200));
+		
+		
+		
 		attr.area.pos.x = gfx_get_width()/3;
 		attr.area.pos.y = gfx_get_height()/2;
-		attr.area.size.x = gfx_get_width()/3;
-		attr.area.size.y = gfx_get_height()/4;
+		attr.area.size.x = gfx_get_width()/4;
+		attr.area.size.y = gfx_get_height()/5;
 
-		button_ok = wtk_button_create(getparent(frame), &attr.area, "OK",
+		button_ok = wtk_button_create(win, &attr.area, "OK",
 				(win_command_t)BUTTON_OK_ID);
 		if (!button_ok) {
-			goto error_widget;
+			// goto error_widget;
 		}
+		
+		win_grab_pointer(frame->container);
 		
 		win_show(wtk_button_as_child(button_ok));
 		
@@ -345,7 +355,7 @@ struct wtk_dialogue_box *wtk_dialogue_box_create(struct win_window *parent,
 
 	
 	// Set background for window
-	// attr.background = NULL;
+	attr.background = NULL;
 	
 	/*if (background) {
 		attr.background = background;
@@ -365,8 +375,8 @@ struct wtk_dialogue_box *wtk_dialogue_box_create(struct win_window *parent,
 
 	return dialogue_box;
 
-error_widget:
-	win_destroy(wtk_dialogue_box_as_child(dialogue_box));	
+/*error_widget:
+	win_destroy(wtk_dialogue_box_as_child(dialogue_box));*/	
 	
 outofmem_win:
 	membag_free(dialogue_box);
