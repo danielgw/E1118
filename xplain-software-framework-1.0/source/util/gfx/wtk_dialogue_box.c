@@ -73,20 +73,10 @@ enum app_widget_ids {
  *       structure is needed externally.
  */
 struct wtk_dialogue_box {
-	//! Frame window.
-	struct win_window					*win;
-	//! Frame command event handler.
-	wtk_dialogue_box_command_handler_t	frame_handler;
-	//! Data for applications and handlers.
-	void								*custom_data;
-	//! Frame draw event handler.
-	wtk_dialogue_box_draw_handler_t		draw_handler;
-
-	//struct win_window					*container;
-	
-	struct workqueue_task				*task;
-	
-
+	//! Copy of caption string.
+	char                    *caption;
+	//! Custom command data, used when "clicked".
+	win_command_t           command_data;
 	
 };
 
@@ -98,34 +88,42 @@ struct wtk_dialogue_box {
  *
  * \sa wtk_basic_frame_command_handler_t
  */
-static bool dialogue_box_command_handler(struct win_window *frame,
+static bool dialogue_box_command_handler(struct wtk_basic_frame *frame,
 		win_command_t command_data)
 {
 	char command = (char)(uintptr_t)command_data;
 	
 	struct wtk_dialogue_box *dialogue_box;
-	dialogue_box = (struct wtk_dialogue_box*) win_get_custom_data(frame);
+	dialogue_box = (struct wtk_dialogue_box*) wtk_basic_frame_get_custom_data(frame);
 
 	switch (command) {
 	case BUTTON_OK_ID:
 		
 		win_grab_pointer(NULL);
 		
-		win_redraw(win_get_parent(frame));
-
-        workqueue_add_task(&main_workqueue, dialogue_box->task);
+		//win_redraw(win_get_parent(wtk_basic_frame_as_child(frame)));
 		
+		
+		struct win_command_event send_command;
+		send_command.sender = wtk_basic_frame_as_child(frame);
+		send_command.recipient =win_get_parent(wtk_basic_frame_as_child(frame));
+		send_command.data = dialogue_box->command_data;
+
+		win_queue_command_event(&send_command);
+		
+		//free memory of button, frame, and box.
+		win_destroy(wtk_basic_frame_as_child(frame));
 		membag_free(dialogue_box);
 		
 		break;
 
 	case BUTTON_CANCEL_ID:
 		
-		win_grab_pointer(NULL);
+		//win_grab_pointer(NULL);
 		
-		win_redraw(win_get_parent(frame));
+		//win_redraw(win_get_parent(frame));
 		
-		membag_free(dialogue_box);
+		//membag_free(dialogue_box);
 		
 		break;
 	}
@@ -134,148 +132,7 @@ static bool dialogue_box_command_handler(struct win_window *frame,
 }
 
 
-/**
- * \brief Get reference to basic frame window.
- *
- * This function returns a reference to the window that should be used when
- * managing the widget, such as move, resize, destroy and reparenting.
- *
- * \param basic_frame Basic frame widget to manage.
- *
- * \return Window to be used for managing the basic frame.
- */
-struct win_window *wtk_dialogue_box_as_child(struct wtk_dialogue_box *dialogue_box)
-{
-	assert(dialogue_box);
-	return dialogue_box->win;
-}
 
-/**
- * \brief Get basic frame custom data
- *
- * This function returns the custom data from the basic frame's attributes.
- * The custom data can be used for e.g. linking to associated applications.
- *
- * \param basic_frame Pointer to basic frame.
- *
- * \return Copy of the custom data.
- */
-void *wtk_dialogue_box_get_custom_data(const struct wtk_dialogue_box *dialogue_box)
-{
-	assert(dialogue_box);
-	return dialogue_box->custom_data;
-}
-
-/**
- * \brief Basic frame event handler
- *
- * This function is the window event handler for basic frame widgets.
- * It handles all events sent to the windows composing the widget.
- *
- * \param win  Window receiving the event.
- * \param type The event type.
- * \param data Custom data, depending on event type.
- *
- * \return True if the event was recognized and accepted.
- */
- 
-
-static bool wtk_dialogue_box_handler(struct win_window *win,
-		enum win_event_type type, const void *data)
-{
-	// Custom data for windows of a widget points back to the widget itself.
-	struct wtk_dialogue_box *frame;
-	bool should_destroy;
-	struct win_clip_region const *clip;
-
-	frame = win_get_custom_data(win);
-
-	switch (type) {
-	case WIN_EVENT_DRAW:
-		/* For DRAW events, the data parameter points to the
-		 * clipping region.
-		 */
-		clip = (struct win_clip_region const *)data;
-		
-		
-		if (win == frame->win) {
-			if (frame->draw_handler) {
-				// Call the draw handler
-				frame->draw_handler(win, clip);
-			}
-		}
-		/* Always accept DRAW events, as the return value is
-		 * ignored anyway for that event type.
-		 */
-		return true;
-
-	case WIN_EVENT_POINTER:
-		/* Accept all POINTER events so that it does not
-		 * propagate up the window tree to our parent in case
-		 * we did not click anything useful inside the frame.
-		 */
-		return true;
-
-	case WIN_EVENT_DESTROY:
-		/* When the frame window is destroyed, also destroy
-		 * the rest of the non-window frame allocations.
-		 */
-		if (win == frame->win) {
-			/* Memory allocated for windows will be
-			 * automatically destroyed by the window
-			 * system. We must destroy other allocations.
-			 */
-			membag_free(frame);
-		}
-
-		/* Always accept DESTROY events, as the return value is
-		 * ignored anyway for that event type.
-		 */
-		return true;
-
-	case WIN_EVENT_COMMAND:
-		/* When commands are received either directly or
-		 * propagated from child widgets and windows, send it
-		 * to the frame handler.
-		 */
-		if (win == frame->win) {
-			if (frame->frame_handler) {
-				/* If the frame handler returns true,
-				 * it wants us to destroy the frame.
-				 * This is normally used by CLOSE
-				 * buttons.
-				 */
-				should_destroy = frame->frame_handler(frame,
-						(win_command_t)data);
-
-				/* It is safe to destroy it here, since
-				 * the event handling finished right
-				 * after this handler returns, and no
-				 * other references to this frame or
-				 * its contents will be done.
-				 */
-				if (should_destroy) {
-					win_destroy(frame->win);
-				}
-
-				/* Accept the event if there was a
-				 * handler installed.
-				 */
-				return true;
-			}
-		}
-
-		/* Reject the event if there was no handler, or this
-		 * was not the container window at all.
-		 */
-		return false;
-
-	default:
-		// Reject unknown event types.
-		return false;
-
-	}
-}
 
 /**
  * \brief Create basic frame widget
@@ -303,13 +160,14 @@ static bool wtk_dialogue_box_handler(struct win_window *win,
  * \return Pointer to basic frame, or NULL if failed.
  */
 struct wtk_dialogue_box *wtk_dialogue_box_create(struct win_window *parent,
-		const struct win_area *area, void *custom_data, struct workqueue_task *task)
+		char *caption, win_command_t command_data)
+		//const struct win_area *area, void *custom_data, struct workqueue_task *task)
 {
-	struct win_attributes		attr;
-	struct wtk_dialogue_box		*dialogue_box;
-	struct wtk_button			*button_ok;
-	
-	
+	//struct win_attributes       attr;
+	struct wtk_dialogue_box     *dialogue_box;
+	struct wtk_button           *button_ok;
+	struct wtk_basic_frame      *dialogue_frame;
+	struct win_area             area;
 
 	assert(area);
 	assert(parent);
@@ -321,39 +179,40 @@ struct wtk_dialogue_box *wtk_dialogue_box_create(struct win_window *parent,
 	}
 
 	// Set window attributes
-	dialogue_box->frame_handler = dialogue_box_command_handler;
-	dialogue_box->custom_data = custom_data;
-	dialogue_box->task = task;
+	//dialogue_box->frame_handler = dialogue_box_command_handler;
+	//dialogue_box->custom_data = custom_data;
+	//dialogue_box->task = task;
 
 
-	attr.area.pos.x = 0;
-	attr.area.pos.y = 0;
-	attr.area.size.x = gfx_get_width();
-	attr.area.size.y = gfx_get_height();
-	attr.event_handler = wtk_dialogue_box_handler;
-	attr.custom = dialogue_box;
+	area.pos.x = 0;
+	area.pos.y = 0;
+	area.size.x = gfx_get_width();
+	area.size.y = gfx_get_height();
+	//attr.event_handler = wtk_dialogue_box_handler;
+	//attr.custom = dialogue_box;
 
 	
 	// Set background for window
-	attr.background = NULL;
+	//attr.background = NULL;
 	
 	// attr.behavior = WIN_BEHAVIOR_REDRAW_PARENT;
 
 
-	// Create the window
-	dialogue_box->win = win_create(parent, &attr);
-	if (!dialogue_box->win) {
-		goto outofmem_win;
+	// Create the basic frame
+	dialogue_frame = wtk_basic_frame_create(parent, &area,
+			NULL, NULL, dialogue_box_command_handler, dialogue_box);
+	if (!dialogue_frame) {
+		goto error_widget;
 	}
 	
 
 	
-	attr.area.pos.x = gfx_get_width()/3;
-	attr.area.pos.y = gfx_get_height()/3;
-	attr.area.size.x = gfx_get_width()/4;
-	attr.area.size.y = gfx_get_height()/5;
+	area.pos.x = gfx_get_width()/3;
+	area.pos.y = gfx_get_height()/3;
+	area.size.x = gfx_get_width()/4;
+	area.size.y = gfx_get_height()/5;
 
-	button_ok = wtk_button_create(dialogue_box->win, &attr.area, "OK",
+	button_ok = wtk_button_create(wtk_basic_frame_as_child(dialogue_frame), &area, "OK",
 			(win_command_t)BUTTON_OK_ID);
 	if (!button_ok) {
 		goto error_widget;
@@ -361,7 +220,7 @@ struct wtk_dialogue_box *wtk_dialogue_box_create(struct win_window *parent,
 	
 	// win_grab_pointer(dialogue_box->win);
 		
-	win_show(wtk_dialogue_box_as_child(dialogue_box)); //sjekk dette
+	win_show(wtk_basic_frame_as_child(dialogue_frame)); //sjekk dette
 
 	gfx_draw_filled_rect(gfx_get_width()/5,
 		gfx_get_height()/6,
@@ -374,7 +233,7 @@ struct wtk_dialogue_box *wtk_dialogue_box_create(struct win_window *parent,
 	return dialogue_box;
 
 error_widget:
-	win_destroy(wtk_dialogue_box_as_child(dialogue_box));
+	win_destroy(wtk_basic_frame_as_child(dialogue_frame));
 	
 outofmem_win:
 	membag_free(dialogue_box);

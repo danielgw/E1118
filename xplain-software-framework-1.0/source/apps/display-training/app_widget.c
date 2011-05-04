@@ -70,6 +70,7 @@ enum app_widget_ids {
 	SLIDER_ID = 1,
 	//! Event command ID for the button.
 	BUTTON_ID,
+	DIALOGUE_ID,
 };
 
 /**
@@ -162,12 +163,6 @@ static struct gfx_bitmap            sub_frame_background;
 
 //! @}
 
-//! Finished task that runs after finishing dialogue box
-static void finished_task(struct workqueue_task *task)
-{
-	counter++;
-	win_redraw(wtk_basic_frame_as_child(sub_frame));
-}
 
 /**
  * \brief Frame command events handler
@@ -195,13 +190,18 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 		// counter++;
 		
 		// Create the dialogue_box
-		dialogue_box = wtk_dialogue_box_create(parent, NULL, widget_frame_command_handler, finished_task);
+		dialogue_box = wtk_dialogue_box_create(wtk_basic_frame_as_child(frame), "whop",
+				(win_command_t)DIALOGUE_ID);
 		if (!dialogue_box) {
-			// goto error_widget;
+		//	goto error_widget;
 		}
 
-		win_redraw(wtk_basic_frame_as_child(sub_frame));
+		//win_redraw(wtk_basic_frame_as_child(sub_frame));
 		break;
+	case DIALOGUE_ID:
+		counter++;
+		win_redraw(wtk_basic_frame_as_child(sub_frame));
+
 	}
 
 	return false;
