@@ -75,11 +75,6 @@ enum app_widget_ids {
 struct wtk_dialogue_box {
 	//! Frame window.
 	struct win_window					*win;
-
-	struct win_window					*container;
-	
-	struct workqueue_task				*task;
-	
 	//! Frame command event handler.
 	wtk_dialogue_box_command_handler_t	frame_handler;
 	//! Data for applications and handlers.
@@ -87,6 +82,12 @@ struct wtk_dialogue_box {
 	//! Frame draw event handler.
 	wtk_dialogue_box_draw_handler_t		draw_handler;
 
+	//struct win_window					*container;
+	
+	struct workqueue_task				*task;
+	
+
+	
 };
 
 
@@ -177,6 +178,8 @@ void *wtk_dialogue_box_get_custom_data(const struct wtk_dialogue_box *dialogue_b
  *
  * \return True if the event was recognized and accepted.
  */
+ 
+
 static bool wtk_dialogue_box_handler(struct win_window *win,
 		enum win_event_type type, const void *data)
 {
@@ -318,12 +321,11 @@ struct wtk_dialogue_box *wtk_dialogue_box_create(struct win_window *parent,
 	}
 
 	// Set window attributes
-	//tas bort                                       dialogue_box->frame_handler = dialogue_box_command_handler;
+	dialogue_box->frame_handler = dialogue_box_command_handler;
 	dialogue_box->custom_data = custom_data;
 	dialogue_box->task = task;
 
-	// Copy area info
-	// attr.area = *area;
+
 	attr.area.pos.x = 0;
 	attr.area.pos.y = 0;
 	attr.area.size.x = gfx_get_width();
@@ -335,13 +337,8 @@ struct wtk_dialogue_box *wtk_dialogue_box_create(struct win_window *parent,
 	// Set background for window
 	attr.background = NULL;
 	
-	/*if (background) {
-		attr.background = background;
-		attr.behavior = 0;
-	} else {
-		attr.background = NULL;
-		attr.behavior = WIN_BEHAVIOR_REDRAW_PARENT;
-	}*/
+	// attr.behavior = WIN_BEHAVIOR_REDRAW_PARENT;
+
 
 	// Create the window
 	dialogue_box->win = win_create(parent, &attr);
@@ -351,7 +348,6 @@ struct wtk_dialogue_box *wtk_dialogue_box_create(struct win_window *parent,
 	
 
 	
-	// dialogue_box_command_handler;
 	attr.area.pos.x = gfx_get_width()/3;
 	attr.area.pos.y = gfx_get_height()/3;
 	attr.area.size.x = gfx_get_width()/4;
@@ -363,7 +359,7 @@ struct wtk_dialogue_box *wtk_dialogue_box_create(struct win_window *parent,
 		goto error_widget;
 	}
 	
-	win_grab_pointer(dialogue_box->win);
+	// win_grab_pointer(dialogue_box->win);
 		
 	win_show(wtk_dialogue_box_as_child(dialogue_box)); //sjekk dette
 
