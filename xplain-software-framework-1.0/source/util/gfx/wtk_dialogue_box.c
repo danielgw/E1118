@@ -103,10 +103,10 @@ static bool dialogue_box_command_handler(struct wtk_basic_frame *frame,
 		
 		//win_redraw(win_get_parent(wtk_basic_frame_as_child(frame)));
 		
-		
+		struct win_window *dialogue_parent = win_get_parent(wtk_basic_frame_as_child(frame));
 		struct win_command_event send_command;
-		send_command.sender = wtk_basic_frame_as_child(frame);
-		send_command.recipient =win_get_parent(wtk_basic_frame_as_child(frame));
+		send_command.sender = dialogue_parent;
+		send_command.recipient = dialogue_parent;
 		send_command.data = dialogue_box->command_data;
 
 		win_queue_command_event(&send_command);
