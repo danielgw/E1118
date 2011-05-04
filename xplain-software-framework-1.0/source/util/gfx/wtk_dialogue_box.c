@@ -181,7 +181,8 @@ struct wtk_dialogue_box *wtk_dialogue_box_create(struct win_window *parent,
 	// Set window attributes
 	//dialogue_box->frame_handler = dialogue_box_command_handler;
 	//dialogue_box->custom_data = custom_data;
-	//dialogue_box->task = task;
+	
+	dialogue_box->command_data = command_data;
 
 
 	area.pos.x = 0;

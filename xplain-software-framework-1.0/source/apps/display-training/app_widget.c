@@ -190,7 +190,7 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 		// counter++;
 		
 		// Create the dialogue_box
-		dialogue_box = wtk_dialogue_box_create(wtk_basic_frame_as_child(frame), "whop",
+		dialogue_box = wtk_dialogue_box_create(parent, "whop",
 				(win_command_t)DIALOGUE_ID);
 		if (!dialogue_box) {
 		//	goto error_widget;
