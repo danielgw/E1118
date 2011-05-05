@@ -50,11 +50,8 @@
  * command event callback for certain widgets.
  */
 enum app_widget_ids {
-	
 	//! Event command ID for the OK button.
 	BUTTON_OK_ID = 1,
-	//! Event command ID for the Cancel button.
-	BUTTON_CANCEL_ID = 2,
 };
 
 /**
@@ -77,7 +74,6 @@ struct wtk_dialogue_box {
 	char                    *caption;
 	//! Custom command data, used when "clicked".
 	win_command_t           command_data;
-	
 };
 
 
@@ -92,39 +88,35 @@ static bool dialogue_box_command_handler(struct wtk_basic_frame *frame,
 		win_command_t command_data)
 {
 	char command = (char)(uintptr_t)command_data;
-	
+
 	struct wtk_dialogue_box *dialogue_box;
-	dialogue_box = (struct wtk_dialogue_box*) wtk_basic_frame_get_custom_data(frame);
+	dialogue_box = (struct wtk_dialogue_box*) 
+			wtk_basic_frame_get_custom_data(frame);
 
 	switch (command) {
 	case BUTTON_OK_ID:
-		
+
 		win_grab_pointer(NULL);
-		
-		//win_redraw(win_get_parent(wtk_basic_frame_as_child(frame)));
-		
-		struct win_window *dialogue_parent = win_get_parent(wtk_basic_frame_as_child(frame));
+
+		struct win_window *dialogue_parent = 
+				win_get_parent(wtk_basic_frame_as_child(frame));
+
 		struct win_command_event send_command;
+
+		/*Send the supplied command event to the frame from which the 
+		 *dialogue box originated
+		 */
+
 		send_command.sender = dialogue_parent;
 		send_command.recipient = dialogue_parent;
 		send_command.data = dialogue_box->command_data;
 
 		win_queue_command_event(&send_command);
-		
+
 		//free memory of button, frame, and box.
 		win_destroy(wtk_basic_frame_as_child(frame));
 		membag_free(dialogue_box);
-		
-		break;
 
-	case BUTTON_CANCEL_ID:
-		
-		//win_grab_pointer(NULL);
-		
-		//win_redraw(win_get_parent(frame));
-		
-		//membag_free(dialogue_box);
-		
 		break;
 	}
 
@@ -135,9 +127,9 @@ static bool dialogue_box_command_handler(struct wtk_basic_frame *frame,
 
 
 /**
- * \brief Create basic frame widget
+ * \brief Create dialogue box widget
  *
- * This function creates a new basic frame widget. It allocates required memory
+ * This function creates a new dialogue box widget. It allocates required memory
  * and intializes necessary windows to create the widget. If there is not enough
  * memory, the function returns NULL.
  *
@@ -161,9 +153,7 @@ static bool dialogue_box_command_handler(struct wtk_basic_frame *frame,
  */
 struct wtk_dialogue_box *wtk_dialogue_box_create(struct win_window *parent,
 		char *caption, win_command_t command_data)
-		//const struct win_area *area, void *custom_data, struct workqueue_task *task)
 {
-	//struct win_attributes       attr;
 	struct wtk_dialogue_box     *dialogue_box;
 	struct wtk_button           *button_ok;
 	struct wtk_basic_frame      *dialogue_frame;
@@ -178,51 +168,36 @@ struct wtk_dialogue_box *wtk_dialogue_box_create(struct win_window *parent,
 		goto outofmem_dialogue_box;
 	}
 
-	// Set window attributes
-	//dialogue_box->frame_handler = dialogue_box_command_handler;
-	//dialogue_box->custom_data = custom_data;
-	
 	dialogue_box->command_data = command_data;
-
+	dialogue_box->caption = caption;
 
 	area.pos.x = 0;
 	area.pos.y = 0;
 	area.size.x = gfx_get_width();
 	area.size.y = gfx_get_height();
-	//attr.event_handler = wtk_dialogue_box_handler;
-	//attr.custom = dialogue_box;
-
 	
-	// Set background for window
-	//attr.background = NULL;
-	
-	// attr.behavior = WIN_BEHAVIOR_REDRAW_PARENT;
-
-
-	// Create the basic frame
 	dialogue_frame = wtk_basic_frame_create(parent, &area,
 			NULL, NULL, dialogue_box_command_handler, dialogue_box);
 	if (!dialogue_frame) {
-		goto error_widget;
+		goto outofmem_frame;
 	}
 	
-
-	
+	//TODO: FIKS DISSE!					NEIN!					UFFOGHUFF
 	area.pos.x = gfx_get_width()/3;
 	area.pos.y = gfx_get_height()/3;
 	area.size.x = gfx_get_width()/4;
 	area.size.y = gfx_get_height()/5;
 
-	button_ok = wtk_button_create(wtk_basic_frame_as_child(dialogue_frame), &area, "OK",
-			(win_command_t)BUTTON_OK_ID);
+	button_ok = wtk_button_create(wtk_basic_frame_as_child(dialogue_frame), 
+			&area, "OK", (win_command_t)BUTTON_OK_ID);
 	if (!button_ok) {
 		goto error_widget;
 	}
-	
-	// win_grab_pointer(dialogue_box->win);
-		
-	win_show(wtk_basic_frame_as_child(dialogue_frame)); //sjekk dette
 
+	win_show(wtk_basic_frame_as_child(dialogue_frame)); 
+
+
+	//TODO: FIKS DISSE!					NEIN!					UFFOGHUFF
 	gfx_draw_filled_rect(gfx_get_width()/5,
 		gfx_get_height()/6,
 		gfx_get_width()/2,
@@ -235,10 +210,8 @@ struct wtk_dialogue_box *wtk_dialogue_box_create(struct win_window *parent,
 
 error_widget:
 	win_destroy(wtk_basic_frame_as_child(dialogue_frame));
-	
-outofmem_win:
+outofmem_frame:
 	membag_free(dialogue_box);
-
 outofmem_dialogue_box:
 	return NULL;
 }
