@@ -115,7 +115,7 @@ static bool dialogue_box_command_handler(struct wtk_basic_frame *frame,
 		win_queue_command_event(&send_command);
 
 		//free memory of button, frame, and box.
-		win_destroy(wtk_basic_frame_as_child(frame));
+		win_destroy(dialogue_win);
 
 		break;
 	}
@@ -124,9 +124,28 @@ static bool dialogue_box_command_handler(struct wtk_basic_frame *frame,
 }
 
 /**
- * \brief Basic frame event handler
+ * \brief Dialogue box frame draw event handler
  *
- * This function is the window event handler for basic frame widgets.
+ * This function will draw the frame and background of the dialogue box.
+ *
+ * \sa wtk_basic_frame_draw_handler_t							//DOXYGEN! 
+ */
+static void dialogue_box_draw_handler(struct win_window *win,
+		struct win_clip_region const *clip)
+{							//TODO: make it pretty! (kanter? ettellerannetiaffal)
+
+	//TODO: FIKS DISSE!					NEIN!					UFFOGHUFF
+	gfx_draw_filled_rect(gfx_get_width()/5,
+		gfx_get_height()/6,
+		gfx_get_width()/2,
+		gfx_get_height()/2, GFX_COLOR(200, 200, 200));
+}
+
+
+/**
+ * \brief Dialogue box event handler
+ *
+ * This function is the window event handler for dialogue box widgets.
  * It handles all events sent to the windows composing the widget.
  *
  * \param win  Window receiving the event.
@@ -168,12 +187,7 @@ static bool wtk_dialogue_box_event_handler(struct win_window *win,
 		/* When the frame window is destroyed, also destroy
 		 * the rest of the non-window frame allocations.
 		 */
-		//if (win == frame->win) {				//spør kristian om hvorfor?/ trenger vi?
-			/* Memory allocated for windows will be         // i så fall må dette inn i structen
-			 * automatically destroyed by the window        // UPDATE: tror den trengs
-			 * system. We must destroy other allocations.
-			 */
-			membag_free(dialogue_box);
+		membag_free(dialogue_box);
 		//}
 
 		/* Always accept DESTROY events, as the return value is
@@ -238,14 +252,14 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 	/* set up the container window, making it as large as the screen to 
 	 * absorb pointer events.
 	 */
-	 
-	 
+
+
 	// Allocate memory for dialogue box data.
 	dialogue_struct = membag_alloc(sizeof(struct wtk_dialogue_box));
 	if (!dialogue_struct) {
 		goto outofmem_dialogue_struct;
 	}
-	
+
 	area.pos.x = 0;
 	area.pos.y = 0;
 	area.size.x = gfx_get_width();
@@ -256,7 +270,7 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 	attr.custom = dialogue_struct;
 	attr.background = NULL;
 	attr.behavior = 0;
-	
+
 	dialogue_window = win_create(parent, &attr);
 	if (!dialogue_window) {
 		goto outofmem_win;
@@ -270,16 +284,14 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 	area.pos.y = 0;
 	area.size.x = gfx_get_width();
 	area.size.y = gfx_get_height();
-	
-	
-	
+
 	dialogue_frame = wtk_basic_frame_create(dialogue_window, &area,
-			NULL, NULL, //TODO: draw_handler her.
+			NULL,dialogue_box_draw_handler,
 			dialogue_box_command_handler, dialogue_struct);
 	if (!dialogue_frame) {
 		goto error_widget;
 	}
-	
+
 	//TODO: FIKS DISSE!					NEIN!					UFFOGHUFF
 	area.pos.x = gfx_get_width()/3;
 	area.pos.y = gfx_get_height()/3;
@@ -294,12 +306,6 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 
 	win_show(wtk_basic_frame_as_child(dialogue_frame)); 
 
-
-	//TODO: FIKS DISSE!					NEIN!					UFFOGHUFF
-	gfx_draw_filled_rect(gfx_get_width()/5,
-		gfx_get_height()/6,
-		gfx_get_width()/2,
-		gfx_get_height()/2, GFX_COLOR(200, 200, 200));
 
 	
 	win_show(wtk_button_as_child(button_ok));
