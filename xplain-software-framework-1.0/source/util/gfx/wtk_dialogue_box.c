@@ -159,8 +159,8 @@ static bool wtk_dialogue_box_event_handler(struct win_window *win,
 {
 	// Custom data for windows of a widget points back to the widget itself.
 	struct wtk_dialogue_box *dialogue_box;
-	bool should_destroy;
-	struct win_clip_region const *clip;
+	bool should_destroy;							//hvis denne ikke trengs, slett!
+	struct win_clip_region const *clip;					//hvis denne ikke trengs, slett!
 
 	dialogue_box = win_get_custom_data(win);
 
@@ -292,7 +292,7 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 		goto error_widget;
 	}
 
-	//TODO: FIKS DISSE!					NEIN!					UFFOGHUFF
+	//TODO: FIKS DISSE!					NEIN!				UFFOGHUFF
 	area.pos.x = gfx_get_width()/3;
 	area.pos.y = gfx_get_height()/3;
 	area.size.x = gfx_get_width()/4;
@@ -312,7 +312,7 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 	win_show(dialogue_window);
 
 	return dialogue_window;
-	//										TODO: RYDDES!
+	//											TODO: RYDDES!
 
 error_widget:
 	win_destroy(dialogue_window);
