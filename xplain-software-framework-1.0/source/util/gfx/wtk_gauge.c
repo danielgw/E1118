@@ -527,6 +527,8 @@ static bool wtk_gauge_handler(struct win_window *win,
  *             gauge. Minimum size in both x and y direction is 3 pixels.
  * \param maximum Maximum value of the gauge.
  * \param value Initial value of the gauge.
+ * \param g_outer_pos Value for the endpoint of the needle in percent of total diameter
+ * \param g_inner_pos Value for the start point of the needle in percent of total diameter
  * \param fill_color Color for filled area.
  * \param background_color Color for background area.
  * \param option \ref gfx_wtk_gauge_options "Configuration options for gauge"
@@ -591,7 +593,6 @@ struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
 	length -= 2;
 
 	// Checks if line pos is an accepted value, else set to max, fail safe
-	// Todo: could this be done with assert?
 	if(g_outer_pos < WTK_GAUGE_MIN_NEEDLE_PERCENT_SIZE ||
 			g_outer_pos > WTK_GAUGE_MAX_NEEDLE_PERCENT_SIZE) {
 		g_outer_pos = WTK_GAUGE_MAX_NEEDLE_PERCENT_SIZE;
