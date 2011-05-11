@@ -66,7 +66,7 @@
  */
 enum app_widget_ids {
 	//! Event command ID for the button.
-	BUTTON_DRAW_ID=1,
+	BUTTON_UPDATE_ID=1,
 	BUTTON_MIRROR_ID=2,
 	BUTTON_INVERT_ID=3,
 	
@@ -161,7 +161,7 @@ const static char                   *demo_string = "Demonstrating gradients";
 
 //! Pointer to frame for application
 static struct wtk_basic_frame       *frame;
-//! Pointer to slider1
+//! Pointers to the sliders
 static struct wtk_slider            *slider[6];
 //! Frame background bitmap
 static struct gfx_bitmap            frame_background;
@@ -190,8 +190,8 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 
 	switch (command) {
 
-	case BUTTON_DRAW_ID:
-		//handle button press.
+	case BUTTON_UPDATE_ID:
+		//Recalculate the gradient, using the six sliders as inputs.
 
 		gfx_gradient_set_values(&sub_frame_gradient, 
 			wtk_slider_get_value(slider[0]),
@@ -206,18 +206,20 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 		break;
 
 	case BUTTON_MIRROR_ID:
+		//Set options to enable mirrored gradients.
 		gradient_option ^= GFX_GRADIENT_MIRROR;
 		gfx_gradient_set_options(&sub_frame_gradient,gradient_option);
 		win_redraw(wtk_basic_frame_as_child(sub_frame));
 		break;
 
 	case BUTTON_INVERT_ID:
+		//Set options to enable inverted gradients.
 		gradient_option ^= GFX_GRADIENT_INVERT;
 		gfx_gradient_set_options(&sub_frame_gradient,gradient_option);
 		win_redraw(wtk_basic_frame_as_child(sub_frame));
 		break;
 
-		}
+	}
 
 	return false;
 }
@@ -322,6 +324,7 @@ void app_widget_launch(struct workqueue_task *task) {
 			area.pos.y=SLIDER_POS_Y;
 		}
 	}
+	// set initial values.
 	wtk_slider_set_value(slider[0],255);
 	wtk_slider_set_value(slider[5],255);
 
@@ -334,7 +337,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	win_show(wtk_slider_as_child(slider[4]));
 	win_show(wtk_slider_as_child(slider[5]));
 
-	//set up button.
+	//set up buttons.
 	area.pos.x = SLIDER_POS_X + BUTTON_SPACING_X;
 	area.pos.y = BUTTON_POS_Y;
 
@@ -342,7 +345,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	area.size.y = BUTTON_SIZE_Y;
 
 	btn_draw = wtk_button_create(parent, &area, "Update",
-			(win_command_t)BUTTON_DRAW_ID);
+			(win_command_t)BUTTON_UPDATE_ID);
 	if (!btn_draw) {
 		goto error_widget;
 	}
@@ -366,7 +369,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	}
 	win_show(wtk_button_as_child(btn_mirror));
 
-	// Set up basic frame.
+	// Set up basic frame, using a gradient background.
 	area.pos.x = FRAME_POS_X;
 	area.pos.y = FRAME_POS_Y;
 
@@ -376,7 +379,6 @@ void app_widget_launch(struct workqueue_task *task) {
 	gfx_gradient_set_values(&sub_frame_gradient, 255,0,0, 0,0,255,
 			FRAME_SIZE_X, GFX_GRADIENT_HORIZONTAL);
 	gradient_option=GFX_GRADIENT_HORIZONTAL;
-
 	sub_frame_background.type = BITMAP_GRADIENT;
 	sub_frame_background.width = FRAME_SIZE_X;
 	sub_frame_background.height = FRAME_SIZE_Y;
