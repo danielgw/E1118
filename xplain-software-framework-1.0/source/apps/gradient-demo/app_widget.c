@@ -105,7 +105,30 @@ enum app_widget_ids {
 
 //! Spacing from slider to slider
 #define SLIDER_SPACING_Y            10
+//! Spacing from slider to slider
+#define SLIDER_SPACING_X            200
 
+
+//! Spacing from slider to button
+#define BUTTON_SPACING_X            100
+//! Spacing from slider to button
+#define BUTTON_SPACING_Y            10
+
+//! Button position
+#define BUTTON_POS_Y                SLIDER_POS_Y
+//! Button size on display
+#define BUTTON_SIZE_X               SLIDER_SIZE_X
+//! Button size on display
+#define BUTTON_SIZE_Y               SLIDER_SIZE_Y
+
+//! Slider position
+#define FRAME_POS_X                20
+//! Slider position
+#define FRAME_POS_Y                40
+//! Slider size on display
+#define FRAME_SIZE_X               280
+//! Slider size on display
+#define FRAME_SIZE_Y               70
 //! @}
 
 /**
@@ -295,7 +318,7 @@ void app_widget_launch(struct workqueue_task *task) {
 
 		if (i == 2)
 		{
-			area.pos.x=SLIDER_POS_X + 200;
+			area.pos.x=SLIDER_POS_X + SLIDER_SPACING_X ;
 			area.pos.y=SLIDER_POS_Y;
 		}
 	}
@@ -312,11 +335,11 @@ void app_widget_launch(struct workqueue_task *task) {
 	win_show(wtk_slider_as_child(slider[5]));
 
 	//set up button.
-	area.pos.x = SLIDER_POS_X + 100;
-	area.pos.y = 120;
+	area.pos.x = SLIDER_POS_X + BUTTON_SPACING_X;
+	area.pos.y = BUTTON_POS_Y;
 
-	area.size.x = 80;
-	area.size.y = 30;
+	area.size.x = BUTTON_SIZE_X;
+	area.size.y = BUTTON_SIZE_Y;
 
 	btn_draw = wtk_button_create(parent, &area, "Update",
 			(win_command_t)BUTTON_DRAW_ID);
@@ -325,7 +348,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	}
 	win_show(wtk_button_as_child(btn_draw));
 
-	area.pos.y += 40;
+	area.pos.y += BUTTON_SIZE_Y + BUTTON_SPACING_Y;
 
 	btn_invert = wtk_button_create(parent, &area, "Invert",
 			(win_command_t)BUTTON_INVERT_ID);
@@ -334,7 +357,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	}
 	win_show(wtk_button_as_child(btn_invert));
 
-	area.pos.y += 40;
+	area.pos.y += BUTTON_SIZE_Y + BUTTON_SPACING_Y;
 
 	btn_mirror = wtk_button_create(parent, &area, "Mirror",
 			(win_command_t)BUTTON_MIRROR_ID);
@@ -344,19 +367,19 @@ void app_widget_launch(struct workqueue_task *task) {
 	win_show(wtk_button_as_child(btn_mirror));
 
 	// Set up basic frame.
-	area.pos.y = 40;
-	area.pos.x = 20;
+	area.pos.x = FRAME_POS_X;
+	area.pos.y = FRAME_POS_Y;
 
-	area.size.x = 280;
-	area.size.y = 70;
+	area.size.x = FRAME_SIZE_X;
+	area.size.y = FRAME_SIZE_Y;
 
 	gfx_gradient_set_values(&sub_frame_gradient, 255,0,0, 0,0,255,
-			280, GFX_GRADIENT_HORIZONTAL);
+			FRAME_SIZE_X, GFX_GRADIENT_HORIZONTAL);
 	gradient_option=GFX_GRADIENT_HORIZONTAL;
 
 	sub_frame_background.type = BITMAP_GRADIENT;
-	sub_frame_background.width = 280;
-	sub_frame_background.height = 50;
+	sub_frame_background.width = FRAME_SIZE_X;
+	sub_frame_background.height = FRAME_SIZE_Y;
 	sub_frame_background.data.gradient = &sub_frame_gradient;
 
 	sub_frame = wtk_basic_frame_create(parent, &area,
