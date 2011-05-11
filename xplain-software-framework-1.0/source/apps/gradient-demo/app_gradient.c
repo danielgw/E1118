@@ -50,7 +50,7 @@
 #include <string.h>
 #include <stream.h>
 
-#include "app_widget.h"
+#include "app_gradient.h"
 
 /**
  * \weakgroup app_widget_group
