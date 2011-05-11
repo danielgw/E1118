@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * \brief Display training application.
+ * \brief Gradient demo application.
  *
  * Copyright (C) 2009 Atmel Corporation. All rights reserved.
  *
@@ -37,24 +37,22 @@
  */
 
 /**
- * \mainpage Display training
- * \section display_training_intro Introduction
+ * \mainpage Gradient demo
+ * \section gradient_demo_intro Introduction
  *
- * The Display training application is an application that introduces users to
- * the graphical system. The application will show how different modules are
- * working together:
+ * The gradient demo application will introduce user to the gradient bitmap.
  *
  * - \ref gfx "Graphics display system"
  * - \ref gfx_gfx "Graphics drivers"
  * - \ref gfx_win "Window system"
  * - \ref gfx_wtk "Widget toolkit"
  * - \ref touch_driver_group "Touch drivers"
- *
- * For the training applications available see \ref apps_training_group.
+ * - \ref apps_training_group
+ * 
  */
 
 /**
- * \defgroup apps_training_group Training Applications
+ * \defgroup apps_training_group Applications
  */
 #include <dma.h>
 #include <led.h>
@@ -69,7 +67,7 @@
 #include <touch/touch.h>
 
 #include "app_calibrate.h"
-#include "app_widget.h"
+#include "app_gradient.h"
 
 static struct workqueue_task launch_application;
 

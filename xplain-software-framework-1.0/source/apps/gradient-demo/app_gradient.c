@@ -50,7 +50,7 @@
 #include <string.h>
 #include <stream.h>
 
-#include "app_widget.h"
+#include "app_gradient.h"
 
 /**
  * \weakgroup app_widget_group
@@ -66,6 +66,7 @@
  */
 enum app_widget_ids {
 	//! Event command ID for the button.
+
 	BUTTON_UPDATE_ID=1,
 	BUTTON_MIRROR_ID,
 	BUTTON_INVERT_ID,
