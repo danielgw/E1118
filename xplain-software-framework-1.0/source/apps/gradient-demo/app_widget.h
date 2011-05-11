@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * \brief Display training widget application
+ * \brief Gradient demo application
  *
  * Copyright (C) 2010 Atmel Corporation. All rights reserved.
  *
@@ -42,19 +42,16 @@
 
 /**
  * \ingroup apps_training_group
- * \defgroup app_widget_group Widget training application
+ * \defgroup app_widget_group Gradient demo application
  *
- * \brief This application is made as a training to introduce users to some of
- * the available widgets in the \ref gfx_wtk "Widget toolkit".
+ * \brief This application is made to introduce users to the gradient bitmap type and
+ *  its possibilities and options.
  *
  * Initially this application will draw a
- * \ref gfx_wtk_basic_frame "basic frame" filling the entire screen and add a
- * \ref gfx_wtk_slider "slider" and a \ref gfx_wtk_progress_bar "progress bar"
- * on the upper half of the screen.
- *
- * The users task is then to add a \ref gfx_wtk_basic_frame "sub-frame" and a
- * \ref gfx_wtk_button "button". The button should increment a counter
- * presented in the sub-frame each time the button is pressed.
+ * \ref gfx_wtk_basic_frame "basic frame" filling the entire screen and add six 
+ * \ref gfx_wtk_slider "sliders", three \ref gfx_wtk_button "buttons" and a 
+ * \ref gfx_wtk_basic_frame "sub-frame" with a gradient background controlled by
+ * the sliders and buttons.
  *
  * @{
  */

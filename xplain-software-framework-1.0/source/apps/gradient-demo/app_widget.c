@@ -66,9 +66,9 @@
  */
 enum app_widget_ids {
 	//! Event command ID for the button.
-	BUTTON_DRAW_ID=1,
-	BUTTON_MIRROR_ID=2,
-	BUTTON_INVERT_ID=3,
+	BUTTON_DRAW_ID = 1,
+	BUTTON_MIRROR_ID,
+	BUTTON_INVERT_ID,
 	
 };
 
