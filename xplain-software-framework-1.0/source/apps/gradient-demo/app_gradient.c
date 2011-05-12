@@ -67,7 +67,7 @@
 enum app_widget_ids {
 	//! Event command ID for the button.
 
-	BUTTON_UPDATE_ID=1,
+	BUTTON_UPDATE_ID = 1,
 	BUTTON_MIRROR_ID,
 	BUTTON_INVERT_ID,
 	
@@ -193,7 +193,6 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 
 	case BUTTON_UPDATE_ID:
 		//Recalculate the gradient, using the six sliders as inputs.
-
 		gfx_gradient_set_values(&sub_frame_gradient, 
 			wtk_slider_get_value(slider[0]),
 			wtk_slider_get_value(slider[1]),
@@ -209,14 +208,14 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 	case BUTTON_MIRROR_ID:
 		//Set options to enable mirrored gradients.
 		gradient_option ^= GFX_GRADIENT_MIRROR;
-		gfx_gradient_set_options(&sub_frame_gradient,gradient_option);
+		gfx_gradient_set_options(&sub_frame_gradient, gradient_option);
 		win_redraw(wtk_basic_frame_as_child(sub_frame));
 		break;
 
 	case BUTTON_INVERT_ID:
 		//Set options to enable inverted gradients.
 		gradient_option ^= GFX_GRADIENT_INVERT;
-		gfx_gradient_set_options(&sub_frame_gradient,gradient_option);
+		gfx_gradient_set_options(&sub_frame_gradient, gradient_option);
 		win_redraw(wtk_basic_frame_as_child(sub_frame));
 		break;
 
@@ -326,8 +325,8 @@ void app_widget_launch(struct workqueue_task *task) {
 		}
 	}
 	// set initial values.
-	wtk_slider_set_value(slider[0],255);
-	wtk_slider_set_value(slider[5],255);
+	wtk_slider_set_value(slider[0], 255);
+	wtk_slider_set_value(slider[5], 255);
 
 
 	// Draw the sliders by showing the slider widget's window.
@@ -377,7 +376,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	area.size.x = FRAME_SIZE_X;
 	area.size.y = FRAME_SIZE_Y;
 
-	gfx_gradient_set_values(&sub_frame_gradient, 255,0,0, 0,0,255,
+	gfx_gradient_set_values(&sub_frame_gradient, 255, 0, 0, 0, 0, 255,
 			FRAME_SIZE_X, GFX_GRADIENT_HORIZONTAL);
 	gradient_option=GFX_GRADIENT_HORIZONTAL;
 	sub_frame_background.type = BITMAP_GRADIENT;
@@ -386,7 +385,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	sub_frame_background.data.gradient = &sub_frame_gradient;
 
 	sub_frame = wtk_basic_frame_create(parent, &area,
-			&sub_frame_background, NULL,NULL, NULL);
+			&sub_frame_background, NULL, NULL, NULL);
 			
 	if (!sub_frame) {
 		goto error_widget;
