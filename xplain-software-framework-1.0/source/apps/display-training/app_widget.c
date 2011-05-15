@@ -96,21 +96,6 @@ enum app_widget_ids {
 //! Label position on top of display
 #define LABEL_POS_Y                 10
 
-//! Slider position
-#define SLIDER_POS_X                10
-//! Slider position
-#define SLIDER_POS_Y                60
-//! Slider size on display
-#define SLIDER_SIZE_X               80
-//! Slider size on display
-#define SLIDER_SIZE_Y               40
-
-//! Spacing from slider to progress bar
-#define SLIDER_PB_SPACING_X         10
-//! Slider progress bar on display
-#define PB_SIZE_X                   SLIDER_SIZE_X
-//! Slider progress bar on display
-#define PB_SIZE_Y                   SLIDER_SIZE_Y
 
 //! @}
 
@@ -120,8 +105,6 @@ enum app_widget_ids {
  * @{
  */
 
-//! Max value for slider
-#define SLIDER_MAX_VALUE            100
 
 //! @}
 
@@ -132,7 +115,7 @@ enum app_widget_ids {
  */
 
 //! Description for label
-const static char                   *demo_string = "Dialogue box widget demo";
+const static char                   *demo_string = "Dialogue box widget demomonstration";
 
 //! @}
 
@@ -148,10 +131,6 @@ static struct wtk_dialogue_box      *dialogue_box;
 
 //! Pointer to frame for application
 static struct wtk_basic_frame       *frame;
-//! Pointer to slider
-static struct wtk_slider            *slider;
-//! Pointer to progress bar
-static struct wtk_progress_bar      *progress_bar;
 //! Frame background bitmap
 static struct gfx_bitmap            frame_background;
 //! Counter for button
@@ -181,10 +160,6 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 	parent = wtk_basic_frame_as_child(frame);
 	
 	switch (command) {
-	case SLIDER_ID:
-		wtk_progress_bar_set_value(progress_bar,
-		wtk_slider_get_value(slider));
-		break;
 
 	case BUTTON_ID:
 		
@@ -303,47 +278,8 @@ void app_widget_launch(struct workqueue_task *task) {
 	// Draw the label by showing the label widget's window.
 	win_show(wtk_label_as_child(lbl));
 
-	// Application slider
-	area.pos.x = SLIDER_POS_X;
-	area.pos.y = SLIDER_POS_Y;
-	area.size.x = SLIDER_SIZE_X;
-	area.size.y = SLIDER_SIZE_Y;
 
-	/*
-	 * Create the slider and check the return value if an error occured
-	 * while creating the slider.
-	 */
-	slider = wtk_slider_create(parent, &area, SLIDER_MAX_VALUE,
-			SLIDER_MAX_VALUE / 2, WTK_SLIDER_HORIZONTAL|WTK_SLIDER_CMD_RELEASE,
-			(win_command_t)SLIDER_ID);
-	if (!slider) {
-		goto error_widget;
-	}
-
-	// Draw the slider by showing the slider widget's window.
-	win_show(wtk_slider_as_child(slider));
-
-	// Application progress bar, placed right of the slider.
-	area.pos.x += area.size.x + SLIDER_PB_SPACING_X;
-	area.size.x = PB_SIZE_X;
-	area.size.y = PB_SIZE_Y;
-
-	/*
-	 * Create the progress bar and check the return value if an error
-	 * occured while creating the progress bar.
-	 */
-	progress_bar = wtk_progress_bar_create(parent, &area, SLIDER_MAX_VALUE,
-			SLIDER_MAX_VALUE / 2, GFX_COLOR(255, 255, 0),
-			GFX_COLOR(90, 90, 90), WTK_PROGRESS_BAR_HORIZONTAL);
-	if (!progress_bar) {
-		goto error_widget;
-	}
-
-	// Draw the progress bar by showing the progress bar widget's window.
-	win_show(wtk_progress_bar_as_child(progress_bar));
-
-
-	area.pos.x =  50;
+	area.pos.x =  60;
 	area.pos.y = 190;
 	area.size.x = 90;
 	area.size.y = 40;

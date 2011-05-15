@@ -42,9 +42,13 @@
 #include <string.h>
 #include <gfx/wtk.h>
 
+/**
+ * \ingroup gfx_wtk_dialogue_box
+ * @{
+ */
 
-
-/** Defined positions and sizes for dialogue box.
+/** 
+ * Defined positions and sizes for dialogue box.
  */
 
 //! Dialogue box frame X position inside parent frame.
@@ -84,6 +88,9 @@
  *
  * \note The command IDs cannot be 0, since this value is reserved for no
  * command event callback for certain widgets.
+ *
+ * \param BUTTON_OK_ID defines command ID for events regarding accepting dialogue
+ * \param BUTTON_CANCEL_ID defines command ID for events regarding aborting dialogue
  */
 enum app_widget_ids {
 	//! Event command ID for the OK button.
@@ -102,6 +109,9 @@ enum app_widget_ids {
  * \internal
  * \note Structure fields are only internally accessible, only pointers to
  *       structure is needed externally.
+ *
+ * \param caption stores top string in dialogue box frame
+ * \param second_caption stores bottom string in dialogue box frame
  */
 struct wtk_dialogue_box {
 	//! Copy of top caption string.
@@ -184,12 +194,9 @@ static bool dialogue_box_command_handler(struct wtk_basic_frame *frame,
  */
 static void dialogue_box_draw_handler(struct win_window *win,
 		struct win_clip_region const *clip)
-{							//TODO: make it pretty! (kanter? ettellerannetiaffal)
-
-	
+{
 	gfx_draw_rect(DIALOGUE_FRAME_POS_X, DIALOGUE_FRAME_POS_Y,
-		DIALOGUE_FRAME_SIZE_X - 1, DIALOGUE_FRAME_SIZE_Y - 1, GFX_COLOR(255, 255, 255));
-	
+		DIALOGUE_FRAME_SIZE_X, DIALOGUE_FRAME_SIZE_Y, GFX_COLOR(0, 0, 0));
 }
 
 
@@ -293,7 +300,7 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 	assert(area);
 	assert(parent);
 
-	/* set up the container window, making it as large as the screen to 
+	/** set up the container window, making it as large as the screen to 
 	 * absorb pointer events.
 	 */
 
@@ -412,7 +419,7 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 	win_show(dialogue_window);
 
 	return dialogue_window;
-	//											TODO: RYDDES!
+
 
 error_widget:
 	win_destroy(dialogue_window);
