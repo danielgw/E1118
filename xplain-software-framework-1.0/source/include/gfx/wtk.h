@@ -355,11 +355,47 @@ void wtk_shade_pixel(gfx_color_t *pixel, uint8_t alpha);
 
 //! @}
 
+/**
+ * \defgroup gfx_wtk_dialogue_box Dialogue box widget
+ *
+ * Dialogue box widget provides storage structs for dialogue
+ * captions and command data.
+ *
+ * @{
+ */
 struct wtk_dialogue_box;
+
+/**
+ * \brief Dialogue box command event handler callback
+ *
+ * The basic frame command event handler callback is used to handle
+ * command events from widgets inside the basic frame. Command events
+ * are typically queued when the user has given some input to a widget.
+ * Examples are pushing a button widget or checking a check box widget.
+ *
+ * \param dialogue_box Pointer to the dialogue box which contains the widget that
+ *                     generated the event.
+ * \param command_data The command data that was set for the specific widget.
+ *                     This is typically an ID for the widget or a pointer to
+ *                     data needed by the widget. This is widget-specific.
+ * \return             True if the basic frame and it's children should be
+ *                     destroyed, false otherwise.
+ */
 
 typedef bool(*wtk_dialogue_box_command_handler_t) (
 		struct wtk_dialogue_box *dialogue_box, win_command_t command_data);
 
+/**
+ * \brief Basic frame draw event handler callback
+ *
+ * The basic frame draw event handler callback can be used to draw simple
+ * graphical display elements without the need for implementing a custom
+ * widget.
+ *
+ * \param win  Pointer to the window of the dialogue box widget to be drawn.
+ * \param clip Region of the dialogue box to be drawn in global display
+ *             coordinates.
+ */
 
 typedef void(*wtk_dialogue_box_draw_handler_t) (
 		struct win_window *win, struct win_clip_region const *clip);
@@ -373,5 +409,6 @@ struct win_window *wtk_dialogue_box_as_child(
 void *wtk_dialogue_box_get_custom_data(
 		const struct wtk_dialogue_box *dialogue_box);
 
+//! @}
 
 #endif /* WTK_H_INCLUDED */

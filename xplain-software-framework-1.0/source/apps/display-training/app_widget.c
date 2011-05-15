@@ -197,7 +197,12 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 
 		}
 		
-		// Create the dialogue_box with its custom captions
+		/** 
+		 * Create the dialogue_box with its custom captions
+		 *
+		 * \warning Ghost pointer warning from (win_command_t)DIALOGUE_ID
+		 */
+		
 		dialogue_box = wtk_dialogue_box_create(parent, caption, second_caption,
 				(win_command_t)DIALOGUE_ID);
 		break;
