@@ -112,6 +112,7 @@ enum app_widget_ids {
  *
  * \param caption stores top string in dialogue box frame
  * \param second_caption stores bottom string in dialogue box frame
+ * \param command_data
  */
 struct wtk_dialogue_box {
 	//! Copy of top caption string.
@@ -119,8 +120,8 @@ struct wtk_dialogue_box {
 	//! Copy of bottom caption string.
 	char                    *second_caption;
 	
-	//! Custom command data, used when "clicked".
-	win_command_t           command_data;
+	//! Stores custom command data, used when "OK" is clicked.
+	win_command_t           *command_data;
 };
 
 
@@ -190,7 +191,7 @@ static bool dialogue_box_command_handler(struct wtk_basic_frame *frame,
  *
  * This function will draw the frame and background of the dialogue box.
  *
- * \sa wtk_basic_frame_draw_handler_t							//DOXYGEN! 
+ * \sa wtk_basic_frame_draw_handler_t
  */
 static void dialogue_box_draw_handler(struct win_window *win,
 		struct win_clip_region const *clip)
@@ -285,7 +286,7 @@ static bool wtk_dialogue_box_event_handler(struct win_window *win,
  * \return Pointer to basic frame, or NULL if failed.
  */
 struct win_window *wtk_dialogue_box_create(struct win_window *parent,
-		char *caption, char *second_caption, win_command_t command_data)
+		char *caption, char *second_caption, win_command_t *command_data)
 {
 	struct win_attributes       attr;
 	struct gfx_bitmap           dialogue_background;
@@ -293,7 +294,7 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 	struct wtk_basic_frame      *dialogue_frame;
 	struct wtk_dialogue_box     *dialogue_struct;
 	struct wtk_button           *button_ok, *button_cancel;
-	struct wtk_label        	*label;
+	struct wtk_label            *label;
 	struct wtk_label            *second_label;
 	struct win_area             area;
 
@@ -349,9 +350,10 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 
 	
 	
-	// Find an optimal size for the widget.
+	// Find an optimal size for the widget from caption string size.
 	wtk_label_size_hint(&area.size, caption);
 	
+	// 
 	area.pos.x = CAPTION_POS_X - area.size.x / 2;
 	area.pos.y = CAPTION_POS_Y;
 	
@@ -368,7 +370,7 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 	
 	
 	
-	// Find an optimal size for the widget.
+	//! Find an optimal size for the widget from second caption string size.
 	wtk_label_size_hint(&area.size, second_caption);
 	
 	area.pos.x = SECOND_CAPTION_POS_X - area.size.x / 2;

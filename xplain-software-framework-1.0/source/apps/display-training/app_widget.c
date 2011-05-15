@@ -155,6 +155,10 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 {
 	char command = (char)(uintptr_t)command_data;
 
+	char *caption = "Dialogue box demo:";
+
+	char *second_caption = "Click 'OK' to increase counter";
+
 	struct win_window       *parent;
 
 	parent = wtk_basic_frame_as_child(frame);
@@ -163,12 +167,31 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 
 	case BUTTON_ID:
 		
-		// Create the dialogue_box with its custom caption
-		dialogue_box = wtk_dialogue_box_create(parent, "Dialogue box demo:", "Click 'OK' to increase counter",
-				(win_command_t)DIALOGUE_ID);
-		if (!dialogue_box) {
-		//	goto error_widget;
+		// Create the dialogue_box with its custom captions
+		switch (counter) {
+			case 1:
+				second_caption = "Click 'OK' once more"; break;
+			case 2:
+				second_caption = "Click 'OK' once again"; break;
+			case 3:
+				second_caption = "Click 'OK' one more time"; break;
+			case 4:
+				second_caption = "Click 'OK' once upon a time"; break;
+			case 5:
+				second_caption = "Click 'OK' at once"; break;
+			case 6:
+				second_caption = "Click 'OK' until you cant stop"; break;
+			case 7:
+				second_caption = "Click 'OK' if you need help"; break;
+			case 8:
+				second_caption = "Click 'OK' for more information"; break;
+			default:
+				second_caption = "Click 'OK' to increase counter"; break;
+
 		}
+
+		dialogue_box = wtk_dialogue_box_create(parent, caption, second_caption,
+				(win_command_t)DIALOGUE_ID);
 		break;
 
 	case DIALOGUE_ID:
