@@ -189,7 +189,7 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 	case BUTTON_ID:
 		
 		// Create the dialogue_box with its custom caption
-		dialogue_box = wtk_dialogue_box_create(parent, "Dialogue box demo:", "Click 'OK'",
+		dialogue_box = wtk_dialogue_box_create(parent, "Dialogue box demo:", "Click 'OK' to increase counter",
 				(win_command_t)DIALOGUE_ID);
 		if (!dialogue_box) {
 		//	goto error_widget;
@@ -343,12 +343,12 @@ void app_widget_launch(struct workqueue_task *task) {
 	win_show(wtk_progress_bar_as_child(progress_bar));
 
 
-	area.pos.x = 10;
-	area.pos.y = 150;
+	area.pos.x =  50;
+	area.pos.y = 190;
 	area.size.x = 90;
 	area.size.y = 40;
 
-	btn = wtk_button_create(parent, &area, "Click",
+	btn = wtk_button_create(parent, &area, "Open dialogue",
 			(win_command_t)BUTTON_ID);
 	if (!btn) {
 		goto error_widget;
@@ -356,7 +356,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	win_show(wtk_button_as_child(btn));
 
 
-	area.pos.x += area.size.x + 40;
+	area.pos.x += area.size.x + 20;
 
 	sub_frame_background.type = BITMAP_SOLID;
 	sub_frame_background.data.color = GFX_COLOR(127, 0, 0);
