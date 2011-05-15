@@ -70,6 +70,7 @@ enum app_widget_ids {
 	SLIDER_ID = 1,
 	//! Event command ID for the button.
 	BUTTON_ID,
+
 	DIALOGUE_ID,
 };
 
@@ -144,7 +145,6 @@ const static char                   *demo_string = "Demonstrating widgets";
 //! Pointer to frame for dialogue_box
 static struct wtk_dialogue_box      *dialogue_box;
 
-static struct wtk_frame             *frametest;
 
 //! Pointer to frame for application
 static struct wtk_basic_frame       *frame;
@@ -187,17 +187,15 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 		break;
 
 	case BUTTON_ID:
-		// counter++;
 		
-		// Create the dialogue_box
-		dialogue_box = wtk_dialogue_box_create(parent, "whop",
+		// Create the dialogue_box with its custom caption
+		dialogue_box = wtk_dialogue_box_create(parent, "Click 'OK'",
 				(win_command_t)DIALOGUE_ID);
 		if (!dialogue_box) {
 		//	goto error_widget;
 		}
-
-		//win_redraw(wtk_basic_frame_as_child(sub_frame));
 		break;
+
 	case DIALOGUE_ID:
 		counter++;
 		win_redraw(wtk_basic_frame_as_child(sub_frame));
@@ -250,7 +248,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	// Get pointer to root window
 	win_root = win_get_root();
 
-	// Application frame
+
 
 	// Create a background bitmap using a solid color.
 	frame_background.type = BITMAP_SOLID;
@@ -284,18 +282,6 @@ void app_widget_launch(struct workqueue_task *task) {
 	 */
 	win_show(parent);
 	
-	area.pos.x = gfx_get_width() / 2;
-	area.pos.y = gfx_get_height() / 2;
-	area.size.x = gfx_get_width() / 4;
-	area.size.y = gfx_get_height() / 4;
-	
-	frametest = wtk_frame_create(parent, &area, demo_string, false, NULL, NULL);
-	if (!frametest) {
-		goto error_frame;
-	}
-	
-	win_show(wtk_frame_as_child(frametest));
-
 
 	
 

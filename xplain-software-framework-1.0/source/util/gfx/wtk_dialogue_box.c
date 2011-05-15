@@ -43,6 +43,35 @@
 #include <gfx/wtk.h>
 #include <mainloop.h>
 
+
+//! Label position on top of display
+#define LABEL_POS_X                 10
+//! Label position on top of display
+#define LABEL_POS_Y                 10
+
+//! Drawn dialogue box positions and size
+
+#define DIALOGUE_FRAME_POS_X        40
+
+#define DIALOGUE_FRAME_POS_Y        50
+
+#define DIALOGUE_FRAME_SIZE_X      240
+
+#define DIALOGUE_FRAME_SIZE_Y      130
+
+#define BUTTON_SIZE_X               90
+
+#define BUTTON_SIZE_Y               40
+
+#define BUTTON_POS_Y                60
+
+#define BUTTON_SPACING              20
+
+#define DIALOGUE_BOX_BACKGROUND     GFX_COLOR(100, 100, 100)
+
+
+
+
 /**
  * \brief Event command ID for the component widgets.
  *
@@ -52,6 +81,8 @@
 enum app_widget_ids {
 	//! Event command ID for the OK button.
 	BUTTON_OK_ID = 1,
+	
+	BUTTON_CANCEL_ID = 2,
 };
 
 
@@ -85,11 +116,6 @@ static bool dialogue_box_command_handler(struct wtk_basic_frame *frame,
 {
 	char command = (char)(uintptr_t)command_data;
 
-		switch (command) {
-	case BUTTON_OK_ID:
-
-		win_grab_pointer(NULL);
-
 		struct wtk_dialogue_box *dialogue_box;
 		dialogue_box = (struct wtk_dialogue_box*)
 				wtk_basic_frame_get_custom_data(frame);
@@ -100,7 +126,14 @@ static bool dialogue_box_command_handler(struct wtk_basic_frame *frame,
 
 		struct win_window *dialogue_parent = 
 				win_get_parent(dialogue_win);
+	
+		switch (command) {
+	
 
+	
+	case BUTTON_OK_ID:
+
+		win_grab_pointer(NULL);
 
 		struct win_command_event send_command;
 
@@ -113,6 +146,15 @@ static bool dialogue_box_command_handler(struct wtk_basic_frame *frame,
 		send_command.data = dialogue_box->command_data;
 
 		win_queue_command_event(&send_command);
+
+		//free memory of button, frame, and box.
+		win_destroy(dialogue_win);
+
+		break;
+		
+	case BUTTON_CANCEL_ID:
+
+		win_grab_pointer(NULL);
 
 		//free memory of button, frame, and box.
 		win_destroy(dialogue_win);
@@ -135,10 +177,11 @@ static void dialogue_box_draw_handler(struct win_window *win,
 {							//TODO: make it pretty! (kanter? ettellerannetiaffal)
 
 	//TODO: FIKS DISSE!					NEIN!					UFFOGHUFF
-	gfx_draw_filled_rect(gfx_get_width()/5,
+	/*gfx_draw_filled_rect(gfx_get_width()/5,
 		gfx_get_height()/6,
 		gfx_get_width()/2,
 		gfx_get_height()/2, GFX_COLOR(200, 200, 200));
+	*/
 }
 
 
@@ -159,8 +202,8 @@ static bool wtk_dialogue_box_event_handler(struct win_window *win,
 {
 	// Custom data for windows of a widget points back to the widget itself.
 	struct wtk_dialogue_box *dialogue_box;
-	bool should_destroy;							//hvis denne ikke trengs, slett!
-	struct win_clip_region const *clip;					//hvis denne ikke trengs, slett!
+	//bool should_destroy;							//hvis denne ikke trengs, slett!
+	//struct win_clip_region const *clip;					//hvis denne ikke trengs, slett!
 
 	dialogue_box = win_get_custom_data(win);
 
@@ -240,10 +283,12 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 		char *caption, win_command_t command_data)
 {
 	struct win_attributes       attr;
+	struct gfx_bitmap           dialogue_background;
 	struct win_window           *dialogue_window;
 	struct wtk_basic_frame      *dialogue_frame;
 	struct wtk_dialogue_box     *dialogue_struct;
-	struct wtk_button           *button_ok;
+	struct wtk_button           *button_ok, *button_cancel;
+	struct wtk_label        	*label;
 	struct win_area             area;
 
 	assert(area);
@@ -280,23 +325,45 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 	dialogue_struct->command_data = command_data;
 	dialogue_struct->caption = caption;
 
-	area.pos.x = 0;
-	area.pos.y = 0;
-	area.size.x = gfx_get_width();
-	area.size.y = gfx_get_height();
+	area.pos.x = DIALOGUE_FRAME_POS_X;
+	area.pos.y = DIALOGUE_FRAME_POS_Y;
+	area.size.x = DIALOGUE_FRAME_SIZE_X;
+	area.size.y = DIALOGUE_FRAME_SIZE_Y;
 
+	dialogue_background.type = BITMAP_SOLID;
+	dialogue_background.data.color = DIALOGUE_BOX_BACKGROUND;
+	
 	dialogue_frame = wtk_basic_frame_create(dialogue_window, &area,
-			NULL,dialogue_box_draw_handler,
+			&dialogue_background,dialogue_box_draw_handler,
 			dialogue_box_command_handler, dialogue_struct);
 	if (!dialogue_frame) {
 		goto error_widget;
 	}
 
-	//TODO: FIKS DISSE!					NEIN!				UFFOGHUFF
-	area.pos.x = gfx_get_width()/3;
-	area.pos.y = gfx_get_height()/3;
-	area.size.x = gfx_get_width()/4;
-	area.size.y = gfx_get_height()/5;
+	
+
+	area.pos.x = LABEL_POS_X;
+	area.pos.y = LABEL_POS_Y;
+	
+	// Find an optimal size for the widget.
+	wtk_label_size_hint(&area.size, caption);
+
+	/*
+	 * Create the label and check the return value if an error occured
+	 * while creating the label.
+	 */
+	label = wtk_label_create(wtk_basic_frame_as_child(dialogue_frame), &area, dialogue_struct->caption, false);
+	if (!label) {
+		goto error_widget;
+	}
+
+
+	
+	// Ok button position and size
+	area.pos.x = DIALOGUE_FRAME_SIZE_X / 2 - BUTTON_SIZE_X - BUTTON_SPACING / 2;
+	area.pos.y = BUTTON_POS_Y;
+	area.size.x = BUTTON_SIZE_X;
+	area.size.y = BUTTON_SIZE_Y;
 
 	button_ok = wtk_button_create(wtk_basic_frame_as_child(dialogue_frame), 
 			&area, "OK", (win_command_t)BUTTON_OK_ID);
@@ -304,11 +371,24 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 		goto error_widget;
 	}
 
+	// Cancel button position and size
+	area.pos.x = DIALOGUE_FRAME_SIZE_X / 2 + BUTTON_SPACING / 2;
+	area.pos.y = BUTTON_POS_Y;
+	
+	button_cancel = wtk_button_create(wtk_basic_frame_as_child(dialogue_frame), 
+			&area, "Cancel", (win_command_t)BUTTON_CANCEL_ID);
+	if (!button_ok) {
+		goto error_widget;
+	}
+
+
 	win_show(wtk_basic_frame_as_child(dialogue_frame)); 
 
-
+	// Draw the label by showing the label widget's window.
+	win_show(wtk_label_as_child(label));
 	
 	win_show(wtk_button_as_child(button_ok));
+	win_show(wtk_button_as_child(button_cancel));
 	win_show(dialogue_window);
 
 	return dialogue_window;
