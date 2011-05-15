@@ -127,8 +127,6 @@ const static char                   *demo_string = "Dialogue box widget demomons
 
 //! Pointer to frame for dialogue_box
 static struct wtk_dialogue_box      *dialogue_box;
-
-
 //! Pointer to frame for application
 static struct wtk_basic_frame       *frame;
 //! Frame background bitmap
@@ -165,9 +163,10 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 	
 	switch (command) {
 
+	// 
 	case BUTTON_ID:
 		
-		// Create the dialogue_box with its custom captions
+		// Changes the caption if counter is changed
 		switch (counter) {
 			case 1:
 				second_caption = "Click 'OK' once more"; break;
@@ -185,11 +184,20 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 				second_caption = "Click 'OK' if you need help"; break;
 			case 8:
 				second_caption = "Click 'OK' for more information"; break;
+			case 9:
+				second_caption = "Click 'OK' twice"; break;
+			case 20:
+				second_caption = "Giving up?"; break;
+			case 50:
+				second_caption = "Please stop clicking!"; break;
+			case 51:
+				second_caption = "Your causing wear on the screen!"; break;
 			default:
 				second_caption = "Click 'OK' to increase counter"; break;
 
 		}
-
+		
+		// Create the dialogue_box with its custom captions
 		dialogue_box = wtk_dialogue_box_create(parent, caption, second_caption,
 				(win_command_t)DIALOGUE_ID);
 		break;
@@ -236,9 +244,9 @@ void app_widget_launch(struct workqueue_task *task) {
 
 	struct win_window       *win_root;
 	struct win_window       *parent;
-	struct win_area         area;
 	struct wtk_label        *lbl;
 	struct wtk_button       *btn;
+	struct win_area         area;
 
 	// Use regular sysfont for this app
 	sysfont.scale = 1;

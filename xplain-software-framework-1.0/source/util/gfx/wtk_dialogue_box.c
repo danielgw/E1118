@@ -272,16 +272,26 @@ static bool wtk_dialogue_box_event_handler(struct win_window *win,
  * wtk_basic_frame_as_child(), like this:
  * "win_destroy(wtk_basic_frame_as_child(my_frame_ptr));".
  *
- * \param parent         Parent window.
- * \param area           Area of the internal contents.
- * \param background     Pointer to background bitmap for frame. NULL for
- *                       transparent background. When background is transparent
- *                       the parent window will automatically be redrawn
- *                       when the basic frame is drawn.
- * \param draw_handler   Draw event handler. NULL for no handler.
- * \param frame_handler  Command event handler. NULL for no handler.
- * \param custom_data    Optional custom data link for application's command
- *                       events.
+ * \param *parent             Parent window.
+ * \param *caption            Text for upper label.
+ * \param *second_caption     Text for below label.
+ * \param *command_data       Pointer to command aquired from create dialogue function
+ *                            External command is executed when "OK" button is clicked.
+ * \param attr                Aquires and contains all variables for managing the window.
+ * \param dialogue_background Pointer to background bitmap for frame. NULL for
+ *                            transparent background. When background is transparent
+ *                            the parent window will automatically be redrawn
+ *                            when the basic frame is drawn.
+ *
+ * \param *dialogue_window    Is the window for the dialogue box.
+ * \param *dialogue_frame     Basic frame container for dialogue box inside dialogue_window
+ * \param *dialogue_struct    Stores the unique captions and command data
+ * \param *button_ok          Pointer to button widget for the "OK" button.
+ * \param *button_cancel      Pointer to button widget for the "Cancel" button.
+ * \param area                Holds variables used in sizeing the widgets.
+ *
+ * \param dialogue_box_draw_handler      Handler for drawing part of the dialogue box
+ * \param dialogue_box_command_handler   Handler for commands used by the dialogue box.
  *
  * \return Pointer to basic frame, or NULL if failed.
  */
@@ -301,10 +311,6 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 	assert(area);
 	assert(parent);
 
-	/** set up the container window, making it as large as the screen to 
-	 * absorb pointer events.
-	 */
-
 
 	// Allocate memory for dialogue box data.
 	dialogue_struct = membag_alloc(sizeof(struct wtk_dialogue_box));
@@ -312,6 +318,10 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 		goto outofmem_dialogue_struct;
 	}
 
+	/** 
+	 * sets up the container window, making it as large as the screen to 
+	 * absorb pointer events.
+	 */
 	area.pos.x = 0;
 	area.pos.y = 0;
 	area.size.x = gfx_get_width();
@@ -323,12 +333,13 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 	attr.background = NULL;
 	attr.behavior = 0;
 
+	// Creates the dialogue box window
 	dialogue_window = win_create(parent, &attr);
 	if (!dialogue_window) {
 		goto outofmem_win;
 	}
 
-
+	// Stores the custom captions and command data to the dialogue struct
 	dialogue_struct->command_data = command_data;
 	dialogue_struct->caption = caption;
 	dialogue_struct->second_caption = second_caption;
@@ -338,11 +349,14 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 	area.size.x = DIALOGUE_FRAME_SIZE_X;
 	area.size.y = DIALOGUE_FRAME_SIZE_Y;
 
+	// Gives the frame background its background color.
 	dialogue_background.type = BITMAP_SOLID;
 	dialogue_background.data.color = DIALOGUE_BOX_BACKGROUND;
 	
+	
+	// Creates the basic frame that forms the dialogue box frontend.
 	dialogue_frame = wtk_basic_frame_create(dialogue_window, &area,
-			&dialogue_background,dialogue_box_draw_handler,
+			&dialogue_background, dialogue_box_draw_handler,
 			dialogue_box_command_handler, dialogue_struct);
 	if (!dialogue_frame) {
 		goto error_widget;
@@ -387,12 +401,13 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 	}
 
 	
-	// Ok button position and size
+	// OK button position and size
 	area.pos.x = DIALOGUE_FRAME_SIZE_X / 2 - BUTTON_SIZE_X - BUTTON_SPACING / 2;
 	area.pos.y = BUTTON_POS_Y;
 	area.size.x = BUTTON_SIZE_X;
 	area.size.y = BUTTON_SIZE_Y;
 
+	// Creates the OK button
 	button_ok = wtk_button_create(wtk_basic_frame_as_child(dialogue_frame), 
 			&area, "OK", (win_command_t)BUTTON_OK_ID);
 	if (!button_ok) {
