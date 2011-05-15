@@ -45,9 +45,9 @@
 
 
 //! Label position on top of display
-#define LABEL_POS_X                 10
+#define CAPTION_POS_X                 10
 //! Label position on top of display
-#define LABEL_POS_Y                 10
+#define CAPTION_POS_Y                 10
 
 //! Drawn dialogue box positions and size
 
@@ -137,8 +137,8 @@ static bool dialogue_box_command_handler(struct wtk_basic_frame *frame,
 
 		struct win_command_event send_command;
 
-		/*Send the supplied command event to the frame from which the 
-		 *dialogue box originated
+		/* Send the supplied command event to the frame from which the 
+		 * dialogue box originated
 		 */
 
 		send_command.sender = dialogue_parent;
@@ -177,11 +177,10 @@ static void dialogue_box_draw_handler(struct win_window *win,
 {							//TODO: make it pretty! (kanter? ettellerannetiaffal)
 
 	//TODO: FIKS DISSE!					NEIN!					UFFOGHUFF
-	/*gfx_draw_filled_rect(gfx_get_width()/5,
-		gfx_get_height()/6,
+	gfx_draw_rect(0, 0,
 		gfx_get_width()/2,
 		gfx_get_height()/2, GFX_COLOR(200, 200, 200));
-	*/
+	
 }
 
 
@@ -202,8 +201,6 @@ static bool wtk_dialogue_box_event_handler(struct win_window *win,
 {
 	// Custom data for windows of a widget points back to the widget itself.
 	struct wtk_dialogue_box *dialogue_box;
-	//bool should_destroy;							//hvis denne ikke trengs, slett!
-	//struct win_clip_region const *clip;					//hvis denne ikke trengs, slett!
 
 	dialogue_box = win_get_custom_data(win);
 
@@ -212,7 +209,6 @@ static bool wtk_dialogue_box_event_handler(struct win_window *win,
 		/* For DRAW events, the data parameter points to the
 		 * clipping region.
 		 */
-//		clip = (struct win_clip_region const *)data;		//TODO:trengs det noe her? hvis ikke, RYDD!
 
 		/* Always accept DRAW events, as the return value is
 		 * ignored anyway for that event type.
@@ -237,13 +233,6 @@ static bool wtk_dialogue_box_event_handler(struct win_window *win,
 		 * ignored anyway for that event type.
 		 */
 		return true;
-
-	case WIN_EVENT_COMMAND:
-									//TODO: skal denne være tom? i så fall, kan
-		/* Reject the event if there was no handler, or this    // den fjernes? (default burde fange opp)
-		 * was not the container window at all.
-		 */
-		return false;
 
 	default:
 		// Reject unknown event types.
@@ -341,9 +330,9 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 	}
 
 	
-
-	area.pos.x = LABEL_POS_X;
-	area.pos.y = LABEL_POS_Y;
+	
+	area.pos.x = CAPTION_POS_X;
+	area.pos.y = CAPTION_POS_Y;
 	
 	// Find an optimal size for the widget.
 	wtk_label_size_hint(&area.size, caption);
