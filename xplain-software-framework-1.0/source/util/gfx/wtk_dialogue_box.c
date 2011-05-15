@@ -340,11 +340,13 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 
 	
 	
-	area.pos.x = CAPTION_POS_X;
-	area.pos.y = CAPTION_POS_Y;
-	
 	// Find an optimal size for the widget.
 	wtk_label_size_hint(&area.size, caption);
+	
+	area.pos.x = CAPTION_POS_X - area.size.x / 2;
+	area.pos.y = CAPTION_POS_Y;
+	
+	
 
 	/*
 	 * Create the label and check the return value if an error occured
@@ -356,12 +358,14 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 	}
 	
 	
-	area.pos.x = SECOND_CAPTION_POS_X;
-	area.pos.y = SECOND_CAPTION_POS_Y;
 	
 	// Find an optimal size for the widget.
 	wtk_label_size_hint(&area.size, second_caption);
-
+	
+	area.pos.x = SECOND_CAPTION_POS_X - area.size.x / 2;
+	area.pos.y = SECOND_CAPTION_POS_Y;
+	
+	
 	/*
 	 * Create the label and check the return value if an error occured
 	 * while creating the label.
