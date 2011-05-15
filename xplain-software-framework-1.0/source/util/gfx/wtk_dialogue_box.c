@@ -44,10 +44,7 @@
 #include <mainloop.h>
 
 
-//! Label position on top of display
-#define CAPTION_POS_X                 10
-//! Label position on top of display
-#define CAPTION_POS_Y                 10
+
 
 //! Drawn dialogue box positions and size
 
@@ -69,7 +66,14 @@
 
 #define DIALOGUE_BOX_BACKGROUND     GFX_COLOR(100, 100, 100)
 
+//! Label position on top of display
+#define CAPTION_POS_X               DIALOGUE_FRAME_SIZE_X / 2
+//! Label position on top of display
+#define CAPTION_POS_Y               10
 
+#define SECOND_CAPTION_POS_X           CAPTION_POS_X
+
+#define SECOND_CAPTION_POS_Y           40
 
 
 /**
@@ -99,6 +103,9 @@ enum app_widget_ids {
 struct wtk_dialogue_box {
 	//! Copy of caption string.
 	char                    *caption;
+	
+	char                    *second_caption;
+	
 	//! Custom command data, used when "clicked".
 	win_command_t           command_data;
 };
@@ -269,7 +276,7 @@ static bool wtk_dialogue_box_event_handler(struct win_window *win,
  * \return Pointer to basic frame, or NULL if failed.
  */
 struct win_window *wtk_dialogue_box_create(struct win_window *parent,
-		char *caption, win_command_t command_data)
+		char *caption, char *second_caption, win_command_t command_data)
 {
 	struct win_attributes       attr;
 	struct gfx_bitmap           dialogue_background;
@@ -278,6 +285,7 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 	struct wtk_dialogue_box     *dialogue_struct;
 	struct wtk_button           *button_ok, *button_cancel;
 	struct wtk_label        	*label;
+	struct wtk_label            *second_label;
 	struct win_area             area;
 
 	assert(area);
@@ -313,6 +321,7 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 
 	dialogue_struct->command_data = command_data;
 	dialogue_struct->caption = caption;
+	dialogue_struct->second_caption = second_caption;
 
 	area.pos.x = DIALOGUE_FRAME_POS_X;
 	area.pos.y = DIALOGUE_FRAME_POS_Y;
@@ -345,7 +354,22 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 	if (!label) {
 		goto error_widget;
 	}
+	
+	
+	area.pos.x = SECOND_CAPTION_POS_X;
+	area.pos.y = SECOND_CAPTION_POS_Y;
+	
+	// Find an optimal size for the widget.
+	wtk_label_size_hint(&area.size, second_caption);
 
+	/*
+	 * Create the label and check the return value if an error occured
+	 * while creating the label.
+	 */
+	second_label = wtk_label_create(wtk_basic_frame_as_child(dialogue_frame), &area, dialogue_struct->second_caption, false);
+	if (!label) {
+		goto error_widget;
+	}
 
 	
 	// Ok button position and size
@@ -375,6 +399,7 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 
 	// Draw the label by showing the label widget's window.
 	win_show(wtk_label_as_child(label));
+	win_show(wtk_label_as_child(second_label));
 	
 	win_show(wtk_button_as_child(button_ok));
 	win_show(wtk_button_as_child(button_cancel));

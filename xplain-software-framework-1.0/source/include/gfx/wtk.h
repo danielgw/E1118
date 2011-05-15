@@ -366,7 +366,7 @@ typedef void(*wtk_dialogue_box_draw_handler_t) (
 
 
 struct win_window *wtk_dialogue_box_create(struct win_window *parent,
-		char *caption, win_command_t command_data);
+		char *caption, char *second_caption, win_command_t command_data);
 		
 struct win_window *wtk_dialogue_box_as_child(
 		struct wtk_dialogue_box *dialogue_box);

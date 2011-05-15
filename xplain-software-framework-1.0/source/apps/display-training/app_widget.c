@@ -132,7 +132,7 @@ enum app_widget_ids {
  */
 
 //! Description for label
-const static char                   *demo_string = "Demonstrating widgets";
+const static char                   *demo_string = "Dialogue box widget demo";
 
 //! @}
 
@@ -189,7 +189,7 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 	case BUTTON_ID:
 		
 		// Create the dialogue_box with its custom caption
-		dialogue_box = wtk_dialogue_box_create(parent, "Click 'OK'",
+		dialogue_box = wtk_dialogue_box_create(parent, "Dialogue box demo:", "Click 'OK'",
 				(win_command_t)DIALOGUE_ID);
 		if (!dialogue_box) {
 		//	goto error_widget;
