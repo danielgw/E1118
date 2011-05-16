@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * \brief Display demo widget application
+ * \brief Dialogue box widget application
  *
  * Copyright (C) 2009 Atmel Corporation. All rights reserved.
  *
@@ -65,12 +65,10 @@
  * command event callback for certain widgets.
  */
 enum app_widget_ids {
-	
-	//! Event command ID for the slider.
-	SLIDER_ID = 1,
-	//! Event command ID for the button.
-	BUTTON_ID,
 
+	//! Event command ID for the button.
+	BUTTON_ID = 1,
+	//! Event command ID for the dialogue box.
 	DIALOGUE_ID,
 };
 
@@ -160,12 +158,11 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 	struct win_window       *parent;
 
 	parent = wtk_basic_frame_as_child(frame);
-	
+
 	switch (command) {
 
-	// 
 	case BUTTON_ID:
-		
+
 		// Changes the caption if counter is changed
 		switch (counter) {
 			case 1:
@@ -196,8 +193,8 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 				second_caption = "Click 'OK' to increase counter"; break;
 
 		}
-		
-		/** 
+
+		/**
 		 * Create the dialogue_box with its custom captions
 		 *
 		 * \warning Ghost pointer warning from (win_command_t)DIALOGUE_ID
@@ -260,7 +257,6 @@ void app_widget_launch(struct workqueue_task *task) {
 	win_root = win_get_root();
 
 
-
 	// Create a background bitmap using a solid color.
 	frame_background.type = BITMAP_SOLID;
 	frame_background.data.color = APP_BACKGROUND_COLOR;
@@ -282,8 +278,8 @@ void app_widget_launch(struct workqueue_task *task) {
 	if (!frame) {
 		goto error_frame;
 	}
-	
-	
+
+
 	// Get a pointer to the widget's window for adding sub-widgets.
 	parent = wtk_basic_frame_as_child(frame);
 	/*
@@ -292,9 +288,7 @@ void app_widget_launch(struct workqueue_task *task) {
 	 * widget/window is shown.
 	 */
 	win_show(parent);
-	
 
-	
 
 	// Application label
 	area.pos.x = LABEL_POS_X;
@@ -341,10 +335,6 @@ void app_widget_launch(struct workqueue_task *task) {
 	}
 	win_show(wtk_basic_frame_as_child(sub_frame));
 
-
-
-	
-	
 
 	return;
 

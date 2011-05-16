@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * \brief Display training application.
+ * \brief Dialogue box widget application.
  *
  * Copyright (C) 2009 Atmel Corporation. All rights reserved.
  *
@@ -37,24 +37,23 @@
  */
 
 /**
- * \mainpage Display training
- * \section display_training_intro Introduction
+ * \mainpage Dialogue box demo
+ * \section dialogue_box_intro Introduction
  *
- * The Display training application is an application that introduces users to
- * the graphical system. The application will show how different modules are
- * working together:
+ * This application will introduce users to the dialogue box widget.
+ * The application will let the user open and close a dialogue box, and let it 
+ * increment a counter.
  *
  * - \ref gfx "Graphics display system"
  * - \ref gfx_gfx "Graphics drivers"
  * - \ref gfx_win "Window system"
  * - \ref gfx_wtk "Widget toolkit"
  * - \ref touch_driver_group "Touch drivers"
- *
- * For the training applications available see \ref apps_training_group.
+ * - \ref apps_group
  */
 
 /**
- * \defgroup apps_training_group Training Applications
+ * \defgroup apps_group Applications
  */
 #include <dma.h>
 #include <led.h>
