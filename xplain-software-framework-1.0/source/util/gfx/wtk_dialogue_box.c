@@ -263,7 +263,7 @@ static bool wtk_dialogue_box_event_handler(struct win_window *win,
  * \return Pointer to dialogue box frame, or NULL if it failed.
  */
 struct win_window *wtk_dialogue_box_create(struct win_window *parent,
-		char *caption, char *second_caption, win_command_t *command_data)
+		char *caption, char *second_caption, win_command_t command_data)
 {
 	struct win_attributes       attr;
 	struct gfx_bitmap           dialogue_background;

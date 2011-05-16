@@ -400,17 +400,8 @@ void wtk_gauge_set_colors(struct wtk_gauge *gauge,
 */
 struct wtk_dialogue_box;
 
-
-typedef bool(*wtk_dialogue_box_command_handler_t) (
-struct wtk_dialogue_box *dialogue_box, win_command_t command_data);
-
-
-typedef void(*wtk_dialogue_box_draw_handler_t) (
-struct win_window *win, struct win_clip_region const *clip);
-
-
 struct win_window *wtk_dialogue_box_create(struct win_window *parent,
-char *caption, char *second_caption, win_command_t *command_data);
+char *caption, char *second_caption, win_command_t command_data);
 
 struct win_window *wtk_dialogue_box_as_child(
 	struct wtk_dialogue_box *dialogue_box);
