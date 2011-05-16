@@ -393,6 +393,8 @@ typedef uint8_t wtk_radio_group_size_t;
 
 //! Background color of dialogue box frame.
 #define DIALOGUE_BOX_BACKGROUND     GFX_COLOR(100, 100, 100)
+//! Frame line color of dialogue box frame.
+#define DIALOGUE_FRAME_LINE_COLOR   GFX_COLOR(0, 0, 0)
 
 //! Caption position centered on top of dialogue box by dividing size in half.
 #define CAPTION_POS_X               DIALOGUE_FRAME_SIZE_X / 2
