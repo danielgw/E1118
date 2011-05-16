@@ -124,7 +124,7 @@ const static char                   *demo_string = "Dialogue box widget demomons
  */
 
 //! Pointer to frame for dialogue_box
-static struct wtk_dialogue_box      *dialogue_box;
+static struct win_window            *dialogue_box;
 //! Pointer to frame for application
 static struct wtk_basic_frame       *frame;
 //! Frame background bitmap
@@ -197,7 +197,7 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 		/**
 		 * Create the dialogue_box with its custom captions
 		 *
-		 * \warning Ghost pointer warning from (win_command_t)DIALOGUE_ID
+		 *
 		 */
 		
 		dialogue_box = wtk_dialogue_box_create(parent, caption, second_caption,
