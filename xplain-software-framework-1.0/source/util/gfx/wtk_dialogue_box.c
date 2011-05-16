@@ -56,7 +56,7 @@
  * \param BUTTON_OK_ID defines command ID for events regarding accepting dialogue
  * \param BUTTON_CANCEL_ID defines command ID for events regarding aborting dialogue
  */
-enum app_widget_ids {
+enum dialogue_widget_ids {
 	//! Event command ID for the OK button.
 	BUTTON_OK_ID     = 1,
 	//! Event command ID for the Cancel button.

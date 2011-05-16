@@ -68,7 +68,7 @@ enum app_widget_ids {
 	//! Event command ID for the slider.
 	SLIDER_ID = 1,
 	//! Event command ID for the button.
-	BUTTON_ID,
+	BUTTON_ID ,
 
 	DIALOGUE_ID,
 };
@@ -125,7 +125,7 @@ const static char                   *demo_string = "Dialogue box widget demomons
  */
 
 //! Pointer to frame for dialogue_box
-static struct wtk_dialogue_box      *dialogue_box;
+static struct win_window            *dialogue_box;
 //! Pointer to frame for application
 static struct wtk_basic_frame       *frame;
 //! Frame background bitmap
@@ -205,6 +205,7 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 		
 		dialogue_box = wtk_dialogue_box_create(parent, caption, second_caption,
 				(win_command_t)DIALOGUE_ID);
+
 		break;
 
 	case DIALOGUE_ID:
@@ -341,10 +342,6 @@ void app_widget_launch(struct workqueue_task *task) {
 	}
 	win_show(wtk_basic_frame_as_child(sub_frame));
 
-
-
-	
-	
 
 	return;
 
