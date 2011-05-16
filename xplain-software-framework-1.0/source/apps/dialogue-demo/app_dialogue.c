@@ -65,7 +65,6 @@
  * command event callback for certain widgets.
  */
 enum app_widget_ids {
-	
 	//! Event command ID for the slider.
 	SLIDER_ID = 1,
 	//! Event command ID for the button.
@@ -138,6 +137,9 @@ static struct wtk_basic_frame       *sub_frame;
 //! Sub-frame background bitmap
 static struct gfx_bitmap            sub_frame_background;
 
+char                                *caption = "Dialogue box demo:";
+
+char                                *second_caption;
 //! @}
 
 
@@ -153,9 +155,7 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 {
 	char command = (char)(uintptr_t)command_data;
 
-	char *caption = "Dialogue box demo:";
-
-	char *second_caption = "Click 'OK' to increase counter";
+	//second_caption = "Click 'OK' to increase counter";
 
 	struct win_window       *parent;
 

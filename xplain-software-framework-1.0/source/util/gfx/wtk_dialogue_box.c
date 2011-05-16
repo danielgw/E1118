@@ -88,7 +88,7 @@ struct wtk_dialogue_box {
 	char                    *second_caption;
 	
 	//! Stores custom command data, used when "OK" is clicked.
-	win_command_t           *command_data;
+	win_command_t           command_data;
 };
 
 
