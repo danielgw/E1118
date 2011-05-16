@@ -47,41 +47,6 @@
  * @{
  */
 
-/** 
- * \note defined positions and sizes for dialogue box.
- */
-
-//! Dialogue box frame X position inside parent frame.
-#define DIALOGUE_FRAME_POS_X        40
-//! Dialogue box frame Y position inside parent frame.
-#define DIALOGUE_FRAME_POS_Y        50
-//! Dialogue box horisontal size X.
-#define DIALOGUE_FRAME_SIZE_X      240
-//! Dialogue box vertical size Y.
-#define DIALOGUE_FRAME_SIZE_Y      120
-
-//! Buttons Y position inside dialogue box frame.
-#define BUTTON_POS_Y                60
-//! Buttons horisontal size X.
-#define BUTTON_SIZE_X               90
-//! Buttons vertical size Y.
-#define BUTTON_SIZE_Y               40
-//! Horisontal spacing between buttons on X axis.
-#define BUTTON_SPACING              20
-
-//! Background color of dialogue box frame.
-#define DIALOGUE_BOX_BACKGROUND     GFX_COLOR(100, 100, 100)
-
-//! Caption position centered on top of dialogue box by dividing size in half.
-#define CAPTION_POS_X               DIALOGUE_FRAME_SIZE_X / 2
-//! Caption distance down from top of dialogue box.
-#define CAPTION_POS_Y               10
-
-//! Second caption position centered on top of dialogue box.
-#define SECOND_CAPTION_POS_X        CAPTION_POS_X
-//! Second caption distance down from top of dialogue box.
-#define SECOND_CAPTION_POS_Y        40
-
 
 /**
  * \brief Event command ID for the component widgets.
@@ -124,7 +89,7 @@ struct wtk_dialogue_box {
 	char                    *second_caption;
 	
 	//! Stores custom command data, used when "OK" is clicked.
-	win_command_t           *command_data;
+	win_command_t           command_data;
 };
 
 
@@ -298,7 +263,7 @@ static bool wtk_dialogue_box_event_handler(struct win_window *win,
  * \return Pointer to dialogue box frame, or NULL if it failed.
  */
 struct win_window *wtk_dialogue_box_create(struct win_window *parent,
-		char *caption, char *second_caption, win_command_t *command_data)
+		char *caption, char *second_caption, win_command_t command_data)
 {
 	struct win_attributes       attr;
 	struct gfx_bitmap           dialogue_background;
