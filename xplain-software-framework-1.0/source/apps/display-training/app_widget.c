@@ -65,10 +65,13 @@
  * command event callback for certain widgets.
  */
 enum app_widget_ids {
+	
 	//! Event command ID for the slider.
 	SLIDER_ID = 1,
 	//! Event command ID for the button.
 	BUTTON_ID,
+
+	DIALOGUE_ID,
 };
 
 /**
@@ -93,21 +96,6 @@ enum app_widget_ids {
 //! Label position on top of display
 #define LABEL_POS_Y                 10
 
-//! Slider position
-#define SLIDER_POS_X                10
-//! Slider position
-#define SLIDER_POS_Y                60
-//! Slider size on display
-#define SLIDER_SIZE_X               80
-//! Slider size on display
-#define SLIDER_SIZE_Y               40
-
-//! Spacing from slider to progress bar
-#define SLIDER_PB_SPACING_X         10
-//! Slider progress bar on display
-#define PB_SIZE_X                   SLIDER_SIZE_X
-//! Slider progress bar on display
-#define PB_SIZE_Y                   SLIDER_SIZE_Y
 
 //! @}
 
@@ -117,8 +105,6 @@ enum app_widget_ids {
  * @{
  */
 
-//! Max value for slider
-#define SLIDER_MAX_VALUE            100
 
 //! @}
 
@@ -129,7 +115,7 @@ enum app_widget_ids {
  */
 
 //! Description for label
-const static char                   *demo_string = "Demonstrating widgets";
+const static char                   *demo_string = "Dialogue box widget demomonstration";
 
 //! @}
 
@@ -139,12 +125,10 @@ const static char                   *demo_string = "Demonstrating widgets";
  * @{
  */
 
+//! Pointer to frame for dialogue_box
+static struct wtk_dialogue_box      *dialogue_box;
 //! Pointer to frame for application
 static struct wtk_basic_frame       *frame;
-//! Pointer to slider
-static struct wtk_slider            *slider;
-//! Pointer to progress bar
-static struct wtk_progress_bar      *progress_bar;
 //! Frame background bitmap
 static struct gfx_bitmap            frame_background;
 //! Counter for button
@@ -155,6 +139,7 @@ static struct wtk_basic_frame       *sub_frame;
 static struct gfx_bitmap            sub_frame_background;
 
 //! @}
+
 
 /**
  * \brief Frame command events handler
@@ -168,15 +153,64 @@ static bool widget_frame_command_handler(struct wtk_basic_frame *frame,
 {
 	char command = (char)(uintptr_t)command_data;
 
+	char *caption = "Dialogue box demo:";
+
+	char *second_caption = "Click 'OK' to increase counter";
+
+	struct win_window       *parent;
+
+	parent = wtk_basic_frame_as_child(frame);
+	
 	switch (command) {
-	case SLIDER_ID:
-		wtk_progress_bar_set_value(progress_bar,
-				wtk_slider_get_value(slider));
+
+	// 
+	case BUTTON_ID:
+		
+		// Changes the caption if counter is changed
+		switch (counter) {
+			case 1:
+				second_caption = "Click 'OK' once more"; break;
+			case 2:
+				second_caption = "Click 'OK' once again"; break;
+			case 3:
+				second_caption = "Click 'OK' one more time"; break;
+			case 4:
+				second_caption = "Click 'OK' once upon a time"; break;
+			case 5:
+				second_caption = "Click 'OK' at once"; break;
+			case 6:
+				second_caption = "Click 'OK' until you cant stop"; break;
+			case 7:
+				second_caption = "Click 'OK' if you need help"; break;
+			case 8:
+				second_caption = "Click 'OK' for more information"; break;
+			case 9:
+				second_caption = "Click 'OK' twice"; break;
+			case 20:
+				second_caption = "Giving up?"; break;
+			case 50:
+				second_caption = "Please stop clicking!"; break;
+			case 51:
+				second_caption = "Your causing wear on the screen!"; break;
+			default:
+				second_caption = "Click 'OK' to increase counter"; break;
+
+		}
+		
+		/** 
+		 * Create the dialogue_box with its custom captions
+		 *
+		 * \warning Ghost pointer warning from (win_command_t)DIALOGUE_ID
+		 */
+		
+		dialogue_box = wtk_dialogue_box_create(parent, caption, second_caption,
+				(win_command_t)DIALOGUE_ID);
 		break;
 
-	case BUTTON_ID:
-		//! \todo Add code here to handle button press.
-		break;
+	case DIALOGUE_ID:
+		counter++;
+		win_redraw(wtk_basic_frame_as_child(sub_frame));
+
 	}
 
 	return false;
@@ -199,6 +233,9 @@ static void sub_frame_draw_handler(struct win_window *win,
 	 * \todo Add code here to draw text on screen using the
 	 * gfx_draw_string() function.
 	 */
+	gfx_draw_string(buffer, clip->origin.x + 30, clip->origin.y + 12,
+			&sysfont, GFX_COLOR(255, 255, 255),
+			GFX_COLOR_TRANSPARENT);
 }
 
 /**
@@ -212,17 +249,17 @@ void app_widget_launch(struct workqueue_task *task) {
 
 	struct win_window       *win_root;
 	struct win_window       *parent;
-	struct win_area         area;
 	struct wtk_label        *lbl;
 	struct wtk_button       *btn;
+	struct win_area         area;
 
-	// Use larger sysfont for this app
-	sysfont.scale = 2;
+	// Use regular sysfont for this app
+	sysfont.scale = 1;
 
 	// Get pointer to root window
 	win_root = win_get_root();
 
-	// Application frame
+
 
 	// Create a background bitmap using a solid color.
 	frame_background.type = BITMAP_SOLID;
@@ -245,7 +282,8 @@ void app_widget_launch(struct workqueue_task *task) {
 	if (!frame) {
 		goto error_frame;
 	}
-
+	
+	
 	// Get a pointer to the widget's window for adding sub-widgets.
 	parent = wtk_basic_frame_as_child(frame);
 	/*
@@ -254,6 +292,9 @@ void app_widget_launch(struct workqueue_task *task) {
 	 * widget/window is shown.
 	 */
 	win_show(parent);
+	
+
+	
 
 	// Application label
 	area.pos.x = LABEL_POS_X;
@@ -273,48 +314,37 @@ void app_widget_launch(struct workqueue_task *task) {
 	// Draw the label by showing the label widget's window.
 	win_show(wtk_label_as_child(lbl));
 
-	// Application slider
-	area.pos.x = SLIDER_POS_X;
-	area.pos.y = SLIDER_POS_Y;
-	area.size.x = SLIDER_SIZE_X;
-	area.size.y = SLIDER_SIZE_Y;
 
-	/*
-	 * Create the slider and check the return value if an error occured
-	 * while creating the slider.
-	 */
-	slider = wtk_slider_create(parent, &area, SLIDER_MAX_VALUE,
-			SLIDER_MAX_VALUE / 2, WTK_SLIDER_HORIZONTAL|WTK_SLIDER_CMD_RELEASE,
-			(win_command_t)SLIDER_ID);
-	if (!slider) {
+	area.pos.x =  60;
+	area.pos.y = 190;
+	area.size.x = 90;
+	area.size.y = 40;
+
+	btn = wtk_button_create(parent, &area, "Open dialogue",
+			(win_command_t)BUTTON_ID);
+	if (!btn) {
 		goto error_widget;
 	}
+	win_show(wtk_button_as_child(btn));
 
-	// Draw the slider by showing the slider widget's window.
-	win_show(wtk_slider_as_child(slider));
 
-	// Application progress bar, placed right of the slider.
-	area.pos.x += area.size.x + SLIDER_PB_SPACING_X;
-	area.size.x = PB_SIZE_X;
-	area.size.y = PB_SIZE_Y;
+	area.pos.x += area.size.x + 20;
 
-	/*
-	 * Create the progress bar and check the return value if an error
-	 * occured while creating the progress bar.
-	 */
-	progress_bar = wtk_progress_bar_create(parent, &area, SLIDER_MAX_VALUE,
-			SLIDER_MAX_VALUE / 2, GFX_COLOR(255, 255, 0),
-			GFX_COLOR(90, 90, 90), WTK_PROGRESS_BAR_HORIZONTAL);
-	if (!progress_bar) {
+	sub_frame_background.type = BITMAP_SOLID;
+	sub_frame_background.data.color = GFX_COLOR(127, 0, 0);
+
+	sub_frame = wtk_basic_frame_create(parent, &area,
+			&sub_frame_background, sub_frame_draw_handler,
+			NULL, NULL);
+	if (!sub_frame) {
 		goto error_widget;
 	}
+	win_show(wtk_basic_frame_as_child(sub_frame));
 
-	// Draw the progress bar by showing the progress bar widget's window.
-	win_show(wtk_progress_bar_as_child(progress_bar));
 
-	//! \todo Add code to set up button here.
 
-	//! \todo Add code to set up basic frame here.
+	
+	
 
 	return;
 
