@@ -47,42 +47,6 @@
  * @{
  */
 
-/** 
- * \note defined positions and sizes for dialogue box.
- */
-
-//! Dialogue box frame X position inside parent frame.
-#define DIALOGUE_FRAME_POS_X        40
-//! Dialogue box frame Y position inside parent frame.
-#define DIALOGUE_FRAME_POS_Y        50
-//! Dialogue box horisontal size X.
-#define DIALOGUE_FRAME_SIZE_X      240
-//! Dialogue box vertical size Y.
-#define DIALOGUE_FRAME_SIZE_Y      120
-
-//! Buttons Y position inside dialogue box frame.
-#define BUTTON_POS_Y                60
-//! Buttons horisontal size X.
-#define BUTTON_SIZE_X               90
-//! Buttons vertical size Y.
-#define BUTTON_SIZE_Y               40
-//! Horisontal spacing between buttons on X axis.
-#define BUTTON_SPACING              20
-
-//! Background color of dialogue box frame.
-#define DIALOGUE_BOX_BACKGROUND     GFX_COLOR(100, 100, 100)
-
-//! Caption position centered on top of dialogue box by dividing size in half.
-#define CAPTION_POS_X               DIALOGUE_FRAME_SIZE_X / 2
-//! Caption distance down from top of dialogue box.
-#define CAPTION_POS_Y               10
-
-//! Second caption position centered on top of dialogue box.
-#define SECOND_CAPTION_POS_X        CAPTION_POS_X
-//! Second caption distance down from top of dialogue box.
-#define SECOND_CAPTION_POS_Y        40
-
-
 /**
  * \brief Event command ID for the component widgets.
  *
@@ -108,7 +72,7 @@ enum app_widget_ids {
  *
  * \internal
  * \note Structure fields are only internally accessible, only pointers to
- *       structure is needed externally.
+ *       structure is needed externally
  *
  * \param caption          stores top string in dialogue box frame
  * \param second_caption   stores bottom string in dialogue box frame
@@ -160,8 +124,8 @@ static bool dialogue_box_command_handler(struct wtk_basic_frame *frame,
 		case BUTTON_OK_ID:
 
 
-			/* Send the supplied command event to the frame from which the 
-			 * dialogue box originated
+			/* Send the supplied command event to the frame from
+			 * which the dialogue box originated
 			 */
 
 			send_command.sender = dialogue_parent;
@@ -199,7 +163,8 @@ static void dialogue_box_draw_handler(struct win_window *win,
 {
 	// Draw the border rectangle for the dialogue box frame 
 	gfx_draw_rect(DIALOGUE_FRAME_POS_X, DIALOGUE_FRAME_POS_Y,
-		DIALOGUE_FRAME_SIZE_X, DIALOGUE_FRAME_SIZE_Y, GFX_COLOR(0, 0, 0));
+		DIALOGUE_FRAME_SIZE_X, DIALOGUE_FRAME_SIZE_Y,
+		DIALOUGE_FRAME_LINE_COLOR);
 }
 
 
@@ -412,7 +377,11 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 	 * Creating buttons.
 	 */
 	
-	// Centers the buttons in the dialogue box frame and spaces them apart from eachother.
+	/*
+	 * Centers the buttons in the dialogue box frame and spaces them apart
+	 * from each other.
+	 * 
+	 */
 	area.pos.x = DIALOGUE_FRAME_SIZE_X / 2 - BUTTON_SIZE_X - BUTTON_SPACING / 2;
 	area.pos.y = BUTTON_POS_Y;
 	area.size.x = BUTTON_SIZE_X;
@@ -425,7 +394,7 @@ struct win_window *wtk_dialogue_box_create(struct win_window *parent,
 		goto error_widget;
 	}
 
-	// Centers the buttons in the dialogue box frame and spaces them apart from eachother.
+	// Centers the buttons in the dialogue box frame and spaces them apart from each other.
 	area.pos.x = DIALOGUE_FRAME_SIZE_X / 2 + BUTTON_SPACING / 2;
 	area.pos.y = BUTTON_POS_Y;
 	

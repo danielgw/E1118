@@ -41,8 +41,6 @@
 #include <app/wtk.h>
 #include <gfx/win.h>
 #include <gfx/sysfont.h>
-#include <mainloop.h>
-
 
 /**
  * \ingroup gfx
@@ -60,6 +58,8 @@
  * - \ref gfx_wtk_radio_button
  * - \ref gfx_wtk_slider
  * - \ref gfx_wtk_label
+ * - \ref gfx_wtk_gauge
+ * - \ref gfx_wtk_trigtable
  * @{
  */
 
@@ -344,6 +344,80 @@ uint8_t wtk_progress_bar_get_value(struct wtk_progress_bar *bar);
 bool wtk_progress_bar_set_value(struct wtk_progress_bar *bar, uint8_t value);
 void wtk_progress_bar_set_colors(struct wtk_progress_bar *bar,
 		gfx_color_t color1, gfx_color_t color2);
+		
+//! @}
+
+/**
+ * \defgroup gfx_wtk_gauge Gauge widget
+ *
+ * Gauge widget provides a gauge. Size and position can be configured.
+ * Can take input from userdefinable input.
+ * @{
+ */
+
+ /**
+ * \defgroup gfx_wtk_gauge_options Gauge widget options
+ * These options can be ORed together to specify the behaviour of a
+ * gauge widget when creating it with \ref wtk_gauge_create
+ * @{
+ */
+
+ /**
+ * \name Gauge widget invert configuration options.
+ * For use with the option parameter of \ref wtk_gauge_create
+ * @{
+ */
+//! Inverts the gauge traveling direction
+#define WTK_GAUGE_INVERT        (1 << 1)
+
+//! @}
+
+//! @}
+
+struct wtk_gauge;
+
+struct wtk_gauge *wtk_gauge_create(struct win_window *parent,
+		struct win_area const *area, struct gfx_bitmap *background,
+		uint8_t maximum, uint8_t value, uint8_t g_outer_pos,
+		uint8_t g_inner_pos, gfx_color_t fill_color,
+		gfx_color_t background_color, uint8_t option);
+struct win_window *wtk_gauge_as_child(struct wtk_gauge *gauge);
+uint8_t wtk_gauge_get_value(struct wtk_gauge *gauge);
+uint8_t wtk_gauge_get_test(struct wtk_gauge *gauge);
+bool wtk_gauge_set_value(struct wtk_gauge *gauge, uint8_t value);
+void wtk_gauge_set_colors(struct wtk_gauge *gauge,
+		gfx_color_t color1, gfx_color_t color2);
+
+//! @}
+
+/**
+* \defgroup gfx_wtk_dialogue_box Dialogue box widget
+*
+* Dialogue box widget provides storage structs for dialogue
+* captions and command data.
+*
+* @{
+*/
+struct wtk_dialogue_box;
+
+
+typedef bool(*wtk_dialogue_box_command_handler_t) (
+struct wtk_dialogue_box *dialogue_box, win_command_t command_data);
+
+
+typedef void(*wtk_dialogue_box_draw_handler_t) (
+struct win_window *win, struct win_clip_region const *clip);
+
+
+struct win_window *wtk_dialogue_box_create(struct win_window *parent,
+char *caption, char *second_caption, win_command_t *command_data);
+
+struct win_window *wtk_dialogue_box_as_child(
+	struct wtk_dialogue_box *dialogue_box);
+void *wtk_dialogue_box_get_custom_data(
+	const struct wtk_dialogue_box *dialogue_box);
+
+//! @}
 
 //! @}
 
@@ -355,60 +429,5 @@ void wtk_shade_pixel(gfx_color_t *pixel, uint8_t alpha);
 
 //! @}
 
-/**
- * \defgroup gfx_wtk_dialogue_box Dialogue box widget
- *
- * Dialogue box widget provides storage structs for dialogue
- * captions and command data.
- *
- * @{
- */
-struct wtk_dialogue_box;
-
-/**
- * \brief Dialogue box command event handler callback
- *
- * The basic frame command event handler callback is used to handle
- * command events from widgets inside the basic frame. Command events
- * are typically queued when the user has given some input to a widget.
- * Examples are pushing a button widget or checking a check box widget.
- *
- * \param dialogue_box Pointer to the dialogue box which contains the widget that
- *                     generated the event.
- * \param command_data The command data that was set for the specific widget.
- *                     This is typically an ID for the widget or a pointer to
- *                     data needed by the widget. This is widget-specific.
- * \return             True if the basic frame and it's children should be
- *                     destroyed, false otherwise.
- */
-
-typedef bool(*wtk_dialogue_box_command_handler_t) (
-		struct wtk_dialogue_box *dialogue_box, win_command_t command_data);
-
-/**
- * \brief Basic frame draw event handler callback
- *
- * The basic frame draw event handler callback can be used to draw simple
- * graphical display elements without the need for implementing a custom
- * widget.
- *
- * \param win  Pointer to the window of the dialogue box widget to be drawn.
- * \param clip Region of the dialogue box to be drawn in global display
- *             coordinates.
- */
-
-typedef void(*wtk_dialogue_box_draw_handler_t) (
-		struct win_window *win, struct win_clip_region const *clip);
-
-
-struct win_window *wtk_dialogue_box_create(struct win_window *parent,
-		char *caption, char *second_caption, win_command_t *command_data);
-		
-struct win_window *wtk_dialogue_box_as_child(
-		struct wtk_dialogue_box *dialogue_box);
-void *wtk_dialogue_box_get_custom_data(
-		const struct wtk_dialogue_box *dialogue_box);
-
-//! @}
 
 #endif /* WTK_H_INCLUDED */
